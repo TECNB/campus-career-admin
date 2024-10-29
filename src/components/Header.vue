@@ -77,12 +77,8 @@ watch(isFullScreen, (newValue) => {
 
 
 const tabs = ref([
-    { name: '首页', route: '/' },
-    { name: '订单管理', route: '/audit' },
-    // { name: '数宇藏品管理', route: '/goods' },
-    // { name: '用户管理', route: '/account' },
-    // { name: '设置', route: '/setting' },
-    // { name: '数据', route: '/data' },
+    { name: '活动日历', route: '/' },
+    { name: '活动发布', route: '/activity-publish' },
 ]);
 
 const currentTab = ref(0);
