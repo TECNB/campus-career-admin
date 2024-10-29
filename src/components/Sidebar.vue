@@ -2,7 +2,7 @@
     <div class="Sidebar">
         <div class="sidebar-logo-container">
             <img class="h-8" src="../assets/images/logo.png">
-            <p>HyperStarAdmin</p>
+            <p>数智就业</p>
         </div>
         <el-scrollbar height="90%">
 
@@ -23,7 +23,7 @@
                             <ArrowDownBold v-if="!ifShowSubMenu" />
                             <ArrowUpBold v-else />
                         </el-icon>
-                        
+
                     </div>
                     <!-- 如果有子菜单，渲染子菜单 -->
                     <ul v-if="menu.children && ifShowSubMenu">
@@ -45,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref,watch } from 'vue';
-import { useRouter,useRoute } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 // 实例化router
 const router = useRouter();
 const route = useRoute();
@@ -57,25 +57,30 @@ const selectedSubMenu = ref<number | null>(null);
 const ifShowSubMenu = ref<boolean>(false);
 
 const menus = [
-    { label: '首页', icon: 'HomeFilled', path: '/' },
-    { label: '分类管理', icon: 'PriceTag', path: '/type' },
-    { label: '数字藏品管理', icon: 'GoodsFilled', path: '/collections' },
-    { label: '合集管理', icon: 'Histogram', path: '/album' },
-    { label: '空投管理', icon: 'WindPower', path: '/drop' },
-    { label: '发行计划管理', icon: 'UploadFilled', path: '/issueDate' },
     {
-        label: '用户管理',
-        icon: 'Menu',
-        path: '/account',
+        label: '职场领航',
+        icon: 'School',
+        path: '/',
+        children: [
+            { label: '活动日历', path: '/' },
+            { label: '活动发布', path: '/activity-publish' },
+            { label: '就业查询', path: '/employment-search' },
+            { label: '岗位搜索', path: '/job-search' },
+            { label: '智能就业', path: '/smart-employment' },
+            { label: '就业资料库', path: '/employment-database' },
+        ],
     },
     {
-        label: '交易管理',
+        label: '研途领航',
         icon: 'List',
-        path: '/order',
-        children: [
-            { label: '订单处理', path: '/order' },
-            { label: '营销与推广', path: '/marketing' },
-        ],
+        path: '/graduate-navigation',
+
+    },
+    {
+        label: '留学智选',
+        icon: 'WindPower',
+        path: '/study-abroad-selection',
+
     },
 
     // { label: '数据', icon: 'TrendCharts', path: '/data' },
@@ -119,7 +124,7 @@ const selectMenu = (index: number, ifChildren: any, path: string) => {
 };
 
 const selectSubMenu = (parentIndex: number, childIndex: number, path: string) => {
-    console.log("parentIndex:"+parentIndex)
+    console.log("parentIndex:" + parentIndex)
     router.push(path)
 
     selectedMenu.value = null;
@@ -161,7 +166,8 @@ const selectSubMenu = (parentIndex: number, childIndex: number, path: string) =>
         padding: 15px 20px;
         margin: 10px;
         cursor: pointer;
-        transition: all 0.3s ease; /* 添加过渡效果 */
+        transition: all 0.3s ease;
+        /* 添加过渡效果 */
 
         &:hover {
             border-radius: 20px;
@@ -178,7 +184,7 @@ const selectSubMenu = (parentIndex: number, childIndex: number, path: string) =>
             border-radius: 20px;
             background: var(--primary-100);
 
-            
+
         }
 
         &.child-menu {
@@ -194,4 +200,5 @@ const selectSubMenu = (parentIndex: number, childIndex: number, path: string) =>
     }
 
 
-}</style>
+}
+</style>

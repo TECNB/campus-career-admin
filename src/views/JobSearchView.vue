@@ -1,9 +1,9 @@
 <template>
-    <div class="CollectionsView">
+    <div class="AccountView">
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>数字藏品管理</p>
+                    <p>用户管理</p>
                 </div>
                 <div class="FilterSection">
                     <div class="FilterBox">
@@ -21,10 +21,10 @@
                             <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
                                 v-if="ifShowTypeOrderPicker">
                                 <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('已审核')">
-                                    已审核</p>
+                                    @click="choseTypeOrder('正常')">
+                                    正常</p>
                                 <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('未审核')">未审核</p>
+                                    @click="choseTypeOrder('封禁')">封禁</p>
                             </div>
                         </transition>
                     </div>
@@ -60,7 +60,7 @@
 
                 </div>
             </div>
-            <CollectionsTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <AccountTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
 
     </div>
@@ -68,11 +68,11 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-// 引入CollectionsTable
-import CollectionsTable from "../components/CollectionsTable.vue"
+// 引入OrderTable
+import AccountTable from "../components/AccountTable.vue"
 
 const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有数字藏品")
+const typeOrder = ref<string>("所有用户")
 const ifShowDateOrderPicker = ref<boolean>(false)
 const ifShowTypeOrderPicker = ref<boolean>(false)
 
@@ -109,7 +109,7 @@ const toggleIfShowTypeOrderPicker = () => {
     opacity: 0;
 }
 
-.CollectionsView {
+.AccountView {
     height: 100%;
 
     .header {

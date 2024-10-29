@@ -1,7 +1,7 @@
 <template>
     <div class="SettingView">
         <el-scrollbar>
-            <p>text</p>
+            <p>Setting</p>
         </el-scrollbar>
         
     </div>

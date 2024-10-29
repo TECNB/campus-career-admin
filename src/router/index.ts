@@ -7,84 +7,53 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("../views/IndexView.vue"),
         children: [
             {
-                name:'首页',
+                name: '活动日历',
                 path: "/",
-                component: () => import("../views/DataView.vue"),
+                component: () => import("../views/ActivityCalendarView.vue"),
             },
             {
-                name:'分类管理',
-                path: "/type",
-                component: () => import("../views/TypeView.vue"),
+                name: '活动发布',
+                path: "/activity-publish",
+                component: () => import("../views/ActivityPublishView.vue"),
             },
             {
-                name:'合集管理',
-                path: "/album",
-                component: () => import("../views/AlbumView.vue"),
+                name: '就业查询',
+                path: "/employment-search",
+                component: () => import("../views/EmploymentSearchView.vue"),
             },
             {
-                name:'数宇藏品管理',
-                path: "/collections",
-                component: () => import("../views/CollectionsView.vue"),
+                name: '岗位搜索',
+                path: "/job-search",
+                component: () => import("../views/JobSearchView.vue"),
             },
             {
-                name:'发行计划管理',
-                path:"/issueDate",
-                component: () => import("../views/IssueDateView.vue"),
+                name: '智能就业',
+                path: "/smart-employment",
+                component: () => import("../views/SmartEmploymentView.vue"),
             },
             {
-                name:'订单管理',
-                path: "/order",
-                component: () => import("../views/OrderView.vue"),
+                name: '就业资料库',
+                path: "/employment-database",
+                component: () => import("../views/EmploymentDatabaseView.vue"),
             },
+
             {
-                name:'空投管理',
-                path: "/drop",
-                component: () => import("../views/DropView.vue"),
+                name: '研途领航',
+                path: "/graduate-navigation",
+                component: () => import("../views/GraduateNavigationView.vue"),
             },
+
+
             {
-                name:'审核管理',
-                path: "/audit",
-                component: () => import("../views/AuditView.vue"),
+                name: '留学智选',
+                path: "/study-abroad-selection",
+                component: () => import("../views/StudyAbroadSelectionView.vue"),
             },
-            {
-                name:'用户管理',
-                path: "/account",
-                component: () => import("../views/AccountView.vue"),
-            },
-            // {
-            //     name:'数据',
-            //     path: "/data",
-            //     component: () => import("../views/DataView.vue"),
-            // },
+
             {
                 name:'设置',
                 path: "/setting",
                 component: () => import("../views/SettingView.vue"),
-            },
-            {
-                name:'营销与推广',
-                path: "/marketing",
-                component: () => import("../views/MarketingView.vue"),
-            },
-            {
-                name:'修改分类',
-                path: "/updateType/:id",
-                component: () => import("../views/UpdateTypeView.vue"),
-            },
-            {
-                name:'修改空投',
-                path: "/updateDrop/:id",
-                component: () => import("../views/UpdateDropView.vue"),
-            },
-            {
-                name:'修改发行计划',
-                path: "/updateIssueDate/:id",
-                component: () => import("../views/UpdateIssueDateView.vue"),
-            },
-            {
-                name:'修改合集',
-                path: "/updateAlbum/:id",
-                component: () => import("../views/UpdateAlbumView.vue"),
             },
         ],
     },

@@ -1,16 +1,19 @@
 <template>
-    <div class="TypeView">
+    <div class="AccountView">
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>分类管理</p>
+                    <p>用户管理</p>
                 </div>
                 <div class="FilterSection">
-                    <!-- <div class="FilterBox">
+                    <div class="FilterBox">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowTypeOrderPicker">
                             <p>显示：</p>
                             <p class="text-black font-medium">{{ typeOrder }}</p>
-                            <el-icon>
+                            <el-icon v-if="ifShowTypeOrderPicker">
+                                <ArrowUpBold />
+                            </el-icon>
+                            <el-icon v-else>
                                 <ArrowDownBold />
                             </el-icon>
                         </div>
@@ -18,13 +21,13 @@
                             <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
                                 v-if="ifShowTypeOrderPicker">
                                 <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('已完成')">
-                                    已完成</p>
+                                    @click="choseTypeOrder('正常')">
+                                    正常</p>
                                 <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('未完成')">未完成</p>
+                                    @click="choseTypeOrder('封禁')">封禁</p>
                             </div>
                         </transition>
-                    </div> -->
+                    </div>
                     <div class="FilterBox">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
@@ -48,16 +51,16 @@
                         </transition>
 
                     </div>
-                    <div class="FilterBox" @click="toUpdateType('create')">
+                    <!-- <div class="FilterBox">
                         <el-icon>
                             <Plus />
                         </el-icon>
-                        <p>添加分类</p>
-                    </div>
+                        <p>添加订单</p>
+                    </div> -->
 
                 </div>
             </div>
-            <TypeTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <AccountTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
 
     </div>
@@ -65,14 +68,13 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-// 引入TypeTable
-import TypeTable from "../components/TypeTable.vue"
-import router from '../router';
+// 引入OrderTable
+import AccountTable from "../components/AccountTable.vue"
 
 const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有分类")
+const typeOrder = ref<string>("所有用户")
 const ifShowDateOrderPicker = ref<boolean>(false)
-// const ifShowTypeOrderPicker = ref<boolean>(false)
+const ifShowTypeOrderPicker = ref<boolean>(false)
 
 
 // 选择日期排序
@@ -81,23 +83,18 @@ const choseDateOrder = (order: string) => {
     ifShowDateOrderPicker.value = false
 }
 // 选择类型排序
-// const choseTypeOrder = (order: string) => {
-//     typeOrder.value = order
-//     ifShowTypeOrderPicker.value = false
-// }
+const choseTypeOrder = (order: string) => {
+    typeOrder.value = order
+    ifShowTypeOrderPicker.value = false
+}
 
 // 控制是否显示日期排序选择框
 const toggleIfShowDateOrderPicker = () => {
     ifShowDateOrderPicker.value = !ifShowDateOrderPicker.value
 }
 // 控制是否显示类型排序选择框
-// const toggleIfShowTypeOrderPicker = () => {
-//     ifShowTypeOrderPicker.value = !ifShowTypeOrderPicker.value
-// }
-
-const toUpdateType = (id:string) => {
-    console.log('toUpdateType')
-    router.push('/updateType/'+id)
+const toggleIfShowTypeOrderPicker = () => {
+    ifShowTypeOrderPicker.value = !ifShowTypeOrderPicker.value
 }
 </script>
 
@@ -112,7 +109,7 @@ const toUpdateType = (id:string) => {
     opacity: 0;
 }
 
-.TypeView {
+.AccountView {
     height: 100%;
 
     .header {
@@ -155,7 +152,7 @@ const toUpdateType = (id:string) => {
                 margin-bottom: 20px;
             }
 
-            .FilterBox:nth-child(2) {
+            .FilterBox:nth-child(3) {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
