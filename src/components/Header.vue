@@ -22,10 +22,10 @@
             </el-icon>
             <div class="user-info">
                 <img class="w-8 h-8 rounded-full object-cover aspect-square"
-                    :src="userInfo.user?.avatar">
+                    :src="userInfo.user?.avatarUrl">
                 <p>{{ userInfo.user?.username }}</p>
             </div>
-            <el-icon size="20">
+            <el-icon size="20" @click="toLogin">
                 <Tools />
             </el-icon>
         </div>
@@ -84,6 +84,32 @@ const tabs = ref([
 const currentTab = ref(0);
 const router = useRouter();
 
+// 监听路由变化，更新当前标签
+onMounted(() => {
+    const updateCurrentTab = () => {
+        const currentRoute = router.currentRoute.value as RouteLocationNormalizedLoaded;
+
+        // 检查当前路由是否在tabs数组中，如果不在就添加
+        const index = tabs.value.findIndex(tab => tab.route === currentRoute.path);
+        if (index === -1) {
+            tabs.value.push({ name: String(currentRoute.name || '未命名'), route: currentRoute.path });
+        }
+
+        // 更新当前标签
+        const newIndex = tabs.value.findIndex(tab => tab.route === currentRoute.path);
+        currentTab.value = newIndex !== -1 ? newIndex : 0;
+    };
+
+    router.afterEach(updateCurrentTab);
+    updateCurrentTab();
+});
+
+const toLogin = () => {
+    // 删掉token
+    localStorage.removeItem('token');
+    router.push('/login');
+};
+
 // 切换导航
 const switchTab = (index: number) => {
     currentTab.value = index;
@@ -106,25 +132,7 @@ const closeTab = (index: number) => {
     }
 };
 
-// 监听路由变化，更新当前标签
-onMounted(() => {
-    const updateCurrentTab = () => {
-        const currentRoute = router.currentRoute.value as RouteLocationNormalizedLoaded;
 
-        // 检查当前路由是否在tabs数组中，如果不在就添加
-        const index = tabs.value.findIndex(tab => tab.route === currentRoute.path);
-        if (index === -1) {
-            tabs.value.push({ name: String(currentRoute.name || '未命名'), route: currentRoute.path });
-        }
-
-        // 更新当前标签
-        const newIndex = tabs.value.findIndex(tab => tab.route === currentRoute.path);
-        currentTab.value = newIndex !== -1 ? newIndex : 0;
-    };
-
-    router.afterEach(updateCurrentTab);
-    updateCurrentTab();
-});
 </script>
 
 <style lang="scss" scoped>

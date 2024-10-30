@@ -95,7 +95,6 @@ const emit = defineEmits();
 const userInfo = userInfoStore();
 
 
-let loginForm = new FormData();
 let signupForm = new FormData();
 
 
@@ -113,22 +112,21 @@ let ifresetPassword = ref(false)
 
 // 实现Login方法
 const handleLogin = async () => {
-    // 清空loginForm
-    loginForm = new FormData();
+    // 初始化 loginData 为一个 JSON 对象
+    let loginData = {};
 
+    // 根据用户名或手机号判断字段
     if (isValidPhone(username.value)) {
-        loginForm.append("phone", username.value);
+        loginData.phone = username.value;
     } else {
-        loginForm.append("username", username.value);
+        loginData.username = username.value;
     }
-    loginForm.append("password", password.value)
+    loginData.passwordHash = password.value;
 
 
     // const data = await login(loginForm).then(response => {
-    await login(loginForm).then(response => {
+    await login(loginData).then(response => {
         console.log("登录返回:" + response);
-
-
 
         // 将data转为JsonData
         const JsonData = JSON.stringify(response)
@@ -137,9 +135,10 @@ const handleLogin = async () => {
         const obj = JSON.parse(JsonData)
 
         if(obj.userType){
-            if(obj.userType != "admin"){
-                ElMessage.error('非管理员用户')
-                return
+            if(obj.userType != "teacher"){
+                ElMessage.success('学生登录成功！')
+            }else{
+                ElMessage.success('教师登录成功！')
             }
         }
 
@@ -151,7 +150,6 @@ const handleLogin = async () => {
 
 
         toggleVisibility()
-        ElMessage.success('管理员登录成功')
         router.push({ path: '/' })
         
     }).catch((error: AxiosError) => {

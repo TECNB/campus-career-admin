@@ -47,27 +47,36 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+
+// 引入userInfoStore
+import { userInfoStore } from '../stores/UserInfoStore';
+
+// 使用userInfoStore
+const userInfo = userInfoStore();
+
 // 实例化router
 const router = useRouter();
 const route = useRoute();
 
-const selectedMenu = ref<number | null>(null);
+const selectedMenu = ref<number | null>(0);
 const selectedSubMenu = ref<number | null>(null);
 // ifShowSubMenu
 const ifShowSubMenu = ref<boolean>(false);
 
-const menus = [
+let menus = [];
+
+const menusStudent = [
     {
-        label: '职场领航',
+        label: '职场引航',
         icon: 'School',
         path: '/',
         children: [
             { label: '活动日历', path: '/' },
-            { label: '活动发布', path: '/activity-publish' },
-            { label: '就业查询', path: '/employment-search' },
+            { label: '活动查看', path: '/activity-publish' },
+            { label: '就业信息登记', path: '/employment-search' },
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
-            { label: '就业资料库', path: '/employment-database' },
+
         ],
     },
     {
@@ -80,13 +89,59 @@ const menus = [
         label: '留学智选',
         icon: 'WindPower',
         path: '/study-abroad-selection',
-
+    },
+    {
+        label: '就业资料库',
+        icon: 'Collection',
+        path: '/employment-database'
     },
 
     // { label: '数据', icon: 'TrendCharts', path: '/data' },
     { label: '设置', icon: 'Setting', path: '/setting' },
 ];
 
+const menusTeacher = [
+    {
+        label: '职场引航',
+        icon: 'School',
+        path: '/',
+        children: [
+            { label: '活动日历', path: '/' },
+            { label: '活动发布', path: '/activity-publish' },
+            { label: '就业查询', path: '/employment-search' },
+            { label: '岗位搜索', path: '/job-search' },
+            { label: '智能就业', path: '/smart-employment' },
+
+        ],
+    },
+    {
+        label: '研途领航',
+        icon: 'List',
+        path: '/graduate-navigation',
+
+    },
+    {
+        label: '留学智选',
+        icon: 'WindPower',
+        path: '/study-abroad-selection',
+    },
+    {
+        label: '就业资料库',
+        icon: 'Collection',
+        path: '/employment-database'
+    },
+
+    // { label: '数据', icon: 'TrendCharts', path: '/data' },
+    { label: '设置', icon: 'Setting', path: '/setting' },
+];
+console.log(userInfo.user.username)
+if (userInfo.user?.userType === 'student') {
+    menus = menusStudent;
+    console.log("学生")
+} else {
+    menus = menusTeacher;
+    console.log("教师")
+}
 
 
 onMounted(() => {
@@ -95,6 +150,7 @@ onMounted(() => {
     if (index !== -1) {
         selectedMenu.value = index;
     }
+    console.log("selectedMenu:" + selectedMenu.value)
 });
 
 
