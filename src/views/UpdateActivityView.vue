@@ -36,7 +36,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">活动内容：</p>
                         <el-select v-model="category" placeholder="请点击选择分类" size="large" clearable :teleported="false">
                             <el-option v-for="item in allType" :key="item.objectId" :label="item.name"
-                                :value="item.objectId" />
+                                :value="item.name" />
                         </el-select>
 
                     </div>
@@ -196,7 +196,7 @@ import { useRoute } from 'vue-router';
 
 import type { UploadFile } from 'element-plus'
 // 引入接口
-import { addActivity,getAllActivity,getActivityById } from '../api/activity';
+import { addActivity,getAllActivity,getActivityById,editActivity } from '../api/activity';
 
 
 import {
@@ -204,6 +204,7 @@ import {
     allNature, participantCount, shortcuts, jobPosition, applicationLink, targetAudience,
     treeData, defaultProps, detail,area
 } from '../constant/ActivityPublishForm';
+import { id } from "element-plus/es/locale";
 
 const route = useRoute();
 
@@ -238,8 +239,10 @@ onMounted(async () => {
             participantCount.value = data.participantCount;
             money.value = data.money;
             nature.value = data.nature;
+
             // 将 area 拆分为数组
             area.value = data.area.split('/');
+
             jobPosition.value = data.jobPosition;
             applicationLink.value = data.applicationLink;
             targetAudience.value = data.targetAudience;
@@ -306,11 +309,37 @@ const handleAdd = () => {
     console.log('啊啊啊啊啊啊啊啊啊',area.value);
 
 }
-const handleEdit = () => {
-    ElMessage.success('更新成功')
-    router.push('/activity')
-    console.log('啊啊啊啊啊啊啊啊啊',area.value);
-}
+const handleEdit = async () => {
+    loading.value = true;
+    const updatedData = {
+        id: route.params.id as string,
+        name: name.value,
+        category: category.value,
+        startTime: startTime.value,
+        endTime: endTime.value,
+        place: place.value,
+        participantCount: participantCount.value,
+        money: money.value,
+        nature: nature.value,
+        area: area.value.join('/'), // 将数组格式的 area 转换为字符串
+        jobPosition: jobPosition.value,
+        applicationLink: applicationLink.value,
+        targetAudience: targetAudience.value,
+        detail: detail.value,
+        activityImage: fileList.value.length ? fileList.value[0].url : null, // 假设只保存一张图片
+    };
+
+    try {
+        await editActivity(updatedData);
+        ElMessage.success('更新成功');
+        router.push('/activity');
+    } catch (error) {
+        console.log(error);
+        ElMessage.error('更新失败');
+    } finally {
+        loading.value = false;
+    }
+};
 </script>
 
 <style lang="scss" scoped>

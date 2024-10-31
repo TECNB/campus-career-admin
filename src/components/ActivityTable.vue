@@ -60,11 +60,11 @@
                 <!-- 操作栏 -->
                 <el-table-column label="操作" width="200" align="center">
                     <template #default="{ row }">
-                        <el-button text bg type="success" size="small" @click="toUpdateActivity(row.objectId)">
+                        <el-button text bg type="success" size="small" @click="toUpdateActivity(row.id)">
                             编辑
                         </el-button>
 
-                        <el-button text bg type="danger" size="small" @click="deletion(row.objectId)">
+                        <el-button text bg type="danger" size="small" @click="deletion(row.id)">
                             删除
                         </el-button>
                     </template>
@@ -87,10 +87,11 @@ import { ref, watch, onMounted } from 'vue';
 import { ElConfigProvider } from 'element-plus';
 // 引入中文包
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-// 引入el-switch所需要的两个图标
 
-import { User } from '../interfaces/User'
-import { getAllUsers } from '../api/user'
+import router from '../router/index';
+
+import { Activity } from '../interfaces/Activity';
+import { addActivity,getAllActivity,getActivityById,editActivity } from '../api/activity';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -98,66 +99,14 @@ const props = defineProps(['dateOrder', 'typeOrder']);
 
 const input = ref('');
 
-const tableData = ref([
-    {
-        id: 1,
-        category: '线上讲座',
-        name: '2024职业规划',
-        startTime: new Date(),
-        endTime: new Date(),
-        place: '线上',
-        participantCount: 100,
-        money: '无',
-        nature: '互联网',
-        area: '浙江省/杭州市/上城区',
-        jobPosition: '产品经理',
-        applicationLink: 'https://example.com',
-        targetAudience: '毕业生',
-        activityImage: 'https://www.helloimg.com/i/2024/10/30/672214f9120cf.jpg',
-        detail: '一次职业规划讲座。',
-    },
-    {
-        id: 2,
-        category: '线上讲座',
-        name: '2024职业规划',
-        startTime: new Date(),
-        endTime: new Date(),
-        place: '线上',
-        participantCount: 100,
-        money: '无',
-        nature: '互联网',
-        area: '浙江省/杭州市/上城区',
-        jobPosition: '产品经理',
-        applicationLink: 'https://example.com',
-        targetAudience: '毕业生',
-        activityImage: 'https://www.helloimg.com/i/2024/10/30/672214f9120cf.jpg',
-        detail: '一次职业规划讲座。',
-    },
-    {
-        id: 3,
-        category: '线上讲座',
-        name: '2024职业规划',
-        startTime: new Date(),
-        endTime: new Date(),
-        place: '线上',
-        participantCount: 100,
-        money: '无',
-        nature: '互联网',
-        area: '浙江省/杭州市/上城区',
-        jobPosition: '产品经理',
-        applicationLink: 'https://example.com',
-        targetAudience: '毕业生',
-        activityImage: 'https://www.helloimg.com/i/2024/10/30/672214f9120cf.jpg',
-        detail: '一次职业规划讲座。',
-    },
-]);
+const tableData = ref<Activity[]>([]);
 
 
 const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
 // const user = 'admin';
-const allData = ref<User[]>([]);
+const allData = ref<Activity[]>([]);
 
 let loading = ref(false);
 
@@ -176,12 +125,30 @@ watch(() => props.dateOrder, (newVal) => {
         });
     }
 });
+// 通过watch监听props.typeOrder的变化
+// 通过watch监听props.typeOrder的变化
+watch(() => props.typeOrder, (newVal) => {
+    if (newVal === "招聘会") {
+        // 筛选出category为"招聘会"的数据
+        tableData.value = allData.value.filter((item) => item.category === "招聘会");
+    } else if (newVal === "宣讲会") {
+        // 筛选出category为"宣讲会"的数据
+        tableData.value = allData.value.filter((item) => item.category === "宣讲会");
+    } else if (newVal === "招聘公告") {
+        // 筛选出category为"招聘公告"的数据
+        tableData.value = allData.value.filter((item) => item.category === "招聘公告");
+    } else {
+        // 如果没有匹配项，则显示全部数据
+        tableData.value = allData.value;
+    }
+    counts.value = tableData.value.length;
+});
 
 onMounted(async () => {
     loading.value = true;
-    await getAllUsers().then((res) => {
+    await getAllActivity().then((res) => {
         loading.value = false;
-        allData.value = res;
+        allData.value = res.data.records;
 
         counts.value = allData.value.length;
         tableData.value = allData.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);

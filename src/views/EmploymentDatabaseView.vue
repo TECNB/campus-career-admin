@@ -60,7 +60,7 @@
 
                 </div>
             </div>
-            <AccountTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <ActivityTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
 
     </div>
@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 // 引入OrderTable
-import AccountTable from "../components/AccountTable.vue"
+import ActivityTable from "../components/ActivityTable.vue"
 
 const dateOrder = ref<string>("默认排序")
 const typeOrder = ref<string>("所有用户")
