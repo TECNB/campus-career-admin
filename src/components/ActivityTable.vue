@@ -6,7 +6,7 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input type="text" class="ml-2" placeholder="请输入活动名称" />
+                <input type="text" class="ml-2" placeholder="请输入活动名称" v-model="input" @keyup.enter="filterData"/>
             </div>
             <div class="FilterBox flex items-center cursor-pointer">
                 <el-icon>
@@ -91,7 +91,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
-import { addActivity,getAllActivity,getActivityById,editActivity } from '../api/activity';
+import { addActivity,getAllActivity,getActivityById,editActivity,deleteActivity } from '../api/activity';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -126,7 +126,6 @@ watch(() => props.dateOrder, (newVal) => {
     }
 });
 // 通过watch监听props.typeOrder的变化
-// 通过watch监听props.typeOrder的变化
 watch(() => props.typeOrder, (newVal) => {
     if (newVal === "招聘会") {
         // 筛选出category为"招聘会"的数据
@@ -156,15 +155,39 @@ onMounted(async () => {
     })
 });
 
+const filterData = () => {
+    const filtered = allData.value.filter(activity => 
+        activity.name.includes(input.value.trim())
+    );
+    counts.value = filtered.length;
+    tableData.value = filtered.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+};
 
 const toUpdateActivity = (id: string) => {
     console.log('toUpdateActivity')
     router.push('/updateActivity/' + id)
 }
 
-const deletion = (id: string) => {
-    console.log(id)
-}
+const deletion = async (id: number) => {
+    try {
+        await ElMessageBox.confirm('确定删除该活动吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+        });
+
+        await deleteActivity({ id });
+        ElMessage.success('删除成功');
+
+        // 删除成功后更新表格数据
+        const updatedData = allData.value.filter((item) => item.id !== id);
+        allData.value = updatedData;
+        updateTableData();
+    } catch (error) {
+        console.error(error);
+        ElMessage.error('删除失败');
+    }
+};
 
 // 处理每页显示数量变化逻辑
 const handleSizeChange = (val: number) => {
@@ -190,10 +213,6 @@ const multipleSelection = ref<[]>([])
 const handleSelectionChange = (val: []) => {
     multipleSelection.value = val
 }
-
-
-
-
 </script>
 
 <style lang="scss" scoped>

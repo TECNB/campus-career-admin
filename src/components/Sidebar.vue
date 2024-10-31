@@ -134,7 +134,7 @@ const menusTeacher = [
     // { label: '数据', icon: 'TrendCharts', path: '/data' },
     { label: '设置', icon: 'Setting', path: '/setting' },
 ];
-console.log(userInfo.user.username)
+console.log(userInfo.user?.username)
 if (userInfo.user?.userType === 'student') {
     menus = menusStudent;
     console.log("学生")

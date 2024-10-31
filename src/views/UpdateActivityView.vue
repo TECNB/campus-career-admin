@@ -224,6 +224,23 @@ onMounted(async () => {
     // 判断是否为编辑
     if (route.params.id === "create") {
         isEdit.value = false;
+        // 清空表单属性
+        name.value = '';
+        category.value = '';
+        startTime.value = '';
+        endTime.value = '';
+        place.value = '';
+        participantCount.value = 0;
+        money.value = '';
+        nature.value = '';
+        area.value = [];
+        jobPosition.value = '';
+        applicationLink.value = '';
+        targetAudience.value = '';
+        detail.value = '';
+        fileList.value = [];
+        loading.value = false;
+        
     } else {
         isEdit.value = true;
         loading.value = true;
@@ -303,12 +320,36 @@ const handleCancel = () => {
     ElMessage.success('取消成功')
     router.push('/activity')
 }
-const handleAdd = () => {
-    ElMessage.success('发布成功')
-    router.push('/activity')
-    console.log('啊啊啊啊啊啊啊啊啊',area.value);
+const handleAdd = async () => {
+    loading.value = true;
+    const newData = {
+        name: name.value,
+        category: category.value,
+        startTime: startTime.value,
+        endTime: endTime.value,
+        place: place.value,
+        participantCount: participantCount.value,
+        money: money.value,
+        nature: nature.value,
+        area: area.value.join('/'), // 将数组格式的 area 转换为字符串
+        jobPosition: jobPosition.value,
+        applicationLink: applicationLink.value,
+        targetAudience: targetAudience.value,
+        detail: detail.value,
+        activityImages: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
+    };
 
-}
+    try {
+        await addActivity(newData);
+        ElMessage.success('发布成功');
+        router.push('/activity');
+    } catch (error) {
+        console.error(error);
+        ElMessage.error('发布失败');
+    } finally {
+        loading.value = false;
+    }
+};
 const handleEdit = async () => {
     loading.value = true;
     const updatedData = {
