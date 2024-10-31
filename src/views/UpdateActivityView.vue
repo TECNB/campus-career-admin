@@ -17,13 +17,13 @@
                     <el-icon>
                         <Plus />
                     </el-icon>
-                    <p>发布活动</p>
+                    <p>确定</p>
                 </div>
                 <div class="FilterBox" v-else @click="handleEdit">
                     <el-icon>
                         <Plus />
                     </el-icon>
-                    <p>更新活动</p>
+                    <p>更新</p>
                 </div>
 
             </div>
@@ -177,9 +177,6 @@
                 </div>
             </div>
         </el-scrollbar>
-
-
-
     </div>
 </template>
 

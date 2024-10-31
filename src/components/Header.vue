@@ -78,7 +78,7 @@ watch(isFullScreen, (newValue) => {
 
 const tabs = ref([
     { name: '活动日历', route: '/' },
-    { name: '活动发布', route: '/activity-publish' },
+    { name: '活动查看', route: '/activity' },
 ]);
 
 const currentTab = ref(0);

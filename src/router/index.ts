@@ -12,9 +12,14 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("../views/ActivityCalendarView.vue"),
             },
             {
+                name: '活动查看',
+                path: "/activity",
+                component: () => import("../views/ActivityView.vue"),
+            },
+            {
                 name: '活动发布',
-                path: "/activity-publish",
-                component: () => import("../views/ActivityPublishView.vue"),
+                path: "/updateActivity/:id",
+                component: () => import("../views/UpdateActivityView.vue"),
             },
             {
                 name: '就业查询',
