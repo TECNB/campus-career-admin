@@ -14,8 +14,8 @@ export const allType = ref<any[]>([
 export const name = ref<string>('');
 
 // 定义开始时间和结束时间的响应式变量
-export const startTime: Ref<Date | null> = ref(null);
-export const endTime: Ref<Date | null> = ref(null);
+export const startTime: Ref<string | null> = ref(null);
+export const endTime: Ref<string | null> = ref(null);
 
 // 定义活动地点的响应式变量
 export const place = ref<string>('');
@@ -137,4 +137,4 @@ export const defaultProps = {
 export const detail = ref<string>('');
 
 // 工作地点
-export const area = ref<string>('');
+export const area = ref<string[]>([]);

@@ -181,7 +181,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from "vue"
+import { ref, onMounted } from "vue"
 import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
 import {
     provinceAndCityData,
@@ -190,13 +190,22 @@ import {
     pcaTextArr,
     codeToText,
 } from "element-china-area-data";
+import router from '../router/index';
+// 引入route
+import { useRoute } from 'vue-router';
 
 import type { UploadFile } from 'element-plus'
+// 引入接口
+import { addActivity,getAllActivity,getActivityById } from '../api/activity';
+
+
 import {
     category, allType, name, startTime, endTime, place, allPlace, money, allMoney, nature,
     allNature, participantCount, shortcuts, jobPosition, applicationLink, targetAudience,
     treeData, defaultProps, detail,area
 } from '../constant/ActivityPublishForm';
+
+const route = useRoute();
 
 // 是否为修改
 let isEdit = ref(false);
@@ -208,6 +217,50 @@ const fileList = ref<UploadFile[]>([]) // 上传文件列表
 const dialogImageUrl = ref('') // 预览图片的URL
 const dialogVisible = ref(false) // 控制对话框可见性
 const disabled = ref(false) // 控制按钮是否禁用
+
+onMounted(async () => {
+    console.log(route.params.id);
+    // 判断是否为编辑
+    if (route.params.id === "create") {
+        isEdit.value = false;
+    } else {
+        isEdit.value = true;
+        loading.value = true;
+        // 获取活动信息
+        await getActivityById(route.params.id as string).then((res) => {
+            const data = res.data;
+            console.log(data);
+            name.value = data.name;
+            category.value = data.category;
+            startTime.value = data.startTime;
+            endTime.value = data.endTime;
+            place.value = data.place;
+            participantCount.value = data.participantCount;
+            money.value = data.money;
+            nature.value = data.nature;
+            // 将 area 拆分为数组
+            area.value = data.area.split('/');
+            jobPosition.value = data.jobPosition;
+            applicationLink.value = data.applicationLink;
+            targetAudience.value = data.targetAudience;
+            detail.value = data.detail;
+
+            // 如果需要处理图片
+            if (data.activityImage) {
+                fileList.value = [{
+                    name: "activity-image",
+                    url: data.activityImage,
+                    status: 'success',
+                    uid: Date.now()
+                }];
+            }
+
+            loading.value = false;
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+});
 
 // 成功上传后的处理方法
 const handleUploadSuccess = (response: any, file: UploadFile) => {
@@ -245,12 +298,18 @@ const handleDownload = (file: UploadFile) => {
 
 const handleCancel = () => {
     ElMessage.success('取消成功')
+    router.push('/activity')
 }
 const handleAdd = () => {
     ElMessage.success('发布成功')
+    router.push('/activity')
+    console.log('啊啊啊啊啊啊啊啊啊',area.value);
+
 }
 const handleEdit = () => {
     ElMessage.success('更新成功')
+    router.push('/activity')
+    console.log('啊啊啊啊啊啊啊啊啊',area.value);
 }
 </script>
 

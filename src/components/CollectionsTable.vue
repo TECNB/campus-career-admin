@@ -115,7 +115,7 @@ import { Collection } from '../interfaces/Collection';
 
 
 import { updateCollectionPrice, getAllCheckedCollections, getAllNotCheckedCollections, getAllCollections,checkCollection,deleteCollection } from '../api/collections';
-import { getTypeById } from '../api/type';
+import { getTypeById } from '../api/activity';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);

@@ -94,11 +94,11 @@ import router from '../router';
 
 
 // 引入接口Type
-import { Type } from '../interfaces/Type';
+import { Type } from '../interfaces/Activity';
 
 
 // 引入api
-import { getAllTypes } from '../api/type';
+import { getAllTypes } from '../api/activity';
 
 
 const props = defineProps(['dateOrder','typeOrder']);

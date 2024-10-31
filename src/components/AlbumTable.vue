@@ -94,7 +94,7 @@ import router from '../router';
 
 
 // 引入接口Type
-import { Type } from '../interfaces/Type';
+import { Type } from '../interfaces/Activity';
 
 
 // 引入getAllAlbums
