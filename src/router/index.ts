@@ -27,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("../views/EmploymentSearchView.vue"),
             },
             {
+                name: '就业信息登记',
+                path: "/updateEmployment-search",
+                component: () => import("../views/UpdateEmploymentSearchView.vue"),
+            },
+            {
                 name: '岗位搜索',
                 path: "/job-search",
                 component: () => import("../views/JobSearchView.vue"),
@@ -40,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
                 name: '就业资料库',
                 path: "/employment-database",
                 component: () => import("../views/EmploymentDatabaseView.vue"),
+            },
+            {
+                name: '发布资料',
+                path: "/updateEmployment-database/:id",
+                component: () => import("../views/UpdateEmploymentDatabaseView.vue"),
             },
 
             {

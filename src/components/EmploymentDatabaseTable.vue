@@ -20,8 +20,9 @@
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
-
                 <el-table-column type="selection" width="40" />
+                
+                <el-table-column prop="id" label="序号"/>
                 <el-table-column prop="category" label="活动内容">
                     <template #default="{ row }">
                         <span>{{ row.category }}</span>

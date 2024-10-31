@@ -73,7 +73,7 @@ const menusStudent = [
         children: [
             { label: '活动日历', path: '/' },
             { label: '活动查看', path: '/activity' },
-            { label: '就业信息登记', path: '/employment-search' },
+            { label: '就业信息登记', path: '/updateEmployment-search' },
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
 

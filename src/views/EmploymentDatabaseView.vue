@@ -3,7 +3,7 @@
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>用户管理</p>
+                    <p>就业资料库</p>
                 </div>
                 <div class="FilterSection">
                     <div class="FilterBox">
@@ -21,10 +21,12 @@
                             <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
                                 v-if="ifShowTypeOrderPicker">
                                 <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('正常')">
-                                    正常</p>
+                                    @click="choseTypeOrder('招聘会')">
+                                    招聘会</p>
                                 <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('封禁')">封禁</p>
+                                    @click="choseTypeOrder('宣讲会')">宣讲会</p>
+                                    <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
+                                    @click="choseTypeOrder('招聘公告')">招聘公告</p>
                             </div>
                         </transition>
                     </div>
@@ -51,16 +53,16 @@
                         </transition>
 
                     </div>
-                    <!-- <div class="FilterBox">
+                    <div class="FilterBox" @click="toUpdate('create')" v-if="userInfo.user?.userType=='teacher'">
                         <el-icon>
                             <Plus />
                         </el-icon>
-                        <p>添加订单</p>
-                    </div> -->
+                        <p>发布资料</p>
+                    </div>
 
                 </div>
             </div>
-            <ActivityTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <EmploymentDatabaseTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
 
     </div>
@@ -68,11 +70,19 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-// 引入OrderTable
-import ActivityTable from "../components/ActivityTable.vue"
+import router from '../router';
+
+// 引入userInfoStore
+import { userInfoStore } from '../stores/UserInfoStore';
+
+import EmploymentDatabaseTable from "../components/EmploymentDatabaseTable.vue"
+
+
+// 使用userInfoStore
+const userInfo = userInfoStore();
 
 const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有用户")
+const typeOrder = ref<string>("所有资料")
 const ifShowDateOrderPicker = ref<boolean>(false)
 const ifShowTypeOrderPicker = ref<boolean>(false)
 
@@ -95,6 +105,11 @@ const toggleIfShowDateOrderPicker = () => {
 // 控制是否显示类型排序选择框
 const toggleIfShowTypeOrderPicker = () => {
     ifShowTypeOrderPicker.value = !ifShowTypeOrderPicker.value
+}
+
+const toUpdate = (id: string) => {
+    console.log('toUpdate')
+    router.push('/updateEmployment-database/'+id)
 }
 </script>
 

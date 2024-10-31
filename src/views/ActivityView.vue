@@ -53,7 +53,7 @@
                         </transition>
 
                     </div>
-                    <div class="FilterBox" @click="toUpdateActivity('create')">
+                    <div class="FilterBox" @click="toUpdateActivity('create')" v-if="userInfo.user?.userType=='teacher'">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -72,7 +72,14 @@
 import { ref } from "vue"
 import router from '../router';
 
+// 引入userInfoStore
+import { userInfoStore } from '../stores/UserInfoStore';
+
 import ActivityTable from "../components/ActivityTable.vue"
+
+
+// 使用userInfoStore
+const userInfo = userInfoStore();
 
 const dateOrder = ref<string>("默认排序")
 const typeOrder = ref<string>("所有活动")
