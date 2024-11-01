@@ -6,7 +6,7 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input type="text" class="ml-2" placeholder="请输入活动名称" v-model="input" @keyup.enter="filterData"/>
+                <input type="text" class="ml-2" placeholder="请输入资料标题" v-model="input" @keyup.enter="filterData" />
             </div>
             <div class="FilterBox flex items-center cursor-pointer">
                 <el-icon>
@@ -22,46 +22,29 @@
                 v-loading="loading" :row-style="{ height: '80px' }">
                 <el-table-column type="selection" width="40" />
                 
-                <el-table-column prop="id" label="序号"/>
-                <el-table-column prop="category" label="活动内容">
+                <el-table-column prop="id" label="序号" />
+                <el-table-column prop="category" label="资料类别">
                     <template #default="{ row }">
                         <span>{{ row.category }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动名称" width="120" />
-                <el-table-column prop="startTime" label="活动开始时间" width="160">
+                <el-table-column prop="title" label="资料标题" width="180" />
+                <el-table-column prop="attachment" label="附件链接" width="160">
                     <template #default="{ row }">
-                        <span>{{ new Date(row.startTime).toLocaleString() }}</span>
+                        <a :href="row.attachment" target="_blank">下载附件</a>
                     </template>
                 </el-table-column>
-                <el-table-column prop="endTime" label="活动结束时间" width="160">
+                <el-table-column prop="details" label="资料详情" width="200" />
+                <el-table-column prop="createdAt" label="创建时间" width="160">
                     <template #default="{ row }">
-                        <span>{{ new Date(row.endTime).toLocaleString() }}</span>
+                        <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="place" label="活动地点" />
-                <el-table-column prop="participantCount" label="活动人数" />
-                <el-table-column prop="money" label="薪资待遇" />
-                <el-table-column prop="nature" label="公司性质" />
-                <el-table-column prop="area" label="工作地点" width="160" />
-                <el-table-column prop="jobPosition" label="招聘岗位" />
-                <el-table-column prop="applicationLink" label="网申链接" width="160">
-                    <template #default="{ row }">
-                        <a :href="row.applicationLink" target="_blank">{{ row.applicationLink }}</a>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="targetAudience" label="发送人群" />
-                <el-table-column prop="activityImage" label="活动图片">
-                    <template #default="{ row }">
-                        <el-avatar :src="row.activityImage" size="large" shape="square"/>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="detail" label="活动详情" width="160" />
 
                 <!-- 操作栏 -->
                 <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType=='teacher'">
                     <template #default="{ row }">
-                        <el-button text bg type="success" size="small" @click="toUpdateActivity(row.id)">
+                        <el-button text bg type="success" size="small" @click="toUpdate(row.id)">
                             编辑
                         </el-button>
 
@@ -94,8 +77,8 @@ import { userInfoStore } from '../stores/UserInfoStore';
 
 import router from '../router/index';
 
-import { Activity } from '../interfaces/Activity';
-import { addActivity,getAllActivity,getActivityById,editActivity,deleteActivity } from '../api/activity';
+import { EmploymentDatabase } from '../interfaces/EmploymentDatabase';
+import { getAllEmploymentDatabase,deleteEmploymentDatabase } from '../api/employmentDatabase';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -105,14 +88,14 @@ const userInfo = userInfoStore();
 
 const input = ref('');
 
-const tableData = ref<Activity[]>([]);
+const tableData = ref<EmploymentDatabase[]>([]);
 
 
 const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
 // const user = 'admin';
-const allData = ref<Activity[]>([]);
+const allData = ref<EmploymentDatabase[]>([]);
 
 let loading = ref(false);
 
@@ -151,7 +134,7 @@ watch(() => props.typeOrder, (newVal) => {
 
 onMounted(async () => {
     loading.value = true;
-    await getAllActivity().then((res) => {
+    await getAllEmploymentDatabase().then((res) => {
         loading.value = false;
         allData.value = res.data.records;
 
@@ -163,26 +146,26 @@ onMounted(async () => {
 
 const filterData = () => {
     const filtered = allData.value.filter(activity => 
-        activity.name.includes(input.value.trim())
+        activity.details.includes(input.value.trim())
     );
     counts.value = filtered.length;
     tableData.value = filtered.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 };
 
-const toUpdateActivity = (id: string) => {
-    console.log('toUpdateActivity')
-    router.push('/updateActivity/' + id)
+const toUpdate = (id: string) => {
+    console.log('toUpdate')
+    router.push('/updateEmployment-database/' + id)
 }
 
 const deletion = async (id: number) => {
     try {
-        await ElMessageBox.confirm('确定删除该活动吗？', '提示', {
+        await ElMessageBox.confirm('确定删除该资料吗？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
         });
 
-        await deleteActivity({ id });
+        await deleteEmploymentDatabase({ id });
         ElMessage.success('删除成功');
 
         // 删除成功后更新表格数据

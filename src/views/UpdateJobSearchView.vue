@@ -78,7 +78,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
                         <el-select v-model="money" placeholder="请点击选择分类" size="large" clearable :teleported="false">
                             <el-option v-for="item in allMoney" :key="item.objectId" :label="item.name"
-                                :value="item.objectId" />
+                                :value="item.name" />
                         </el-select>
                     </div>
                     <div class="flex flex-1 justify-start items-center">

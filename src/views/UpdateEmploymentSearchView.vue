@@ -67,7 +67,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">活动地点：</p>
                         <el-select v-model="place" placeholder="请点击选择分类" size="large" clearable :teleported="false">
                             <el-option v-for="item in allPlace" :key="item.objectId" :label="item.name"
-                                :value="item.objectId" />
+                                :value="item.name" />
                         </el-select>
 
                     </div>
@@ -84,14 +84,14 @@
                         <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
                         <el-select v-model="money" placeholder="请点击选择分类" size="large" clearable :teleported="false">
                             <el-option v-for="item in allMoney" :key="item.objectId" :label="item.name"
-                                :value="item.objectId" />
+                                :value="item.name" />
                         </el-select>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">公司性质：</p>
                         <el-select v-model="nature" placeholder="请点击选择性质" size="large" clearable :teleported="false">
                             <el-option v-for="item in allNature" :key="item.objectId" :label="item.name"
-                                :value="item.objectId" />
+                                :value="item.name" />
                         </el-select>
                     </div>
                 </div>

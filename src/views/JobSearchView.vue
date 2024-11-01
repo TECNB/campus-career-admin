@@ -21,10 +21,10 @@
                             <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
                                 v-if="ifShowTypeOrderPicker">
                                 <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('正常')">
-                                    正常</p>
+                                    @click="choseTypeOrder('10k-15k')">
+                                    10k-15k</p>
                                 <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('封禁')">封禁</p>
+                                    @click="choseTypeOrder('15k以上')">15k以上</p>
                             </div>
                         </transition>
                     </div>
@@ -77,7 +77,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import JobSearchTable from "../components/JobSearchTable.vue"
 
 const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有用户")
+const typeOrder = ref<string>("所有岗位")
 
 // 使用userInfoStore
 const userInfo = userInfoStore();

@@ -1,16 +1,19 @@
 export interface User {
-    objectId: string; // 用户对象ID
-    hash: string; // 哈希值
-    username: string; // 用户名
-    userType: string; // 用户类型
-    phone: string; // 手机号码
-    avatar: string; // 头像
-    orders: string[]; // 订单列表
-    favoriteCollection: string[]; // 收藏的集合列表
-    ownedCollection: string[]; // 拥有的集合列表
-    sellingCollection: string[]; // 正在出售的集合列表
-    token: string; // 令牌
-    lastLogin: string; // 上次登录时间
-    createdAt: string; // 创建时间
-    updatedAt: string; // 更新时间
+    userId: string;
+    username: string;
+    passwordHash: string;
+    userType: 'teacher' | 'student' | 'admin'; // 具体的 userType 可根据实际情况添加
+    avatarUrl: string;
+    age: number | null;
+    city: string | null;
+    province: string | null;
+    signature: string | null;
+    aboutMe: string | null;
+    starRating: number;
+    token: string;
+    salt: string;
+    lastLogin: string; // ISO 日期格式，适合使用 string
+    phone: string;
+    createdAt: string | null;
+    updatedAt: string | null;
 }

@@ -41,7 +41,7 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">标题：</p>
-                        <el-input v-model="name" placeholder="请输入标题" />
+                        <el-input v-model="title" placeholder="请输入标题" />
                     </div>
                 </div>
 
@@ -92,7 +92,7 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-start">
                         <p class="text-xl font-bold whitespace-nowrap">资料详情：</p>
-                        <el-input v-model="detail" placeholder="请输入资料详情" :rows="10" type="textarea" />
+                        <el-input v-model="details" placeholder="请输入资料详情" :rows="10" type="textarea" />
                     </div>
                 </div>
                 
@@ -102,30 +102,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
-import {
-    provinceAndCityData,
-    pcTextArr,
-    regionData,
-    pcaTextArr,
-    codeToText,
-} from "element-china-area-data";
+import { ref, onMounted } from "vue";
+import { Download, Plus } from '@element-plus/icons-vue';
 import router from '../router/index';
-// 引入route
 import { useRoute } from 'vue-router';
 
-import type { UploadFile } from 'element-plus'
-// 引入接口
-import { addActivity,getAllActivity,getActivityById,editActivity } from '../api/activity';
-
-
-import {
-    category, name, startTime, endTime, place, allPlace, money, allMoney, nature,
-    allNature, participantCount, shortcuts, jobPosition, applicationLink, targetAudience,
-    treeData, defaultProps, detail,area
-} from '../constant/ActivityPublishForm';
-import { id } from "element-plus/es/locale";
+import type { UploadFile } from 'element-plus';
+import { addEmploymentDatabase, getEmploymentDatabaseById, editEmploymentDatabase } from '../api/employmentDatabase';
 
 const route = useRoute();
 
@@ -143,61 +126,45 @@ const allType = ref<any[]>([
 
 // 定义上传文件列表
 const fileList = ref<UploadFile[]>([]) // 上传文件列表
-const dialogImageUrl = ref('') // 预览图片的URL
-const dialogVisible = ref(false) // 控制对话框可见性
+const dialogImageUrl = ref(''); // 预览图片的URL
+const dialogVisible = ref(false); // 控制对话框可见性
 const disabled = ref(false) // 控制按钮是否禁用
 
+// 表单属性
+const id = ref('');
+const category = ref('');
+const title = ref('');
+const attachment = ref('');
+const details = ref('');
+const createdAt = ref('');
+
 onMounted(async () => {
-    console.log(route.params.id);
-    // 判断是否为编辑
     if (route.params.id === "create") {
         isEdit.value = false;
         // 清空表单属性
-        name.value = '';
+        title.value = '';
         category.value = '';
-        startTime.value = '';
-        endTime.value = '';
-        place.value = '';
-        participantCount.value = 0;
-        money.value = '';
-        nature.value = '';
-        area.value = [];
-        jobPosition.value = '';
-        applicationLink.value = '';
-        targetAudience.value = '';
-        detail.value = '';
+        attachment.value = '';
+        details.value = '';
         fileList.value = [];
         loading.value = false;
-        
     } else {
         isEdit.value = true;
         loading.value = true;
-        // 获取活动信息
-        await getActivityById(route.params.id as string).then((res) => {
+        // 获取文档信息
+        await getEmploymentDatabaseById(route.params.id as string).then((res) => {
             const data = res.data;
-            console.log(data);
-            name.value = data.name;
+            title.value = data.title;
             category.value = data.category;
-            startTime.value = data.startTime;
-            endTime.value = data.endTime;
-            place.value = data.place;
-            participantCount.value = data.participantCount;
-            money.value = data.money;
-            nature.value = data.nature;
+            attachment.value = data.attachment;
+            details.value = data.details;
+            createdAt.value = data.createdAt;
 
-            // 将 area 拆分为数组
-            area.value = data.area.split('/');
-
-            jobPosition.value = data.jobPosition;
-            applicationLink.value = data.applicationLink;
-            targetAudience.value = data.targetAudience;
-            detail.value = data.detail;
-
-            // 如果需要处理图片
-            if (data.activityImage) {
+            // 如果有附件
+            if (data.attachment) {
                 fileList.value = [{
-                    name: "activity-image",
-                    url: data.activityImage,
+                    name: "attachment-file",
+                    url: data.attachment,
                     status: 'success',
                     uid: Date.now()
                 }];
@@ -217,60 +184,34 @@ const handleUploadSuccess = (response: any, file: UploadFile) => {
             name: file.name,
             url: file.url || (file.raw ? URL.createObjectURL(file.raw) : ''), // 使用本地URL预览
             uid: file.uid,
-            status: 'success' // 添加status属性
-        })
+            status: 'success'
+        });
     }
-    console.log('handleUploadSuccess fileList:', fileList.value)
-}
+};
 const handleRemove = (file: UploadFile) => {
-    console.log('fileList:', fileList.value)
-    console.log('Removing file:', file)
-    console.log('file.uid:', file.uid)
-    // 仅移除当前点击的文件
-    fileList.value = fileList.value.filter(f => f.uid !== file.uid)
-    console.log('fileList:', fileList.value)
-}
-
-const handlePictureCardPreview = (file: UploadFile) => {
-    dialogImageUrl.value = file.url!
-    dialogVisible.value = true
-
-    console.log('Previewing file:', file)
-}
+    fileList.value = fileList.value.filter(f => f.uid !== file.uid);
+};
 
 const handleDownload = (file: UploadFile) => {
-    // 在此实现下载功能
-    console.log('Downloading file:', file)
-}
-
-
+    console.log('Downloading file:', file);
+};
 const handleCancel = () => {
     ElMessage.success('取消成功')
-    router.push('/activity')
+    router.push('/employment-database')
 }
 const handleAdd = async () => {
     loading.value = true;
     const newData = {
-        name: name.value,
+        title: title.value,
         category: category.value,
-        startTime: startTime.value,
-        endTime: endTime.value,
-        place: place.value,
-        participantCount: participantCount.value,
-        money: money.value,
-        nature: nature.value,
-        area: area.value.join('/'), // 将数组格式的 area 转换为字符串
-        jobPosition: jobPosition.value,
-        applicationLink: applicationLink.value,
-        targetAudience: targetAudience.value,
-        detail: detail.value,
-        activityImages: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
+        attachment: fileList.value.length ? fileList.value[0].url : null,
+        details: details.value,
     };
 
     try {
-        await addActivity(newData);
+        await addEmploymentDatabase(newData);
         ElMessage.success('发布成功');
-        router.push('/activity');
+        router.push('/employment-database');
     } catch (error) {
         console.error(error);
         ElMessage.error('发布失败');
@@ -282,26 +223,16 @@ const handleEdit = async () => {
     loading.value = true;
     const updatedData = {
         id: route.params.id as string,
-        name: name.value,
+        title: title.value,
         category: category.value,
-        startTime: startTime.value,
-        endTime: endTime.value,
-        place: place.value,
-        participantCount: participantCount.value,
-        money: money.value,
-        nature: nature.value,
-        area: area.value.join('/'), // 将数组格式的 area 转换为字符串
-        jobPosition: jobPosition.value,
-        applicationLink: applicationLink.value,
-        targetAudience: targetAudience.value,
-        detail: detail.value,
-        activityImage: fileList.value.length ? fileList.value[0].url : null, // 假设只保存一张图片
+        attachment: fileList.value.length ? fileList.value[0].url : null,
+        details: details.value,
     };
 
     try {
-        await editActivity(updatedData);
+        await editEmploymentDatabase(updatedData);
         ElMessage.success('更新成功');
-        router.push('/activity');
+        router.push('/employment-database');
     } catch (error) {
         console.log(error);
         ElMessage.error('更新失败');
@@ -309,6 +240,12 @@ const handleEdit = async () => {
         loading.value = false;
     }
 };
+const handlePictureCardPreview = (file: UploadFile) => {
+    dialogImageUrl.value = file.url!
+    dialogVisible.value = true
+
+    console.log('Previewing file:', file)
+}
 </script>
 
 <style lang="scss" scoped>

@@ -26,7 +26,9 @@
                 <el-input v-model="phone" placeholder="手机号" class="mt-4" v-if="ifRegister">
 
                     <template #prefix>
-                        <el-icon><Phone /></el-icon>
+                        <el-icon>
+                            <Phone />
+                        </el-icon>
                     </template>
                 </el-input>
                 <!-- 下面为密码输入框 -->
@@ -88,6 +90,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 
 import { login, signup } from '../api/user'
 import router from '../router/index';
+import { User } from "../interfaces/User";
 
 const emit = defineEmits();
 
@@ -113,7 +116,25 @@ let ifresetPassword = ref(false)
 // 实现Login方法
 const handleLogin = async () => {
     // 初始化 loginData 为一个 JSON 对象
-    let loginData = {};
+    let loginData: User = {
+        userId: "",
+        username: "",
+        passwordHash: "",
+        userType: "teacher", // 根据需要设置默认值
+        avatarUrl: "",
+        age: null,
+        city: null,
+        province: null,
+        signature: null,
+        aboutMe: null,
+        starRating: 0,
+        token: "",
+        salt: "",
+        lastLogin: "",
+        phone: "",
+        createdAt: null,
+        updatedAt: null
+    };
 
     // 根据用户名或手机号判断字段
     if (isValidPhone(username.value)) {
@@ -134,10 +155,10 @@ const handleLogin = async () => {
         // JsonData封装为对象
         const obj = JSON.parse(JsonData)
 
-        if(obj.userType){
-            if(obj.userType != "teacher"){
+        if (obj.userType) {
+            if (obj.userType != "teacher") {
                 ElMessage.success('学生登录成功！')
-            }else{
+            } else {
                 ElMessage.success('教师登录成功！')
             }
         }
@@ -151,7 +172,7 @@ const handleLogin = async () => {
 
         toggleVisibility()
         router.push({ path: '/' })
-        
+
     }).catch((error: AxiosError) => {
         // 获取到 AxiosError 中的 error
         // 处理错误的情况

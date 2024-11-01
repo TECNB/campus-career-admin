@@ -35,6 +35,7 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTreeSelect: typeof import('element-plus/es')['ElTreeSelect']
     ElUpload: typeof import('element-plus/es')['ElUpload']
+    EmploymentDatabase: typeof import('./src/components/EmploymentDatabase.vue')['default']
     EmploymentDatabaseTable: typeof import('./src/components/EmploymentDatabaseTable.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     IssueDateTable: typeof import('./src/components/IssueDateTable.vue')['default']

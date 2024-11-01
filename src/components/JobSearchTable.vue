@@ -22,6 +22,8 @@
                 v-loading="loading" :row-style="{ height: '80px' }">
 
                 <el-table-column type="selection" width="40" />
+
+                <el-table-column prop="id" label="序号"/>
                 <el-table-column prop="companyName" label="企业名称" width="120" />
                 <el-table-column prop="positionName" label="岗位名称" width="120" />
                 <el-table-column prop="hrName" label="HR" width="100" />
@@ -141,12 +143,17 @@ onMounted(async () => {
 });
 
 const filterData = () => {
+    const searchTerm = input.value.trim().toLowerCase();
     const filtered = allData.value.filter(activity => 
-        activity.companyName.includes(input.value.trim())
+        Object.keys(activity).some(key => {
+            const value = activity[key as keyof JobSearch];
+            return value && value.toString().toLowerCase().includes(searchTerm);
+        })
     );
     counts.value = filtered.length;
     tableData.value = filtered.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
 };
+
 
 const toUpdateJob = (id: string) => {
     console.log('toUpdate')
