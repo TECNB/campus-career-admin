@@ -23,7 +23,7 @@
 
                 <el-table-column type="selection" width="40" />
 
-                <el-table-column prop="id" label="序号"/>
+                <el-table-column prop="id" label="序号" width="60"/>
                 <el-table-column prop="companyName" label="企业名称" width="120" />
                 <el-table-column prop="positionName" label="岗位名称" width="120" />
                 <el-table-column prop="hrName" label="HR" width="100" />
@@ -38,7 +38,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="additionalRequirements" label="其他要求" width="160" />
-                <el-table-column prop="companyDescription" label="企业简介" width="200" />
+                <el-table-column prop="companyDescription" label="企业简介"/>
 
                 <!-- 操作栏 -->
                 <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType=='teacher'">

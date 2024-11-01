@@ -47,6 +47,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { getEmploymentSearchByUserId } from '../api/employmentSearch';
 
 // 引入userInfoStore
 import { userInfoStore } from '../stores/UserInfoStore';
@@ -63,7 +64,7 @@ const selectedSubMenu = ref<number | null>(null);
 // ifShowSubMenu
 const ifShowSubMenu = ref<boolean>(false);
 
-let menus = [];
+let menus:any = [];
 
 const menusStudent = [
     {
@@ -73,7 +74,7 @@ const menusStudent = [
         children: [
             { label: '活动日历', path: '/' },
             { label: '活动查看', path: '/activity' },
-            { label: '就业信息登记', path: '/updateEmployment-search' },
+            { label: '就业信息登记', path: '/updateEmployment-search/'+ userInfo.user!.userId },
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
 
@@ -144,9 +145,9 @@ if (userInfo.user?.userType === 'student') {
 }
 
 
-onMounted(() => {
+onMounted(async() => {
     // 初始化选中的菜单
-    const index = menus.findIndex((menu) => menu.path === route.path);
+    const index = menus.findIndex((menu:any) => menu.path === route.path);
     if (index !== -1) {
         selectedMenu.value = index;
     }

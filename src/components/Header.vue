@@ -25,7 +25,7 @@
                     :src="userInfo.user?.avatarUrl">
                 <p>{{ userInfo.user?.username }}</p>
             </div>
-            <el-icon size="20" @click="toLogin">
+            <el-icon size="20" @click="toLogin" class="cursor-pointer">
                 <Tools />
             </el-icon>
         </div>

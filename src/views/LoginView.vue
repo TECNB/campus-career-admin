@@ -90,7 +90,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 
 import { login, signup } from '../api/user'
 import router from '../router/index';
-import { User } from "../interfaces/User";
+import type { User } from '../interfaces/User';
 
 const emit = defineEmits();
 

@@ -6,7 +6,7 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input type="text" class="ml-2" placeholder="请输入资料标题" v-model="input" @keyup.enter="filterData" />
+                <input type="text" class="ml-2" placeholder="请输入学生姓名" v-model="input" @keyup.enter="filterData" />
             </div>
             <div class="FilterBox flex items-center cursor-pointer">
                 <el-icon>
@@ -21,20 +21,25 @@
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
                 <el-table-column type="selection" width="40" />
-                
+
                 <el-table-column prop="id" label="序号" width="60"/>
-                <el-table-column prop="category" label="资料类别" width="80">
+                <el-table-column prop="name" label="姓名" width="120" />
+                <el-table-column prop="gender" label="性别" width="80" />
+                <el-table-column prop="className" label="班级" width="150" />
+                <el-table-column prop="userId" label="学号" width="130" />
+                <el-table-column prop="contactNumber" label="联系电话" width="130" />
+                <el-table-column prop="classTeacher" label="班主任" width="120" />
+                <el-table-column prop="graduationTutor" label="毕业导师" width="120" />
+                <el-table-column prop="futurePlan" label="毕业意向" width="120">
                     <template #default="{ row }">
-                        <span>{{ row.category }}</span>
+                        <span>{{ row.futurePlan }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="title" label="资料标题" width="180" />
-                <el-table-column prop="attachment" label="附件链接" width="160">
-                    <template #default="{ row }">
-                        <a :href="row.attachment" target="_blank">下载附件</a>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="details" label="资料详情"/>
+                <el-table-column prop="companyName" label="公司名称" />
+                <el-table-column prop="employmentStatus" label="就业状态" width="120" />
+                <el-table-column prop="workLocation" label="工作地点" width="120" />
+                <el-table-column prop="salary" label="薪资" width="100" />
+                <el-table-column prop="companyNature" label="单位性质" width="100" />
                 <el-table-column prop="createdAt" label="创建时间" width="160">
                     <template #default="{ row }">
                         <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
@@ -42,7 +47,7 @@
                 </el-table-column>
 
                 <!-- 操作栏 -->
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType=='teacher'">
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType == 'teacher'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdate(row.id)">
                             编辑
@@ -78,7 +83,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { EmploymentDatabase } from '../interfaces/EmploymentDatabase';
-import { getAllEmploymentDatabase,deleteEmploymentDatabase } from '../api/employmentDatabase';
+import { getAllEmploymentSearch, deleteEmploymentSearch } from '../api/employmentSearch';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -134,7 +139,7 @@ watch(() => props.typeOrder, (newVal) => {
 
 onMounted(async () => {
     loading.value = true;
-    await getAllEmploymentDatabase().then((res) => {
+    await getAllEmploymentSearch().then((res) => {
         loading.value = false;
         allData.value = res.data.records;
 
@@ -145,7 +150,7 @@ onMounted(async () => {
 });
 
 const filterData = () => {
-    const filtered = allData.value.filter(activity => 
+    const filtered = allData.value.filter(activity =>
         activity.details.includes(input.value.trim())
     );
     counts.value = filtered.length;
@@ -154,7 +159,7 @@ const filterData = () => {
 
 const toUpdate = (id: string) => {
     console.log('toUpdate')
-    router.push('/updateEmployment-database/' + id)
+    router.push('/updateEmployment-search/' + id)
 }
 
 const deletion = async (id: number) => {
@@ -165,7 +170,7 @@ const deletion = async (id: number) => {
             type: 'warning',
         });
 
-        await deleteEmploymentDatabase({ id });
+        await deleteEmploymentSearch({ id });
         ElMessage.success('删除成功');
 
         // 删除成功后更新表格数据

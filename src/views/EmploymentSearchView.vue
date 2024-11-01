@@ -62,7 +62,7 @@
 
                 </div>
             </div>
-            <ActivityTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <EmploymentSearchTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
 
     </div>
@@ -75,7 +75,7 @@ import router from '../router';
 // 引入userInfoStore
 import { userInfoStore } from '../stores/UserInfoStore';
 
-import ActivityTable from "../components/ActivityTable.vue"
+import EmploymentSearchTable from "../components/EmploymentSearchTable.vue"
 
 
 // 使用userInfoStore

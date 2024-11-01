@@ -103,7 +103,6 @@
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
                         <el-cascader size="large" :options="pcaTextArr" v-model="area" placeholder="请点击选择区域">
                         </el-cascader>
-
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">招聘岗位：</p>

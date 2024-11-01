@@ -28,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 name: '就业信息登记',
-                path: "/updateEmployment-search",
+                path: "/updateEmployment-search/:id",
                 component: () => import("../views/UpdateEmploymentSearchView.vue"),
             },
             {
