@@ -5,53 +5,7 @@
                 <div class="title">
                     <p>就业日历</p>
                 </div>
-                <div class="FilterSection">
-                    <div class="FilterBox">
-                        <div class="flex justify-center items-center gap-3" @click="toggleIfShowTypeOrderPicker">
-                            <p>显示：</p>
-                            <p class="text-black font-medium">{{ typeOrder }}</p>
-                            <el-icon v-if="ifShowTypeOrderPicker">
-                                <ArrowUpBold />
-                            </el-icon>
-                            <el-icon v-else>
-                                <ArrowDownBold />
-                            </el-icon>
-                        </div>
-                        <transition name="fade">
-                            <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
-                                v-if="ifShowTypeOrderPicker">
-                                <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('正常')">
-                                    正常</p>
-                                <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('封禁')">封禁</p>
-                            </div>
-                        </transition>
-                    </div>
-                    <div class="FilterBox">
-                        <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
-                            <p>排序：</p>
-                            <p class="text-black font-medium">{{ dateOrder }}</p>
-                            <el-icon v-if="ifShowDateOrderPicker">
-                                <ArrowUpBold />
-                            </el-icon>
-                            <el-icon v-else>
-                                <ArrowDownBold />
-                            </el-icon>
-                        </div>
-                        <transition name="fade">
-                            <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3 z-50"
-                                v-if="ifShowDateOrderPicker">
-                                <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseDateOrder('日期倒序')">
-                                    日期倒序</p>
-                                <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseDateOrder('日期正序')">日期正序</p>
-                            </div>
-                        </transition>
-
-                    </div>
-                </div>
+                
             </div>
             <ActivityCalendar />
         </el-scrollbar>

@@ -4,8 +4,7 @@
             <!-- 自定义日期单元格 -->
             <template #dateCell="{ data }">
                 <div :style="{
-                    backgroundColor: activityByDate[data.day] ? '#f56c6c' : '',
-                    borderRadius: activityByDate[data.day] ? '50%' : '',
+                    backgroundColor: activityByDate[data.day] ? '#BFDFFF' : '',
                     color: activityByDate[data.day] ? 'white' : '',
                     opacity: data.type === 'current-month' ? 1 : 0.5,
                     width: '100%',
@@ -14,24 +13,27 @@
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
-                }" @click="handleDateClick(data.day, $event)">
+                    position: 'relative'
+                }" @click="handleDateClick(data.day)">
                     {{ data.day.split('-')[2] }} <!-- 显示日期的日部分 -->
+
+                    <!-- 动态 Popover 展示活动信息 -->
+                    <el-popover
+                        v-if="popoverVisible[data.day]"
+                        v-model:visible="popoverVisible[data.day]"
+                        width="100%"
+                        :teleported="false"
+                    >
+                        <div v-for="activity in activityByDate[data.day]" :key="activity.id">
+                            <p><strong>{{ activity.name }}</strong></p>
+                            <p>时间: {{ new Date(activity.startTime).toLocaleString() }}</p>
+                            <p>地点: {{ activity.place }}</p>
+                        </div>
+                    </el-popover>
                 </div>
             </template>
         </el-calendar>
-
-        <!-- 动态 Popover 展示活动信息 -->
-        <el-popover v-if="popoverVisible" :visible="popoverVisible" width="200" placement="top"
-            :style="{ position: 'fixed', top: popoverPosition.top, left: popoverPosition.left }"
-            @mouseleave="popoverVisible = false">
-            <div v-for="activity in selectedActivities" :key="activity.id">
-                <p><strong>{{ activity.name }}</strong></p>
-                <p>时间: {{ new Date(activity.startTime).toLocaleString() }}</p>
-                <p>地点: {{ activity.place }}</p>
-            </div>
-        </el-popover>
     </div>
-
 </template>
 
 <script setup lang="ts">
@@ -39,16 +41,12 @@ import { ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 
 import { Activity } from '../interfaces/Activity';
-
 import { getAllActivity } from '../api/activity';
-
 
 const loading = ref(false);
 const allData = ref<Activity[]>([]);
 const activityByDate = ref<{ [key: string]: Activity[] }>({});
-const selectedActivities = ref<Activity[]>([]);
-const popoverVisible = ref(false);
-const popoverPosition = ref({ top: '0px', left: '0px' });
+const popoverVisible = ref<{ [key: string]: boolean }>({});
 
 onMounted(async () => {
     loading.value = true;
@@ -72,16 +70,12 @@ onMounted(async () => {
 });
 
 // 点击日期显示活动详情的 Popover
-const handleDateClick = (day, event) => {
-    selectedActivities.value = activityByDate.value[day] || [];
-    if (selectedActivities.value.length > 0) {
-        popoverVisible.value = true;
-        popoverPosition.value = {
-            top: `${event.clientY + 10}px`,
-            left: `${event.clientX + 10}px`,
-        };
+const handleDateClick = (day: string) => {
+    if (activityByDate.value[day]) {
+        // 切换 Popover 可见状态
+        popoverVisible.value[day] = !popoverVisible.value[day];
     } else {
-        popoverVisible.value = false;
+        popoverVisible.value[day] = false;
     }
 };
 </script>
