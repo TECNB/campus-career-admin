@@ -2,7 +2,7 @@
     <div class="pt-10 px-10">
         <el-calendar>
             <!-- 自定义日期单元格 -->
-            <template #dateCell="{ data }">
+            <template #date-cell="{ data }">
                 <div :style="{
                     backgroundColor: activityByDate[data.day] ? '#BFDFFF' : '',
                     color: activityByDate[data.day] ? 'white' : '',

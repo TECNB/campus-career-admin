@@ -38,6 +38,7 @@ declare module 'vue' {
     EmploymentDatabaseTable: typeof import('./src/components/EmploymentDatabaseTable.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     IssueDateTable: typeof import('./src/components/IssueDateTable.vue')['default']
+    JobSearchTable: typeof import('./src/components/JobSearchTable.vue')['default']
     MaskLayer: typeof import('./src/components/MaskLayer.vue')['default']
     OrderTable: typeof import('./src/components/OrderTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

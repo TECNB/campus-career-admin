@@ -3,7 +3,7 @@
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>用户管理</p>
+                    <p>岗位搜索</p>
                 </div>
                 <div class="FilterSection">
                     <div class="FilterBox">
@@ -51,16 +51,16 @@
                         </transition>
 
                     </div>
-                    <!-- <div class="FilterBox">
+                    <div class="FilterBox" @click="toUpdate('create')" v-if="userInfo.user?.userType=='teacher'">
                         <el-icon>
                             <Plus />
                         </el-icon>
-                        <p>添加订单</p>
-                    </div> -->
+                        <p>发布岗位</p>
+                    </div>
 
                 </div>
             </div>
-            <AccountTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <JobSearchTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
 
     </div>
@@ -68,11 +68,20 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-// 引入OrderTable
-import AccountTable from "../components/AccountTable.vue"
+
+import router from '../router';
+
+// 引入userInfoStore
+import { userInfoStore } from '../stores/UserInfoStore';
+
+import JobSearchTable from "../components/JobSearchTable.vue"
 
 const dateOrder = ref<string>("默认排序")
 const typeOrder = ref<string>("所有用户")
+
+// 使用userInfoStore
+const userInfo = userInfoStore();
+
 const ifShowDateOrderPicker = ref<boolean>(false)
 const ifShowTypeOrderPicker = ref<boolean>(false)
 
@@ -95,6 +104,10 @@ const toggleIfShowDateOrderPicker = () => {
 // 控制是否显示类型排序选择框
 const toggleIfShowTypeOrderPicker = () => {
     ifShowTypeOrderPicker.value = !ifShowTypeOrderPicker.value
+}
+const toUpdate = (id: string) => {
+    console.log('toUpdate')
+    router.push('/updateJob-search/'+id)
 }
 </script>
 

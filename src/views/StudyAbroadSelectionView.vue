@@ -3,7 +3,7 @@
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>用户管理</p>
+                    <p>留学智选</p>
                 </div>
                 <div class="FilterSection">
                     <div class="FilterBox">
@@ -60,7 +60,7 @@
 
                 </div>
             </div>
-            <AccountTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <ActivityTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
 
     </div>
@@ -68,8 +68,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-// 引入OrderTable
-import AccountTable from "../components/AccountTable.vue"
+
+import ActivityTable from "../components/ActivityTable.vue"
 
 const dateOrder = ref<string>("默认排序")
 const typeOrder = ref<string>("所有用户")

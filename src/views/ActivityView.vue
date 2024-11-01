@@ -53,7 +53,7 @@
                         </transition>
 
                     </div>
-                    <div class="FilterBox" @click="toUpdateActivity('create')" v-if="userInfo.user?.userType=='teacher'">
+                    <div class="FilterBox" @click="toUpdate('create')" v-if="userInfo.user?.userType=='teacher'">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -107,8 +107,8 @@ const toggleIfShowTypeOrderPicker = () => {
     ifShowTypeOrderPicker.value = !ifShowTypeOrderPicker.value
 }
 
-const toUpdateActivity = (id: string) => {
-    console.log('toUpdateActivity')
+const toUpdate = (id: string) => {
+    console.log('toUpdate')
     router.push('/updateActivity/'+id)
 }
 </script>

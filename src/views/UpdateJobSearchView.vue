@@ -3,7 +3,7 @@
 
         <div class="header">
             <div class="title">
-                <p>发布活动详情</p>
+                <p>岗位发布详情</p>
             </div>
             <div class="FilterSection">
                 <div class="FilterBox" @click="handleCancel">
@@ -33,46 +33,40 @@
                 <!-- 第一行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">活动内容：</p>
-                        <el-select v-model="category" placeholder="请点击选择分类" size="large" clearable :teleported="false">
-                            <el-option v-for="item in allType" :key="item.objectId" :label="item.name"
-                                :value="item.name" />
-                        </el-select>
-
+                        <p class="text-xl font-bold whitespace-nowrap">企业名称：</p>
+                        <el-input v-model="companyName" placeholder="请输入名称" />
                     </div>
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">活动名称：</p>
-                        <el-input v-model="name" placeholder="请输入名称" />
+                        <p class="text-xl font-bold whitespace-nowrap">岗位名称：</p>
+                        <el-input v-model="positionName" placeholder="请输入名称" />
                     </div>
                 </div>
 
                 <!-- 第二行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">活动开始时间：</p>
-                        <el-date-picker v-model="startTime" type="datetime" placeholder="请选择开始时间"
-                            :shortcuts="shortcuts" />
-
+                        <p class="text-xl font-bold whitespace-nowrap">HR：</p>
+                        <el-input v-model="hrName" placeholder="请输入HR名称" />
                     </div>
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">活动结束时间：</p>
-                        <el-date-picker v-model="endTime" type="datetime" placeholder="请选择结束时间"
-                            :shortcuts="shortcuts" />
+                        <p class="text-xl font-bold whitespace-nowrap">联系电话：</p>
+                        <el-input v-model="hrPhone" placeholder="请输入名称" />
                     </div>
                 </div>
 
                 <!-- 第三行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">活动地点：</p>
-                        <el-select v-model="place" placeholder="请点击选择分类" size="large" clearable :teleported="false">
-                            <el-option v-for="item in allPlace" :key="item.objectId" :label="item.name"
-                                :value="item.objectId" />
+                        <p class="text-xl font-bold whitespace-nowrap">专业要求：</p>
+                        <el-select v-model="majorRequirement" placeholder="请点击选择专业" size="large" clearable
+                            :teleported="false">
+                            <el-option v-for="item in allMajor" :key="item.objectId" :label="item.name"
+                                :value="item.name" />
                         </el-select>
 
                     </div>
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">活动人数：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">招聘人数：</p>
                         <el-input-number v-model="participantCount" :min="1" placeholder="请输入人数" />
                     </div>
                 </div>
@@ -88,30 +82,14 @@
                         </el-select>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">公司性质：</p>
-                        <el-select v-model="nature" placeholder="请点击选择性质" size="large" clearable :teleported="false">
-                            <el-option v-for="item in allNature" :key="item.objectId" :label="item.name"
-                                :value="item.objectId" />
-                        </el-select>
-                    </div>
-                </div>
-
-
-                <!-- 第五行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
-                    <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
                         <el-cascader size="large" :options="pcaTextArr" v-model="area" placeholder="请点击选择区域">
                         </el-cascader>
 
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">招聘岗位：</p>
-                        <el-input v-model="jobPosition" placeholder="请输入具体岗位" />
-                    </div>
                 </div>
 
-                <!-- 第六行 -->
+                <!-- 第五行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">网申链接：</p>
@@ -119,60 +97,17 @@
 
                     </div>
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">发送人群：</p>
-                        <el-tree-select v-model="targetAudience" :data="treeData" placeholder="请点击选择发送人群" size="large"
-                            clearable :props="defaultProps" />
+                        <p class="text-xl font-bold whitespace-nowrap">其他要求：</p>
+                        <el-input v-model="additionalRequirements" placeholder="请输入其他要求" />
+
                     </div>
                 </div>
 
-                <!-- 第七行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
-                    <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">活动图片：</p>
-                        <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card"
-                            :auto-upload="false" :file-list="fileList" multiple :on-success="handleUploadSuccess">
-                            <el-icon>
-                                <Plus />
-                            </el-icon>
-
-                            <template #file="{ file }">
-                                <div>
-                                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                                    <span class="el-upload-list__item-actions">
-                                        <span class="el-upload-list__item-preview"
-                                            @click="handlePictureCardPreview(file)">
-                                            <el-icon>
-                                                <ZoomIn />
-                                            </el-icon>
-                                        </span>
-                                        <span v-if="!disabled" class="el-upload-list__item-delete"
-                                            @click="handleDownload(file)">
-                                            <el-icon>
-                                                <Download />
-                                            </el-icon>
-                                        </span>
-                                        <span v-if="!disabled" class="el-upload-list__item-delete"
-                                            @click="handleRemove(file)">
-                                            <el-icon>
-                                                <Delete />
-                                            </el-icon>
-                                        </span>
-                                    </span>
-                                </div>
-                            </template>
-                        </el-upload>
-
-                        <el-dialog v-model="dialogVisible">
-                            <img class="w-full" :src="dialogImageUrl" alt="Preview Image" />
-                        </el-dialog>
-                    </div>
-                </div>
-
-                <!-- 第八行 -->
+                <!-- 第六行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-start">
-                        <p class="text-xl font-bold whitespace-nowrap">活动详情：</p>
-                        <el-input v-model="detail" placeholder="请输入活动详情" :rows="5" type="textarea" />
+                        <p class="text-xl font-bold whitespace-nowrap">企业简介：</p>
+                        <el-input v-model="companyDescription" placeholder="请输入企业简介" :rows="5" type="textarea" />
                     </div>
                 </div>
             </div>
@@ -181,85 +116,72 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
-import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
-import { pcaTextArr } from "element-china-area-data";
-import router from '../router/index';
-// 引入route
+import { ref, onMounted } from "vue";
+import { Close, Plus } from '@element-plus/icons-vue';
 import { useRoute } from 'vue-router';
-
-import type { UploadFile } from 'element-plus'
-// 引入接口
-import { addActivity,getActivityById,editActivity } from '../api/activity';
-
-
-import {
-    category, allType, name, startTime, endTime, place, allPlace, money, allMoney, nature,
-    allNature, participantCount, shortcuts, jobPosition, applicationLink, targetAudience,
-    treeData, defaultProps, detail,area
-} from '../constant/ActivityPublishForm';
-import { id } from "element-plus/es/locale";
+import { pcaTextArr } from "element-china-area-data";
+import { addJobSearch, getJobSearchById, editJobSearch } from '../api/jobSearch';
+import type { UploadFile } from 'element-plus';
+import router from '../router/index';
 
 const route = useRoute();
 
-// 是否为修改
 let isEdit = ref(false);
-// 加载
 let loading = ref(false);
 
+// 定义表单属性
+const companyName = ref('');
+const positionName = ref('');
+const hrName = ref('');
+const hrPhone = ref('');
+const majorRequirement = ref('');
+const participantCount = ref(0);
+const money = ref('');
+const area = ref<string[]>([]);
+const applicationLink = ref('');
+const additionalRequirements = ref('');
+const companyDescription = ref('');
+
+// 定义下拉选项
+const allMajor = ref<any[]>([
+    { objectId: '1', name: '软件工程' },
+    { objectId: '2', name: '机械自动化' },
+    { objectId: '3', name: '电气自动化' }
+]);
+
+const allMoney = ref<any[]>([
+    { objectId: '1', name: '2000-5000' },
+    { objectId: '2', name: '5000-8000' },
+    { objectId: '3', name: '8000-15000' },
+    { objectId: '4', name: '15000以上' }
+]);
+
 // 定义上传文件列表
-const fileList = ref<UploadFile[]>([]) // 上传文件列表
-const dialogImageUrl = ref('') // 预览图片的URL
-const dialogVisible = ref(false) // 控制对话框可见性
-const disabled = ref(false) // 控制按钮是否禁用
+const fileList = ref<UploadFile[]>([]);
+const dialogImageUrl = ref('');
+const dialogVisible = ref(false);
 
 onMounted(async () => {
-    console.log(route.params.id);
-    // 判断是否为编辑
     if (route.params.id === "create") {
         isEdit.value = false;
-        // 清空表单属性
-        name.value = '';
-        category.value = '';
-        startTime.value = '';
-        endTime.value = '';
-        place.value = '';
-        participantCount.value = 0;
-        money.value = '';
-        nature.value = '';
-        area.value = [];
-        jobPosition.value = '';
-        applicationLink.value = '';
-        targetAudience.value = '';
-        detail.value = '';
-        fileList.value = [];
-        loading.value = false;
-        
     } else {
         isEdit.value = true;
         loading.value = true;
-        // 获取活动信息
-        await getActivityById(route.params.id as string).then((res) => {
+        try {
+            const res = await getJobSearchById(route.params.id as string);
             const data = res.data;
-            console.log(data);
-            name.value = data.name;
-            category.value = data.category;
-            startTime.value = data.startTime;
-            endTime.value = data.endTime;
-            place.value = data.place;
+            companyName.value = data.companyName;
+            positionName.value = data.positionName;
+            hrName.value = data.hrName;
+            hrPhone.value = data.hrPhone;
+            majorRequirement.value = data.majorRequirement;
             participantCount.value = data.participantCount;
             money.value = data.money;
-            nature.value = data.nature;
-
-            // 将 area 拆分为数组
             area.value = data.area.split('/');
-
-            jobPosition.value = data.jobPosition;
             applicationLink.value = data.applicationLink;
-            targetAudience.value = data.targetAudience;
-            detail.value = data.detail;
+            additionalRequirements.value = data.additionalRequirements;
+            companyDescription.value = data.companyDescription;
 
-            // 如果需要处理图片
             if (data.activityImage) {
                 fileList.value = [{
                     name: "activity-image",
@@ -268,11 +190,11 @@ onMounted(async () => {
                     uid: Date.now()
                 }];
             }
-
-            loading.value = false;
-        }).catch((err) => {
+        } catch (err) {
             console.log(err);
-        });
+        } finally {
+            loading.value = false;
+        }
     }
 });
 
@@ -281,62 +203,47 @@ const handleUploadSuccess = (response: any, file: UploadFile) => {
     if (!fileList.value.find(f => f.uid === file.uid)) {
         fileList.value.push({
             name: file.name,
-            url: file.url || (file.raw ? URL.createObjectURL(file.raw) : ''), // 使用本地URL预览
+            url: file.url || (file.raw ? URL.createObjectURL(file.raw) : ''),
             uid: file.uid,
-            status: 'success' // 添加status属性
-        })
+            status: 'success'
+        });
     }
-    console.log('handleUploadSuccess fileList:', fileList.value)
-}
+};
 const handleRemove = (file: UploadFile) => {
-    console.log('fileList:', fileList.value)
-    console.log('Removing file:', file)
-    console.log('file.uid:', file.uid)
-    // 仅移除当前点击的文件
-    fileList.value = fileList.value.filter(f => f.uid !== file.uid)
-    console.log('fileList:', fileList.value)
-}
+    fileList.value = fileList.value.filter(f => f.uid !== file.uid);
+};
 
 const handlePictureCardPreview = (file: UploadFile) => {
-    dialogImageUrl.value = file.url!
-    dialogVisible.value = true
-
-    console.log('Previewing file:', file)
-}
-
-const handleDownload = (file: UploadFile) => {
-    // 在此实现下载功能
-    console.log('Downloading file:', file)
-}
-
+    dialogImageUrl.value = file.url!;
+    dialogVisible.value = true;
+};
 
 const handleCancel = () => {
-    ElMessage.success('取消成功')
-    router.push('/activity')
-}
+    ElMessage.success('取消成功');
+    router.push('/job-search');
+};
+
 const handleAdd = async () => {
     loading.value = true;
     const newData = {
-        name: name.value,
-        category: category.value,
-        startTime: startTime.value,
-        endTime: endTime.value,
-        place: place.value,
+        companyName: companyName.value,
+        positionName: positionName.value,
+        hrName: hrName.value,
+        hrPhone: hrPhone.value,
+        majorRequirement: majorRequirement.value,
         participantCount: participantCount.value,
         money: money.value,
-        nature: nature.value,
-        area: area.value.join('/'), // 将数组格式的 area 转换为字符串
-        jobPosition: jobPosition.value,
+        area: area.value.join('/'),
         applicationLink: applicationLink.value,
-        targetAudience: targetAudience.value,
-        detail: detail.value,
-        activityImages: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
+        additionalRequirements: additionalRequirements.value,
+        companyDescription: companyDescription.value,
+        activityImages: fileList.value.map((file) => file.url),
     };
 
     try {
-        await addActivity(newData);
+        await addJobSearch(newData);
         ElMessage.success('发布成功');
-        router.push('/activity');
+        router.push('/job-search');
     } catch (error) {
         console.error(error);
         ElMessage.error('发布失败');
@@ -344,30 +251,29 @@ const handleAdd = async () => {
         loading.value = false;
     }
 };
+
 const handleEdit = async () => {
     loading.value = true;
     const updatedData = {
         id: route.params.id as string,
-        name: name.value,
-        category: category.value,
-        startTime: startTime.value,
-        endTime: endTime.value,
-        place: place.value,
+        companyName: companyName.value,
+        positionName: positionName.value,
+        hrName: hrName.value,
+        hrPhone: hrPhone.value,
+        majorRequirement: majorRequirement.value,
         participantCount: participantCount.value,
         money: money.value,
-        nature: nature.value,
-        area: area.value.join('/'), // 将数组格式的 area 转换为字符串
-        jobPosition: jobPosition.value,
+        area: area.value.join('/'),
         applicationLink: applicationLink.value,
-        targetAudience: targetAudience.value,
-        detail: detail.value,
-        activityImage: fileList.value.length ? fileList.value[0].url : null, // 假设只保存一张图片
+        additionalRequirements: additionalRequirements.value,
+        companyDescription: companyDescription.value,
+        activityImage: fileList.value.length ? fileList.value[0].url : null,
     };
 
     try {
-        await editActivity(updatedData);
+        await editJobSearch(updatedData);
         ElMessage.success('更新成功');
-        router.push('/activity');
+        router.push('/job-search');
     } catch (error) {
         console.log(error);
         ElMessage.error('更新失败');
@@ -566,17 +472,20 @@ const handleEdit = async () => {
 
 
 // 下面是地区选择组件的自定义样式
-:deep(.el-cascader--large){
+:deep(.el-cascader--large) {
     width: 100%;
     height: 50px;
 }
-:deep(.el-cascader .el-input){
+
+:deep(.el-cascader .el-input) {
     height: 50px;
 }
-:deep(.el-input--large .el-input__wrapper){
+
+:deep(.el-input--large .el-input__wrapper) {
     border-radius: 12px;
 }
-:deep(.el-cascader .el-input .el-input__inner){
+
+:deep(.el-cascader .el-input .el-input__inner) {
     font-size: 16px;
     font-weight: bold;
 }
