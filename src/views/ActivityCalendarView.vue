@@ -3,7 +3,7 @@
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>用户管理</p>
+                    <p>就业日历</p>
                 </div>
                 <div class="FilterSection">
                     <div class="FilterBox">
@@ -51,16 +51,9 @@
                         </transition>
 
                     </div>
-                    <!-- <div class="FilterBox">
-                        <el-icon>
-                            <Plus />
-                        </el-icon>
-                        <p>添加订单</p>
-                    </div> -->
-
                 </div>
             </div>
-            <ActivityTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <ActivityCalendar />
         </el-scrollbar>
 
     </div>
@@ -69,7 +62,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
 // 引入OrderTable
-import ActivityTable from "../components/ActivityTable.vue"
+import ActivityCalendar from "../components/ActivityCalendar.vue"
 
 const dateOrder = ref<string>("默认排序")
 const typeOrder = ref<string>("所有用户")

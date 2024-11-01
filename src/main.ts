@@ -3,6 +3,7 @@ import './style.css'
 import App from './App.vue'
 import router from "./router/index"
 import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 自定义全局css
 import './assets/styles/global.css'
 import * as ElIcons from '@element-plus/icons-vue'
@@ -27,15 +28,17 @@ pinia.use(piniaPluginPersistedstate)
 
 
 const app = createApp(App)
-for (const name in ElIcons){
-	app.component(name,(ElIcons as any)[name])
+for (const name in ElIcons) {
+    app.component(name, (ElIcons as any)[name])
 }
 
 // app.config.globalProperties.$echarts = echarts
 app
-    .use(ElementPlus)
+    .use(ElementPlus, {
+        locale: zhCn,
+    })
     .use(router)
     .use(pinia) // 启用 Pinia
 
     .mount('#app')
-    
+

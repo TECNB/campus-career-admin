@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AccountTable: typeof import('./src/components/AccountTable.vue')['default']
+    ActivityCalendar: typeof import('./src/components/ActivityCalendar.vue')['default']
     ActivityTable: typeof import('./src/components/ActivityTable.vue')['default']
     AlbumTable: typeof import('./src/components/AlbumTable.vue')['default']
     CollectionBoxDrop: typeof import('./src/components/CollectionBoxDrop.vue')['default']
@@ -15,6 +16,7 @@ declare module 'vue' {
     DropTable: typeof import('./src/components/DropTable.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCalendar: typeof import('element-plus/es')['ElCalendar']
     ElCascader: typeof import('element-plus/es')['ElCascader']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
@@ -24,6 +26,7 @@ declare module 'vue' {
     ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
