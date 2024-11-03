@@ -128,8 +128,8 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动图片：</p>
-                        <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card"
-                            :auto-upload="false" :file-list="fileList" multiple :on-success="handleUploadSuccess">
+                        <el-upload action="http://localhost:5173/api/activity/file" list-type="picture-card"
+                            :auto-upload="true" :file-list="fileList" multiple :on-success="handleUploadSuccess">
                             <el-icon>
                                 <Plus />
                             </el-icon>
@@ -211,6 +211,9 @@ const fileList = ref<UploadFile[]>([]) // 上传文件列表
 const dialogImageUrl = ref('') // 预览图片的URL
 const dialogVisible = ref(false) // 控制对话框可见性
 const disabled = ref(false) // 控制按钮是否禁用
+// 定义图片上传后的多张图片路径变量
+const imagePaths = ref<string[]>([])
+
 
 onMounted(async () => {
     console.log(route.params.id);
@@ -258,15 +261,13 @@ onMounted(async () => {
             targetAudience.value = data.targetAudience;
             detail.value = data.detail;
 
-            // 如果需要处理图片
-            if (data.activityImage) {
-                fileList.value = [{
-                    name: "activity-image",
-                    url: data.activityImage,
-                    status: 'success',
-                    uid: Date.now()
-                }];
-            }
+            // 将imagePaths数组存入fileList
+            fileList.value = data.imagePaths.map((url: string) => ({
+                name: url,
+                url: url,
+                uid: url,
+                status: 'success'
+            }));
 
             loading.value = false;
         }).catch((err) => {
@@ -280,12 +281,12 @@ const handleUploadSuccess = (response: any, file: UploadFile) => {
     if (!fileList.value.find(f => f.uid === file.uid)) {
         fileList.value.push({
             name: file.name,
-            url: file.url || (file.raw ? URL.createObjectURL(file.raw) : ''), // 使用本地URL预览
+            url: response.data,
             uid: file.uid,
             status: 'success' // 添加status属性
         })
     }
-    console.log('handleUploadSuccess fileList:', fileList.value)
+    console.log('handleUploadSuccess fileList:', fileList.value.map((file) => file.url))
 }
 const handleRemove = (file: UploadFile) => {
     console.log('fileList:', fileList.value)
@@ -329,7 +330,8 @@ const handleAdd = async () => {
         applicationLink: applicationLink.value,
         targetAudience: targetAudience.value,
         detail: detail.value,
-        activityImages: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
+        activityImage: fileList.value.length ? fileList.value[0].url : null, // activityImages中只保存一张图片
+        imagePaths: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
     };
 
     try {
@@ -360,7 +362,8 @@ const handleEdit = async () => {
         applicationLink: applicationLink.value,
         targetAudience: targetAudience.value,
         detail: detail.value,
-        activityImage: fileList.value.length ? fileList.value[0].url : null, // 假设只保存一张图片
+        activityImage: fileList.value.length ? fileList.value[0].url : null, // activityImages中只保存一张图片
+        imagePaths: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
     };
 
     try {

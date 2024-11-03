@@ -26,3 +26,8 @@ export const editActivity = (params: any): Promise<R<any>> => {
 export const deleteActivity = (params: any): Promise<R<any>> => {
     return axios.delete<R<any>>('api/activity', params);
 };
+
+// 上传文件
+export const uploadActivityFile = (params: any): Promise<R<any>> => {
+    return axios.post<R<any>>('api/activity/file', params);
+}

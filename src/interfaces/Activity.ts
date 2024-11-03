@@ -16,4 +16,5 @@ export interface Activity {
     detail: string; // 活动详情
     createdAt: string; // 创建时间 (ISO 8601 格式)
     updatedAt: string; // 更新时间 (ISO 8601 格式)
+    imagePaths: string[]; // 活动图片链接数组
 }
