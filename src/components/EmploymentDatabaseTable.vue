@@ -21,20 +21,20 @@
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
                 <el-table-column type="selection" width="40" />
-                
-                <el-table-column prop="id" label="序号" width="60"/>
+
+                <el-table-column prop="id" label="序号" width="60" />
                 <el-table-column prop="category" label="资料类别" width="80">
                     <template #default="{ row }">
                         <span>{{ row.category }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="title" label="资料标题" width="180" />
-                <el-table-column prop="attachment" label="附件链接" width="160">
+                <el-table-column prop="attachment" label="附件压缩包" width="160">
                     <template #default="{ row }">
-                        <a :href="row.attachment" target="_blank">下载附件</a>
+                        <a href="javascript:void(0)" @click="downloadAllAttachments(row.attachment)">点击下载附件</a>
                     </template>
                 </el-table-column>
-                <el-table-column prop="details" label="资料详情"/>
+                <el-table-column prop="details" label="资料详情" />
                 <el-table-column prop="createdAt" label="创建时间" width="160">
                     <template #default="{ row }">
                         <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
@@ -42,7 +42,7 @@
                 </el-table-column>
 
                 <!-- 操作栏 -->
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType=='teacher'">
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType == 'teacher'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdate(row.id)">
                             编辑
@@ -78,7 +78,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { EmploymentDatabase } from '../interfaces/EmploymentDatabase';
-import { getAllEmploymentDatabase,deleteEmploymentDatabase } from '../api/employmentDatabase';
+import { getAllEmploymentDatabase, deleteEmploymentDatabase,download } from '../api/employmentDatabase';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -145,7 +145,7 @@ onMounted(async () => {
 });
 
 const filterData = () => {
-    const filtered = allData.value.filter(activity => 
+    const filtered = allData.value.filter(activity =>
         activity.details.includes(input.value.trim())
     );
     counts.value = filtered.length;
@@ -202,6 +202,39 @@ const multipleSelection = ref<[]>([])
 const handleSelectionChange = (val: []) => {
     multipleSelection.value = val
 }
+
+const downloadAllAttachments = async (attachment: string[]) => {
+    const data = {
+        attachment: attachment
+    };
+
+    const response = await fetch('http://localhost:5173/api/employment-database/download', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        // 转换响应为 Blob 对象
+        const blob = await response.blob();
+        
+        // 创建临时下载链接
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'attachments.zip'; // 下载文件名
+        document.body.appendChild(a);
+        a.click(); // 自动触发下载
+        a.remove(); // 移除临时元素
+
+        // 释放 URL 对象
+        window.URL.revokeObjectURL(url);
+    } else {
+        console.error('下载失败');
+    }
+};
 </script>
 
 <style lang="scss" scoped>

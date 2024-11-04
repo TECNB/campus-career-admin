@@ -49,45 +49,23 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">上传附件：</p>
-                        <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card"
-                            :auto-upload="false" :file-list="fileList" multiple :on-success="handleUploadSuccess">
-                            <el-icon>
-                                <Plus />
+                        <el-upload class="w-1/2" drag action="http://localhost:5173/api/activity/file" multiple
+                            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.ppt,.pptx,.mp4,.avi,.mov" :file-list="fileList"
+                            :on-success="handleUploadSuccess">
+                            <el-icon class="el-icon--upload">
+                                <upload-filled />
                             </el-icon>
-
-                            <template #file="{ file }">
-                                <div>
-                                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                                    <span class="el-upload-list__item-actions">
-                                        <span class="el-upload-list__item-preview"
-                                            @click="handlePictureCardPreview(file)">
-                                            <el-icon>
-                                                <ZoomIn />
-                                            </el-icon>
-                                        </span>
-                                        <span v-if="!disabled" class="el-upload-list__item-delete"
-                                            @click="handleDownload(file)">
-                                            <el-icon>
-                                                <Download />
-                                            </el-icon>
-                                        </span>
-                                        <span v-if="!disabled" class="el-upload-list__item-delete"
-                                            @click="handleRemove(file)">
-                                            <el-icon>
-                                                <Delete />
-                                            </el-icon>
-                                        </span>
-                                    </span>
+                            <div class="el-upload__text">
+                                将文件拖拽在这里或<em>点击上传</em>
+                            </div>
+                            <template #tip>
+                                <div class="el-upload__tip">
+                                    支持 jpg、png、pdf、doc、ppt、mp4 等文件
                                 </div>
                             </template>
                         </el-upload>
-
-                        <el-dialog v-model="dialogVisible">
-                            <img class="w-full" :src="dialogImageUrl" alt="Preview Image" />
-                        </el-dialog>
                     </div>
                 </div>
-
                 <!-- 第三行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-start">
@@ -95,7 +73,7 @@
                         <el-input v-model="details" placeholder="请输入资料详情" :rows="10" type="textarea" />
                     </div>
                 </div>
-                
+
             </div>
         </el-scrollbar>
     </div>
@@ -156,19 +134,17 @@ onMounted(async () => {
             const data = res.data;
             title.value = data.title;
             category.value = data.category;
-            attachment.value = data.attachment;
+
             details.value = data.details;
             createdAt.value = data.createdAt;
 
-            // 如果有附件
-            if (data.attachment) {
-                fileList.value = [{
-                    name: "attachment-file",
-                    url: data.attachment,
-                    status: 'success',
-                    uid: Date.now()
-                }];
-            }
+            // 将attachment数组存入fileList
+            fileList.value = data.attachment.map((data: any) => ({
+                name: data.fileName,
+                url: data.filePath,
+                uid: data.id,
+                status: 'success'
+            }));
 
             loading.value = false;
         }).catch((err) => {
@@ -182,11 +158,12 @@ const handleUploadSuccess = (response: any, file: UploadFile) => {
     if (!fileList.value.find(f => f.uid === file.uid)) {
         fileList.value.push({
             name: file.name,
-            url: file.url || (file.raw ? URL.createObjectURL(file.raw) : ''), // 使用本地URL预览
+            url: response.data,
             uid: file.uid,
-            status: 'success'
-        });
+            status: 'success' // 添加status属性
+        })
     }
+    console.log('handleUploadSuccess fileList:', fileList.value.map((file) => file.url))
 };
 const handleRemove = (file: UploadFile) => {
     fileList.value = fileList.value.filter(f => f.uid !== file.uid);
@@ -204,7 +181,10 @@ const handleAdd = async () => {
     const newData = {
         title: title.value,
         category: category.value,
-        attachment: fileList.value.length ? fileList.value[0].url : null,
+        attachment: fileList.value.map((file) => ({
+            fileName: file.name,       // 使用文件的名称作为 fileName
+            filePath: file.url         // 使用文件的 URL 作为 filePath
+        })),
         details: details.value,
     };
 
@@ -225,7 +205,10 @@ const handleEdit = async () => {
         id: route.params.id as string,
         title: title.value,
         category: category.value,
-        attachment: fileList.value.length ? fileList.value[0].url : null,
+        attachment: fileList.value.map((file) => ({
+            fileName: file.name,       // 使用文件的名称作为 fileName
+            filePath: file.url         // 使用文件的 URL 作为 filePath
+        })),
         details: details.value,
     };
 
@@ -437,17 +420,20 @@ const handlePictureCardPreview = (file: UploadFile) => {
 
 
 // 下面是地区选择组件的自定义样式
-:deep(.el-cascader--large){
+:deep(.el-cascader--large) {
     width: 100%;
     height: 50px;
 }
-:deep(.el-cascader .el-input){
+
+:deep(.el-cascader .el-input) {
     height: 50px;
 }
-:deep(.el-input--large .el-input__wrapper){
+
+:deep(.el-input--large .el-input__wrapper) {
     border-radius: 12px;
 }
-:deep(.el-cascader .el-input .el-input__inner){
+
+:deep(.el-cascader .el-input .el-input__inner) {
     font-size: 16px;
     font-weight: bold;
 }
