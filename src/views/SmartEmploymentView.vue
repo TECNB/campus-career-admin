@@ -3,31 +3,9 @@
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>用户管理</p>
+                    <p>智能就业</p>
                 </div>
                 <div class="FilterSection">
-                    <div class="FilterBox">
-                        <div class="flex justify-center items-center gap-3" @click="toggleIfShowTypeOrderPicker">
-                            <p>显示：</p>
-                            <p class="text-black font-medium">{{ typeOrder }}</p>
-                            <el-icon v-if="ifShowTypeOrderPicker">
-                                <ArrowUpBold />
-                            </el-icon>
-                            <el-icon v-else>
-                                <ArrowDownBold />
-                            </el-icon>
-                        </div>
-                        <transition name="fade">
-                            <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
-                                v-if="ifShowTypeOrderPicker">
-                                <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('正常')">
-                                    正常</p>
-                                <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('封禁')">封禁</p>
-                            </div>
-                        </transition>
-                    </div>
                     <div class="FilterBox">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
@@ -51,30 +29,80 @@
                         </transition>
 
                     </div>
-                    <!-- <div class="FilterBox">
+                    <div class="FilterBox" @click="triggerFileUpload('resume')" v-if="userInfo.user?.userType==='student'">
                         <el-icon>
                             <Plus />
                         </el-icon>
-                        <p>添加订单</p>
-                    </div> -->
-
+                        <p>添加简历</p>
+                    </div>
+                    <div class="FilterBox" @click="triggerFileUpload('resume')" v-if="userInfo.user?.userType==='student'">
+                        <el-icon>
+                            <Plus />
+                        </el-icon>
+                        <p>添加面试</p>
+                    </div>
                 </div>
             </div>
-            <ActivityTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <SmartEmploymentTable :dateOrder="dateOrder" :typeOrder="typeOrder" />
+            <!-- 隐藏的文件选择框 -->
+            <input ref="fileInput" type="file" accept=".pdf" style="display: none" @change="handleFileChange" />
         </el-scrollbar>
-
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue"
 
-import ActivityTable from "../components/ActivityTable.vue"
+import SmartEmploymentTable from "../components/SmartEmploymentTable.vue"
+import { userInfoStore } from "../stores/UserInfoStore";
+
+const userInfo = userInfoStore();
 
 const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有用户")
+const typeOrder = ref<string>("所有链接")
 const ifShowDateOrderPicker = ref<boolean>(false)
 const ifShowTypeOrderPicker = ref<boolean>(false)
+
+// 引用文件输入
+const fileInput = ref<HTMLInputElement | null>(null)
+
+// 触发文件选择框
+const triggerFileUpload = (type: string) => {
+    fileInput.value?.click()
+}
+
+// 处理文件选择
+const handleFileChange = async (event: Event) => {
+    const target = event.target as HTMLInputElement
+    const file = target.files?.[0]
+
+    if (file && file.type === 'application/pdf') {
+        // 创建 FormData 并将文件添加到请求中
+        const formData = new FormData()
+        formData.append('file', file)
+
+        try {
+            const response = await fetch('http://localhost:5173/api/activity/file', {
+                method: 'POST',
+                body: formData,
+            })
+            if (response.ok) {
+                ElMessage.success('文件上传成功')
+                console.log('文件上传成功')
+            } else {
+                ElMessage.success('文件上传失败')
+                console.error('文件上传失败')
+            }
+        } catch (error) {
+            console.error('上传过程中出错:', error)
+        }
+    } else {
+        alert('仅支持上传 PDF 文件')
+    }
+
+    // 清空文件选择框的值，确保可以重新选择同一文件
+    target.value = ''
+}
 
 
 // 选择日期排序
@@ -143,6 +171,25 @@ const toggleIfShowTypeOrderPicker = () => {
 
                 color: rgba(160, 174, 192, 1);
                 background: white;
+                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
+
+                border-radius: 12px;
+
+
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+
+            .FilterBox:nth-child(2) {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 10px;
+
+
+
+                color: white;
+                background: rgba(63, 140, 255, 1);
                 box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
 
                 border-radius: 12px;
