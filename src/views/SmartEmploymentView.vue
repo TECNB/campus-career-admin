@@ -27,15 +27,16 @@
                                     @click="choseDateOrder('日期正序')">日期正序</p>
                             </div>
                         </transition>
-
                     </div>
-                    <div class="FilterBox" @click="triggerFileUpload('resume')" v-if="userInfo.user?.userType==='student'">
+                    <div class="FilterBox" @click="triggerFileUpload('resume')"
+                        v-if="userInfo.user?.userType === 'student'">
                         <el-icon>
                             <Plus />
                         </el-icon>
                         <p>添加简历</p>
                     </div>
-                    <div class="FilterBox" @click="triggerFileUpload('resume')" v-if="userInfo.user?.userType==='student'">
+                    <div class="FilterBox" @click="triggerFileUpload('interview')"
+                        v-if="userInfo.user?.userType === 'student'">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -52,9 +53,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-
 import SmartEmploymentTable from "../components/SmartEmploymentTable.vue"
 import { userInfoStore } from "../stores/UserInfoStore";
+import { ElMessage } from 'element-plus'
 
 const userInfo = userInfoStore();
 
@@ -65,9 +66,12 @@ const ifShowTypeOrderPicker = ref<boolean>(false)
 
 // 引用文件输入
 const fileInput = ref<HTMLInputElement | null>(null)
+// 当前文件类型
+const fileType = ref<string>('')
 
 // 触发文件选择框
 const triggerFileUpload = (type: string) => {
+    fileType.value = type // 设置文件类型为简历或面试
     fileInput.value?.click()
 }
 
@@ -80,9 +84,11 @@ const handleFileChange = async (event: Event) => {
         // 创建 FormData 并将文件添加到请求中
         const formData = new FormData()
         formData.append('file', file)
+        formData.append('fileType', fileType.value) // 使用当前的 fileType 值
+        formData.append('userId', userInfo.user?.userId || '')
 
         try {
-            const response = await fetch('http://localhost:5173/api/activity/file', {
+            const response = await fetch('http://localhost:5173/api/user-resume-interview-attachment/file', {
                 method: 'POST',
                 body: formData,
             })
@@ -90,7 +96,7 @@ const handleFileChange = async (event: Event) => {
                 ElMessage.success('文件上传成功')
                 console.log('文件上传成功')
             } else {
-                ElMessage.success('文件上传失败')
+                ElMessage.error('文件上传失败')
                 console.error('文件上传失败')
             }
         } catch (error) {

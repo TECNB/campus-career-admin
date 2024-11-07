@@ -54,7 +54,7 @@
                     style="border-radius: 12px;">
                     <div class="flex items-center justify-between text-left">
                         <div>
-                            <p class="text-lg font-semibold">{{ resume.title }}</p>
+                            <p class="text-lg font-semibold">简历 {{ resume.title }}</p>
                             <p class="text-sm text-gray-600">创建时间：{{ resume.date }}</p>
                         </div>
                         <div class="space-x-2">
@@ -79,7 +79,7 @@
                         style="border-radius: 12px;">
                         <div class="flex items-center justify-between text-left">
                             <div>
-                                <p class="text-lg font-semibold">{{ interview.title }}</p>
+                                <p class="text-lg font-semibold">面试记录 {{ interview.title }}</p>
                                 <p class="text-sm text-gray-600">面试时间：{{ interview.date }}</p>
                             </div>
                             <div class="space-x-2">
@@ -112,7 +112,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { JobSearch } from '../interfaces/JobSearch';
-import { getAllJobSearch, deleteJobSearch } from '../api/jobSearch';
+import { getUserFile } from '../api/smartEmployment';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -120,16 +120,47 @@ const props = defineProps(['dateOrder', 'typeOrder']);
 const userInfo = userInfoStore();
 
 
-// 模拟数据
-const resumeRecords = ref([
-    { id: 1, title: '简历 2023-01-15', date: '2023年1月15日', status: '已提交', statusColor: 'success' },
-    { id: 2, title: '简历 2023-02-10', date: '2023年2月10日', status: '草稿', statusColor: 'info' },
-])
+// 初始化数据引用
+const resumeRecords = ref<any[]>([]);
+const interviewRecords = ref<any[]>([]);
 
-const interviewRecords = ref([
-    { id: 1, title: '面试记录 2023-02-20', date: '2023年2月20日', status: '待面试', statusColor: 'warning' },
-    { id: 2, title: '面试记录 2023-03-05', date: '2023年3月5日', status: '已完成', statusColor: 'success' },
-])
+// 在组件挂载时调用接口获取数据
+onMounted(() => {
+    fetchRecords();
+});
+
+// 获取数据函数
+const fetchRecords = async () => {
+    try {
+        // 获取简历数据
+        const resumeResponse = await getUserFile({ fileType: 'resume', userId: userInfo.user?.userId });
+        if (resumeResponse && resumeResponse.data) {
+            resumeRecords.value = resumeResponse.data.map((record: any) => ({
+                id: record.id,
+                title: record.fileName, // 假设接口返回的日期字段是 'date'
+                date: record.uploadTime,
+                path: record.filePath,
+                statusColor: 'success' // 或根据逻辑设置 statusColor
+            }));
+        }
+
+        // 获取面试数据
+        const interviewResponse = await getUserFile({ fileType: 'interview', userId: userInfo.user?.userId });
+        if (interviewResponse && interviewResponse.data) {
+            interviewRecords.value = interviewResponse.data.map((record: any) => ({
+                id: record.id,
+                title: record.fileName, // 假设接口返回的日期字段是 'date'
+                date: record.uploadTime,
+                path: record.filePath,
+                statusColor: 'warning' // 或根据逻辑设置 statusColor
+            }));
+        }
+    } catch (error) {
+        console.error('获取文件记录失败', error);
+    }
+};
+
+
 
 // 添加、查看和删除功能
 const addResume = () => {
@@ -141,7 +172,8 @@ const addInterview = () => {
 
 // 模拟查看功能
 const check = (id: number) => {
-    const url = `http://localhost:8080/简历%202023-01-15.pdf`; // 可以根据 id 动态生成 URL
+    // 根据ID获取到path
+    const url = resumeRecords.value.find((record) => record.id === id)?.path;
     window.open(url, '_blank');
     console.log(`查看 ${id}`);
 }
