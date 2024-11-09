@@ -147,22 +147,22 @@ watch(() => props.dateOrder, (newVal) => {
     }
 });
 // 通过watch监听props.typeOrder的变化
-// watch(() => props.typeOrder, (newVal) => {
-//     if (newVal === "招聘会") {
-//         // 筛选出category为"招聘会"的数据
-//         tableData.value = allData.value.filter((item) => item.category === "招聘会");
-//     } else if (newVal === "宣讲会") {
-//         // 筛选出category为"宣讲会"的数据
-//         tableData.value = allData.value.filter((item) => item.category === "宣讲会");
-//     } else if (newVal === "招聘公告") {
-//         // 筛选出category为"招聘公告"的数据
-//         tableData.value = allData.value.filter((item) => item.category === "招聘公告");
-//     } else {
-//         // 如果没有匹配项，则显示全部数据
-//         tableData.value = allData.value;
-//     }
-//     counts.value = tableData.value.length;
-// });
+watch(() => props.typeOrder, (newVal) => {
+    if (newVal === "实习") {
+        // 筛选出category为"实习"的数据
+        tableData.value = allData.value.filter((item) => item.employmentStatus === "实习");
+    } else if (newVal === "签约") {
+        // 筛选出category为"签约"的数据
+        tableData.value = allData.value.filter((item) => item.employmentStatus === "签约");
+    } else if (newVal === "暂无") {
+        // 筛选出category为"暂无"的数据
+        tableData.value = allData.value.filter((item) => item.employmentStatus === "暂无");
+    } else {
+        // 如果没有匹配项，则显示全部数据
+        tableData.value = allData.value;
+    }
+    counts.value = tableData.value.length;
+});
 
 onMounted(async () => {
     loading.value = true;

@@ -21,10 +21,13 @@
                             <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
                                 v-if="ifShowTypeOrderPicker">
                                 <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('10k-15k')">
-                                    10k-15k</p>
-                                <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('15k以上')">15k以上</p>
+                                    @click="choseTypeOrder('2000-5000')">2000-5000</p>
+                                <p class="text-left mt-2 hover:text-accent-100 cursor-pointer"
+                                    @click="choseTypeOrder('5000-8000')">5000-8000</p>
+                                <p class="text-left mt-2 hover:text-accent-100 cursor-pointer"
+                                    @click="choseTypeOrder('8000-15000')">8000-15000</p>
+                                <p class="text-left mt-2 hover:text-accent-100 cursor-pointer"
+                                    @click="choseTypeOrder('15000以上')">15000以上</p>
                             </div>
                         </transition>
                     </div>
@@ -51,7 +54,7 @@
                         </transition>
 
                     </div>
-                    <div class="FilterBox" @click="toUpdate('create')" v-if="userInfo.user?.userType=='teacher'">
+                    <div class="FilterBox" @click="toUpdate('create')" v-if="userInfo.user?.userType == 'teacher'">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -60,7 +63,7 @@
 
                 </div>
             </div>
-            <JobSearchTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
+            <JobSearchTable :dateOrder="dateOrder" :typeOrder="typeOrder" />
         </el-scrollbar>
 
     </div>
@@ -77,7 +80,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import JobSearchTable from "../components/JobSearchTable.vue"
 
 const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有岗位")
+const typeOrder = ref<string>("所有薪资待遇")
 
 // 使用userInfoStore
 const userInfo = userInfoStore();
@@ -107,7 +110,7 @@ const toggleIfShowTypeOrderPicker = () => {
 }
 const toUpdate = (id: string) => {
     console.log('toUpdate')
-    router.push('/updateJob-search/'+id)
+    router.push('/updateJob-search/' + id)
 }
 </script>
 

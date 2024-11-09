@@ -138,15 +138,18 @@ watch(() => props.dateOrder, (newVal) => {
 });
 // 通过watch监听props.typeOrder的变化
 watch(() => props.typeOrder, (newVal) => {
-    if (newVal === "招聘会") {
-        // 筛选出category为"招聘会"的数据
-        tableData.value = allData.value.filter((item) => item.companyName === "招聘会");
-    } else if (newVal === "宣讲会") {
-        // 筛选出category为"宣讲会"的数据
-        tableData.value = allData.value.filter((item) => item.companyName === "宣讲会");
-    } else if (newVal === "招聘公告") {
-        // 筛选出category为"招聘公告"的数据
-        tableData.value = allData.value.filter((item) => item.companyName === "招聘公告");
+    if (newVal === "2000-5000") {
+        // 筛选出category为"2000-5000"的数据
+        tableData.value = allData.value.filter((item) => item.money === "2000-5000");
+    } else if (newVal === "5000-8000") {
+        // 筛选出category为"5000-8000"的数据
+        tableData.value = allData.value.filter((item) => item.money === "5000-8000");
+    } else if (newVal === "8000-15000") {
+        // 筛选出category为"8000-15000"的数据
+        tableData.value = allData.value.filter((item) => item.money === "8000-15000");
+    }else if (newVal === "15000以上") {
+        // 筛选出category为"15000以上"的数据
+        tableData.value = allData.value.filter((item) => item.money === "15000以上");
     } else {
         // 如果没有匹配项，则显示全部数据
         tableData.value = allData.value;

@@ -21,12 +21,12 @@
                             <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
                                 v-if="ifShowTypeOrderPicker">
                                 <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('招聘会')">
-                                    招聘会</p>
+                                    @click="choseTypeOrder('签约')">
+                                    签约</p>
                                 <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('宣讲会')">宣讲会</p>
+                                    @click="choseTypeOrder('实习')">实习</p>
                                     <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('招聘公告')">招聘公告</p>
+                                    @click="choseTypeOrder('暂无')">暂无</p>
                             </div>
                         </transition>
                     </div>
@@ -82,7 +82,7 @@ import EmploymentSearchTable from "../components/EmploymentSearchTable.vue"
 const userInfo = userInfoStore();
 
 const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有就业信息")
+const typeOrder = ref<string>("所有就业状态")
 const ifShowDateOrderPicker = ref<boolean>(false)
 const ifShowTypeOrderPicker = ref<boolean>(false)
 

@@ -6,8 +6,8 @@ export interface JobSearch {
     hrPhone?: string;  // HR 联系电话，可选
     majorRequirement?: string;  // 专业要求，可选，以逗号分隔
     participantCount?: number;  // 招聘人数，可选
-    salaryRange?: string;  // 薪资待遇，可选，格式如 "10k-15k"
-    workLocation?: string;  // 工作地点，可选
+    money?: string;  // 薪资待遇，可选，格式如 "10k-15k"
+    area?: string;  // 工作地点，可选
     applicationLink?: string;  // 网申链接，可选
     additionalRequirements?: string;  // 其他要求，可选
     companyDescription?: string;  // 企业简介，可选

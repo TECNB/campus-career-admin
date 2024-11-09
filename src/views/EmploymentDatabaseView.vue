@@ -21,12 +21,12 @@
                             <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
                                 v-if="ifShowTypeOrderPicker">
                                 <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('招聘会')">
-                                    招聘会</p>
+                                    @click="choseTypeOrder('就业资料')">
+                                    就业资料</p>
                                 <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('宣讲会')">宣讲会</p>
+                                    @click="choseTypeOrder('考研资料')">考研资料</p>
                                     <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('招聘公告')">招聘公告</p>
+                                    @click="choseTypeOrder('出国资料')">出国资料</p>
                             </div>
                         </transition>
                     </div>
