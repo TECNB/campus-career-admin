@@ -6,14 +6,23 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input type="text" class="ml-2" placeholder="请输入岗位名称" v-model="input" @keyup.enter="filterData" />
+                <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
             </div>
-            <div class="FilterBox flex items-center cursor-pointer">
+            <div class="FilterBox flex items-center cursor-pointer" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
                 <p class="ml-2">筛选</p>
             </div>
+        </div>
+
+        <!-- 筛选选项 -->
+        <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
+            <p v-for="(option, index) in filterOptions" :key="index" :class="[
+                selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
+            ]" @click="selectFilter(option.value)">
+                {{ option.label }}
+            </p>
         </div>
 
         <!-- 表格数据 -->
@@ -23,7 +32,7 @@
 
                 <el-table-column type="selection" width="40" />
 
-                <el-table-column prop="id" label="序号" width="60"/>
+                <el-table-column prop="id" label="序号" width="60" />
                 <el-table-column prop="companyName" label="企业名称" width="120" />
                 <el-table-column prop="positionName" label="岗位名称" width="120" />
                 <el-table-column prop="hrName" label="HR" width="100" />
@@ -38,10 +47,10 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="additionalRequirements" label="其他要求" width="160" />
-                <el-table-column prop="companyDescription" label="企业简介"/>
+                <el-table-column prop="companyDescription" label="企业简介" />
 
                 <!-- 操作栏 -->
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType=='teacher'">
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType == 'teacher'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdateJob(row.id)">
                             编辑
@@ -76,10 +85,25 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { JobSearch } from '../interfaces/JobSearch';
-import { getAllJobSearch,deleteJobSearch } from '../api/jobSearch';
+import { getAllJobSearch, deleteJobSearch } from '../api/jobSearch';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
+const filterOptions = [
+    { label: '企业名称', value: 'companyName' },
+    { label: '岗位名称', value: 'positionName' },
+    { label: 'HR', value: 'hrName' },
+    { label: '联系电话', value: 'hrPhone' },
+    { label: '专业要求', value: 'majorRequirement' },
+    { label: '招聘人数', value: 'participantCount' },
+    { label: '薪资待遇', value: 'money' },
+    { label: '工作地点', value: 'area' },
+    { label: '网申链接', value: 'applicationLink' },
+    { label: '其他要求', value: 'additionalRequirements' },
+    { label: '企业简介', value: 'companyDescription' }
+];
+const selectedFilter = ref('companyName');  // 默认筛选条件
+const filterVisible = ref(false);
 // 使用userInfoStore
 const userInfo = userInfoStore();
 
@@ -142,16 +166,25 @@ onMounted(async () => {
     })
 });
 
+const toggleFilter = () => {
+    filterVisible.value = !filterVisible.value;
+};
+
+// 选择筛选项
+const selectFilter = (value: string) => {
+    selectedFilter.value = value;
+    console.log(selectedFilter.value);
+    filterData();
+};
+
+// 过滤数据
 const filterData = () => {
-    const searchTerm = input.value.trim().toLowerCase();
-    const filtered = allData.value.filter(activity => 
-        Object.keys(activity).some(key => {
-            const value = activity[key as keyof JobSearch];
-            return value && value.toString().toLowerCase().includes(searchTerm);
-        })
-    );
-    counts.value = filtered.length;
-    tableData.value = filtered.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+    console.log('allData', allData.value)
+    const filtered = allData.value.filter(table => {
+        const value = table[selectedFilter.value as keyof JobSearch];
+        return value && value.toString().includes(input.value.trim());
+    });
+    tableData.value = filtered.slice(0, 10); // 这里假设分页大小为10，您可以根据实际需要修改
 };
 
 

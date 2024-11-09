@@ -6,21 +6,46 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input type="text" class="ml-2" placeholder="请输入活动名称" v-model="input" @keyup.enter="filterData"/>
+                <input
+                    type="text"
+                    class="ml-2"
+                    placeholder="请输入文字进行搜索"
+                    v-model="input"
+                    @keyup.enter="filterData"
+                />
             </div>
-            <div class="FilterBox flex items-center cursor-pointer">
+            <div class="FilterBox flex items-center cursor-pointer" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
                 <p class="ml-2">筛选</p>
             </div>
         </div>
+        
+        <!-- 筛选选项 -->
+        <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
+            <p
+                v-for="(option, index) in filterOptions"
+                :key="index"
+                :class="[
+                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
+                ]"
+                @click="selectFilter(option.value)"
+            >
+                {{ option.label }}
+            </p>
+        </div>
 
         <!-- 表格数据 -->
         <el-scrollbar height="100%">
-            <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
-                v-loading="loading" :row-style="{ height: '80px' }">
-
+            <el-table
+                :data="tableData"
+                class="tableBox"
+                table-layout="fixed"
+                @selection-change="handleSelectionChange"
+                v-loading="loading"
+                :row-style="{ height: '80px' }"
+            >
                 <el-table-column type="selection" width="40" />
                 <el-table-column prop="category" label="活动内容">
                     <template #default="{ row }">
@@ -52,18 +77,15 @@
                 <el-table-column prop="targetAudience" label="发送人群" />
                 <el-table-column prop="activityImage" label="活动图片">
                     <template #default="{ row }">
-                        <el-avatar :src="row.activityImage" size="large" shape="square"/>
+                        <el-avatar :src="row.activityImage" size="large" shape="square" />
                     </template>
                 </el-table-column>
                 <el-table-column prop="detail" label="活动详情" width="160" />
-
-                <!-- 操作栏 -->
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType=='teacher'">
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType == 'teacher'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdateActivity(row.id)">
                             编辑
                         </el-button>
-
                         <el-button text bg type="danger" size="small" @click="deletion(row.id)">
                             删除
                         </el-button>
@@ -71,12 +93,19 @@
                 </el-table-column>
             </el-table>
         </el-scrollbar>
-
+        
         <!-- 分页 -->
         <el-config-provider :locale="zhCn">
-            <el-pagination class="pageList" :page-sizes="[10, 20, 30]" :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="counts" :current-page.sync="page"
-                @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
+            <el-pagination
+                class="pageList"
+                :page-sizes="[10, 20, 30]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="counts"
+                :current-page.sync="page"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+            ></el-pagination>
         </el-config-provider>
     </div>
 </template>
@@ -94,29 +123,40 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
-import { addActivity,getAllActivity,getActivityById,editActivity,deleteActivity } from '../api/activity';
+import { addActivity, getAllActivity, getActivityById, editActivity, deleteActivity } from '../api/activity';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
+
+
+const filterOptions = [
+    { label: '活动名称', value: 'name' },
+    { label: '活动开始时间', value: 'startTime' },
+    { label: '活动结束时间', value: 'endTime' },
+    { label: '活动地点', value: 'place' },
+    { label: '活动人数', value: 'participantCount' },
+    { label: '薪资待遇', value: 'money' },
+    { label: '公司性质', value: 'nature' },
+    { label: '工作地点', value: 'area' },
+    { label: '招聘岗位', value: 'jobPosition' },
+    { label: '发送人群', value: 'targetAudience' },
+];
+const selectedFilter = ref('name');  // 默认筛选条件
+
 // 使用userInfoStore
 const userInfo = userInfoStore();
 
 
 const input = ref('');
-
 const tableData = ref<Activity[]>([]);
-
+const filterVisible = ref(false);
 
 const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
-// const user = 'admin';
 const allData = ref<Activity[]>([]);
 
 let loading = ref(false);
-
-
-
 
 // 通过watch监听props.dateOrder的变化
 watch(() => props.dateOrder, (newVal) => {
@@ -160,14 +200,26 @@ onMounted(async () => {
     })
 });
 
-const filterData = () => {
-    const filtered = allData.value.filter(activity => 
-        activity.name.includes(input.value.trim())
-    );
-    counts.value = filtered.length;
-    tableData.value = filtered.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+const toggleFilter = () => {
+    filterVisible.value = !filterVisible.value;
 };
 
+// 选择筛选项
+const selectFilter = (value: string) => {
+    selectedFilter.value = value;
+    console.log(selectedFilter.value);
+    filterData();
+};
+
+// 过滤数据
+const filterData = () => {
+    console.log('allData', allData.value)
+    const filtered = allData.value.filter(activity => {
+        const value = activity[selectedFilter.value as keyof Activity];
+        return value && value.toString().includes(input.value.trim());
+    });
+    tableData.value = filtered.slice(0, 10); // 这里假设分页大小为10，您可以根据实际需要修改
+};
 const toUpdateActivity = (id: string) => {
     console.log('toUpdateActivity')
     router.push('/updateActivity/' + id)
@@ -252,7 +304,7 @@ const handleSelectionChange = (val: []) => {
 
 
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
 
             input {
                 outline: none;
@@ -280,7 +332,7 @@ const handleSelectionChange = (val: []) => {
 
 
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
     }
 }

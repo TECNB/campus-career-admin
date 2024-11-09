@@ -6,14 +6,23 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input type="text" class="ml-2" placeholder="请输入学生姓名" v-model="input" @keyup.enter="filterData" />
+                <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
             </div>
-            <div class="FilterBox flex items-center cursor-pointer">
+            <div class="FilterBox flex items-center cursor-pointer" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
                 <p class="ml-2">筛选</p>
             </div>
+        </div>
+
+        <!-- 筛选选项 -->
+        <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
+            <p v-for="(option, index) in filterOptions" :key="index" :class="[
+                selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
+            ]" @click="selectFilter(option.value)">
+                {{ option.label }}
+            </p>
         </div>
 
         <!-- 表格数据 -->
@@ -22,7 +31,7 @@
                 v-loading="loading" :row-style="{ height: '80px' }">
                 <el-table-column type="selection" width="40" />
 
-                <el-table-column prop="id" label="序号" width="60"/>
+                <el-table-column prop="id" label="序号" width="60" />
                 <el-table-column prop="name" label="姓名" width="120" />
                 <el-table-column prop="gender" label="性别" width="80" />
                 <el-table-column prop="className" label="班级" width="150" />
@@ -82,25 +91,43 @@ import { userInfoStore } from '../stores/UserInfoStore';
 
 import router from '../router/index';
 
-import { EmploymentDatabase } from '../interfaces/EmploymentDatabase';
+import { EmploymentSearch } from '../interfaces/EmploymentSearch';
 import { getAllEmploymentSearch, deleteEmploymentSearch } from '../api/employmentSearch';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
+
+const filterOptions = [
+    { label: '姓名', value: 'name' },
+    { label: '性别', value: 'gender' },
+    { label: '班级', value: 'className' },
+    { label: '学号', value: 'userId' },
+    { label: '联系电话', value: 'contactNumber' },
+    { label: '班主任', value: 'classTeacher' },
+    { label: '毕业导师', value: 'graduationTutor' },
+    { label: '毕业意向', value: 'futurePlan' },
+    { label: '公司名称', value: 'companyName' },
+    { label: '就业状态', value: 'employmentStatus' },
+    { label: '工作地点', value: 'workLocation' },
+    { label: '薪资', value: 'salary' },
+    { label: '单位性质', value: 'companyNature' },
+];
+const selectedFilter = ref('category');  // 默认筛选条件
+const filterVisible = ref(false);
 // 使用userInfoStore
 const userInfo = userInfoStore();
 
 
 const input = ref('');
 
-const tableData = ref<EmploymentDatabase[]>([]);
+const tableData = ref<EmploymentSearch[]>([]);
 
 
 const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
 // const user = 'admin';
-const allData = ref<EmploymentDatabase[]>([]);
+const allData = ref<EmploymentSearch[]>([]);
 
 let loading = ref(false);
 
@@ -120,22 +147,22 @@ watch(() => props.dateOrder, (newVal) => {
     }
 });
 // 通过watch监听props.typeOrder的变化
-watch(() => props.typeOrder, (newVal) => {
-    if (newVal === "招聘会") {
-        // 筛选出category为"招聘会"的数据
-        tableData.value = allData.value.filter((item) => item.category === "招聘会");
-    } else if (newVal === "宣讲会") {
-        // 筛选出category为"宣讲会"的数据
-        tableData.value = allData.value.filter((item) => item.category === "宣讲会");
-    } else if (newVal === "招聘公告") {
-        // 筛选出category为"招聘公告"的数据
-        tableData.value = allData.value.filter((item) => item.category === "招聘公告");
-    } else {
-        // 如果没有匹配项，则显示全部数据
-        tableData.value = allData.value;
-    }
-    counts.value = tableData.value.length;
-});
+// watch(() => props.typeOrder, (newVal) => {
+//     if (newVal === "招聘会") {
+//         // 筛选出category为"招聘会"的数据
+//         tableData.value = allData.value.filter((item) => item.category === "招聘会");
+//     } else if (newVal === "宣讲会") {
+//         // 筛选出category为"宣讲会"的数据
+//         tableData.value = allData.value.filter((item) => item.category === "宣讲会");
+//     } else if (newVal === "招聘公告") {
+//         // 筛选出category为"招聘公告"的数据
+//         tableData.value = allData.value.filter((item) => item.category === "招聘公告");
+//     } else {
+//         // 如果没有匹配项，则显示全部数据
+//         tableData.value = allData.value;
+//     }
+//     counts.value = tableData.value.length;
+// });
 
 onMounted(async () => {
     loading.value = true;
@@ -149,14 +176,26 @@ onMounted(async () => {
     })
 });
 
-const filterData = () => {
-    const filtered = allData.value.filter(activity =>
-        activity.details.includes(input.value.trim())
-    );
-    counts.value = filtered.length;
-    tableData.value = filtered.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+const toggleFilter = () => {
+    filterVisible.value = !filterVisible.value;
 };
 
+// 选择筛选项
+const selectFilter = (value: string) => {
+    selectedFilter.value = value;
+    console.log(selectedFilter.value);
+    filterData();
+};
+
+// 过滤数据
+const filterData = () => {
+    console.log('allData', allData.value)
+    const filtered = allData.value.filter(table => {
+        const value = table[selectedFilter.value as keyof EmploymentSearch];
+        return value && value.toString().includes(input.value.trim());
+    });
+    tableData.value = filtered.slice(0, 10); // 这里假设分页大小为10，您可以根据实际需要修改
+};
 const toUpdate = (id: string) => {
     console.log('toUpdate')
     router.push('/updateEmployment-search/' + id)

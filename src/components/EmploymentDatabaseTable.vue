@@ -6,14 +6,34 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input type="text" class="ml-2" placeholder="请输入资料标题" v-model="input" @keyup.enter="filterData" />
+                <input
+                    type="text"
+                    class="ml-2"
+                    placeholder="请输入文字进行搜索"
+                    v-model="input"
+                    @keyup.enter="filterData"
+                />
             </div>
-            <div class="FilterBox flex items-center cursor-pointer">
+            <div class="FilterBox flex items-center cursor-pointer" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
                 <p class="ml-2">筛选</p>
             </div>
+        </div>
+        
+        <!-- 筛选选项 -->
+        <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
+            <p
+                v-for="(option, index) in filterOptions"
+                :key="index"
+                :class="[
+                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
+                ]"
+                @click="selectFilter(option.value)"
+            >
+                {{ option.label }}
+            </p>
         </div>
 
         <!-- 表格数据 -->
@@ -82,6 +102,15 @@ import { getAllEmploymentDatabase, deleteEmploymentDatabase,download } from '../
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
+const filterOptions = [
+    { label: '资料类别', value: 'category' },
+    { label: '资料标题', value: 'title' },
+    { label: '附件压缩包', value: 'attachment' },
+    { label: '资料详情', value: 'details' },
+    { label: '创建时间', value: 'createdAt' }
+];
+const selectedFilter = ref('category');  // 默认筛选条件
+const filterVisible = ref(false);
 // 使用userInfoStore
 const userInfo = userInfoStore();
 
@@ -143,13 +172,25 @@ onMounted(async () => {
 
     })
 });
+const toggleFilter = () => {
+    filterVisible.value = !filterVisible.value;
+};
 
+// 选择筛选项
+const selectFilter = (value: string) => {
+    selectedFilter.value = value;
+    console.log(selectedFilter.value);
+    filterData();
+};
+
+// 过滤数据
 const filterData = () => {
-    const filtered = allData.value.filter(activity =>
-        activity.details.includes(input.value.trim())
-    );
-    counts.value = filtered.length;
-    tableData.value = filtered.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
+    console.log('allData', allData.value)
+    const filtered = allData.value.filter(table => {
+        const value = table[selectedFilter.value as keyof EmploymentDatabase];
+        return value && value.toString().includes(input.value.trim());
+    });
+    tableData.value = filtered.slice(0, 10); // 这里假设分页大小为10，您可以根据实际需要修改
 };
 
 const toUpdate = (id: string) => {

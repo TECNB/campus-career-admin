@@ -13,4 +13,5 @@ export interface EmploymentSearch {
     workLocation: string;         // 工作地点
     employmentStatus: "实习" | "签约" | "暂无";  // 就业情况
     companyName?: string;         // 实习/签约单位，若就业情况为 "暂无" 时可为空
+    createdAt: string; // 创建时间 (ISO 8601 格式)
 }
