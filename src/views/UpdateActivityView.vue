@@ -115,12 +115,12 @@
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">网申链接：</p>
                         <el-input v-model="applicationLink" placeholder="请输入链接" />
-
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">发送人群：</p>
                         <el-tree-select v-model="targetAudience" :data="treeData" placeholder="请点击选择发送人群" size="large"
-                            clearable :props="defaultProps" />
+                            clearable :props="defaultProps" multiple show-checkbox collapse-tags
+                            class="dynamic-height-select" />
                     </div>
                 </div>
 
@@ -189,16 +189,18 @@ import { useRoute } from 'vue-router';
 
 import type { UploadFile } from 'element-plus'
 // 引入接口
-import { addActivity,getActivityById,editActivity } from '../api/activity';
+import { addActivity, getActivityById, editActivity } from '../api/activity';
+import { getAllActivityPlace } from '../api/activityPlace';
 
 
 import {
-    category, allType, name, startTime, endTime, place, allPlace, money, allMoney, nature,
+    category, allType, name, startTime, endTime, place, money, allMoney, nature,
     allNature, participantCount, shortcuts, jobPosition, applicationLink, targetAudience,
-    treeData, defaultProps, detail,area
+    treeData, defaultProps, detail, area
 } from '../constant/ActivityPublishForm';
 import { id } from "element-plus/es/locale";
 
+const allPlace = ref<any[]>([]);
 const route = useRoute();
 
 // 是否为修改
@@ -217,6 +219,13 @@ const imagePaths = ref<string[]>([])
 
 onMounted(async () => {
     console.log(route.params.id);
+    // 接口getAllActivityPlace获取所有活动地点
+    await getAllActivityPlace().then((res) => {
+        allPlace.value = res.data;
+    }).catch((err) => {
+        console.log(err);
+    });
+
     // 判断是否为编辑
     if (route.params.id === "create") {
         isEdit.value = false;
@@ -232,11 +241,11 @@ onMounted(async () => {
         area.value = [];
         jobPosition.value = '';
         applicationLink.value = '';
-        targetAudience.value = '';
+        targetAudience.value = [];
         detail.value = '';
         fileList.value = [];
         loading.value = false;
-        
+
     } else {
         isEdit.value = true;
         loading.value = true;
@@ -258,7 +267,7 @@ onMounted(async () => {
 
             jobPosition.value = data.jobPosition;
             applicationLink.value = data.applicationLink;
-            targetAudience.value = data.targetAudience;
+            targetAudience.value = data.targetAudience.split('/');
             detail.value = data.detail;
 
             // 将imagePaths数组存入fileList
@@ -328,7 +337,7 @@ const handleAdd = async () => {
         area: area.value.join('/'), // 将数组格式的 area 转换为字符串
         jobPosition: jobPosition.value,
         applicationLink: applicationLink.value,
-        targetAudience: targetAudience.value,
+        targetAudience: targetAudience.value.join('/'),
         detail: detail.value,
         activityImage: fileList.value.length ? fileList.value[0].url : null, // activityImages中只保存一张图片
         imagePaths: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
@@ -360,7 +369,7 @@ const handleEdit = async () => {
         area: area.value.join('/'), // 将数组格式的 area 转换为字符串
         jobPosition: jobPosition.value,
         applicationLink: applicationLink.value,
-        targetAudience: targetAudience.value,
+        targetAudience: targetAudience.value.join('/'),
         detail: detail.value,
         activityImage: fileList.value.length ? fileList.value[0].url : null, // activityImages中只保存一张图片
         imagePaths: fileList.value.map((file) => file.url), // 将所有图片的 URL 提取为数组
@@ -568,17 +577,20 @@ const handleEdit = async () => {
 
 
 // 下面是地区选择组件的自定义样式
-:deep(.el-cascader--large){
+:deep(.el-cascader--large) {
     width: 100%;
     height: 50px;
 }
-:deep(.el-cascader .el-input){
+
+:deep(.el-cascader .el-input) {
     height: 50px;
 }
-:deep(.el-input--large .el-input__wrapper){
+
+:deep(.el-input--large .el-input__wrapper) {
     border-radius: 12px;
 }
-:deep(.el-cascader .el-input .el-input__inner){
+
+:deep(.el-cascader .el-input .el-input__inner) {
     font-size: 16px;
     font-weight: bold;
 }

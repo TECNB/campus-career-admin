@@ -123,7 +123,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
-import { addActivity, getAllActivity, getActivityById, editActivity, deleteActivity } from '../api/activity';
+import { getAllActivity, deleteActivity } from '../api/activity';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);

@@ -21,12 +21,12 @@ export const endTime: Ref<string | null> = ref(null);
 export const place = ref<string>('');
 
 // 定义地点选项
-export const allPlace = ref<any[]>([
-    { objectId: '1', name: '3C 108' },
-    { objectId: '2', name: '喷泉广场' },
-    { objectId: '3', name: '图书馆' },
-    { objectId: '4', name: '西南门' }
-]);
+// export const allPlace = ref<any[]>([
+//     { objectId: '1', name: '3C 108' },
+//     { objectId: '2', name: '喷泉广场' },
+//     { objectId: '3', name: '图书馆' },
+//     { objectId: '4', name: '西南门' }
+// ]);
 
 // 定义薪资待遇的响应式变量
 export const money = ref<string>('');
@@ -91,7 +91,7 @@ export const jobPosition = ref<string>('');
 export const applicationLink = ref<string>('');
 
 // 定义目标受众的响应式变量
-export const targetAudience = ref<any>(null);
+export const targetAudience = ref<any>([]);
 
 // 定义树形选择的数据结构
 export const treeData = ref([
@@ -109,19 +109,34 @@ export const treeData = ref([
     {
         label: '22级本科',
         children: [
-            // 按需添加班级信息
+            { label: '电子信息2201', value: '电子信息2201' },
+            { label: '电子信息2202', value: '电子信息2202' },
+            { label: '电子信息2203', value: '电子信息2203' },
+            { label: '电子信息2204', value: '电子信息2204' },
+            { label: '软件工程2201', value: '软件工程2201' },
+            { label: '软件工程2202', value: '软件工程2202' }
         ]
     },
     {
         label: '23级本科',
         children: [
-            // 按需添加班级信息
+            { label: '电子信息2301', value: '电子信息2301' },
+            { label: '电子信息2302', value: '电子信息2302' },
+            { label: '电子信息2303', value: '电子信息2303' },
+            { label: '电子信息2304', value: '电子信息2304' },
+            { label: '软件工程2301', value: '软件工程2301' },
+            { label: '软件工程2302', value: '软件工程2302' }
         ]
     },
     {
         label: '24级本科',
         children: [
-            // 按需添加班级信息
+            { label: '电子信息2401', value: '电子信息2401' },
+            { label: '电子信息2402', value: '电子信息2402' },
+            { label: '电子信息2403', value: '电子信息2403' },
+            { label: '电子信息2404', value: '电子信息2404' },
+            { label: '软件工程2401', value: '软件工程2401' },
+            { label: '软件工程2402', value: '软件工程2402' }
         ]
     }
 ]);
