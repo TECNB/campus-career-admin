@@ -135,13 +135,30 @@ const menusTeacher = [
     // { label: '数据', icon: 'TrendCharts', path: '/data' },
     { label: '设置', icon: 'Setting', path: '/setting' },
 ];
+
+const menusAdmin = [
+    {
+        label: '职场引航',
+        icon: 'School',
+        path: '/',
+        children: [
+            { label: '活动日历', path: '/' },
+            { label: '活动地点', path: '/activity-place' },
+            { label: '添加发送人群', path: '/employment-search' },
+            { label: '导入学生资料', path: '/job-search' },
+            { label: '智能就业', path: '/smart-employment' },
+
+        ],
+    },
+    { label: '设置', icon: 'Setting', path: '/setting' },
+];
 console.log(userInfo.user?.username)
 if (userInfo.user?.userType === 'student') {
     menus = menusStudent;
-    console.log("学生")
-} else {
+} else if (userInfo.user?.userType === 'teacher'){
     menus = menusTeacher;
-    console.log("教师")
+}else {
+    menus = menusAdmin;
 }
 
 

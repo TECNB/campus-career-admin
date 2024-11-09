@@ -47,41 +47,14 @@
                 :row-style="{ height: '80px' }"
             >
                 <el-table-column type="selection" width="40" />
-                <el-table-column prop="category" label="活动内容">
+                <el-table-column prop="name" label="活动地点名称" />
+                <el-table-column prop="createdAt" label="创建时间">
                     <template #default="{ row }">
-                        <span>{{ row.category }}</span>
+                        <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动名称" width="120" />
-                <el-table-column prop="startTime" label="活动开始时间" width="160">
-                    <template #default="{ row }">
-                        <span>{{ new Date(row.startTime).toLocaleString() }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="endTime" label="活动结束时间" width="160">
-                    <template #default="{ row }">
-                        <span>{{ new Date(row.endTime).toLocaleString() }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="place" label="活动地点" />
-                <el-table-column prop="participantCount" label="活动人数" />
-                <el-table-column prop="money" label="薪资待遇" />
-                <el-table-column prop="nature" label="公司性质" />
-                <el-table-column prop="area" label="工作地点" width="160" />
-                <el-table-column prop="jobPosition" label="招聘岗位" />
-                <el-table-column prop="applicationLink" label="网申链接" width="160">
-                    <template #default="{ row }">
-                        <a :href="row.applicationLink" target="_blank">{{ row.applicationLink }}</a>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="targetAudience" label="发送人群" />
-                <el-table-column prop="activityImage" label="活动图片">
-                    <template #default="{ row }">
-                        <el-avatar :src="row.activityImage" size="large" shape="square" />
-                    </template>
-                </el-table-column>
-                <el-table-column prop="detail" label="活动详情" width="160" />
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType == 'teacher'">
+                
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType === 'admin'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdateActivity(row.id)">
                             编辑
@@ -123,7 +96,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
-import { addActivity, getAllActivity, getActivityById, editActivity, deleteActivity } from '../api/activity';
+import { getAllActivityPlace,deleteActivityPlace } from '../api/activityPlace';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -190,9 +163,9 @@ watch(() => props.typeOrder, (newVal) => {
 
 onMounted(async () => {
     loading.value = true;
-    await getAllActivity().then((res) => {
+    await getAllActivityPlace().then((res) => {
         loading.value = false;
-        allData.value = res.data.records;
+        allData.value = res.data;
 
         counts.value = allData.value.length;
         tableData.value = allData.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
@@ -222,7 +195,7 @@ const filterData = () => {
 };
 const toUpdateActivity = (id: string) => {
     console.log('toUpdateActivity')
-    router.push('/updateActivity/' + id)
+    router.push('/updatePlace/' + id)
 }
 
 const deletion = async (id: number) => {
@@ -233,7 +206,7 @@ const deletion = async (id: number) => {
             type: 'warning',
         });
 
-        await deleteActivity({ id });
+        await deleteActivityPlace({ id });
         ElMessage.success('删除成功');
 
         // 删除成功后更新表格数据

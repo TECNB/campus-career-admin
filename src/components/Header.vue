@@ -89,6 +89,13 @@ onMounted(() => {
     const updateCurrentTab = () => {
         const currentRoute = router.currentRoute.value as RouteLocationNormalizedLoaded;
 
+        if(userInfo.user?.userType == 'admin'){
+            tabs.value = [
+                { name: '活动日历', route: '/' },
+                { name: '活动地点', route: '/activity-place' },
+            ];
+        }
+
         // 检查当前路由是否在tabs数组中，如果不在就添加
         const index = tabs.value.findIndex(tab => tab.route === currentRoute.path);
         if (index === -1) {

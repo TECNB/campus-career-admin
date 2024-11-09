@@ -156,10 +156,12 @@ const handleLogin = async () => {
         const obj = JSON.parse(JsonData)
 
         if (obj.userType) {
-            if (obj.userType != "teacher") {
+            if (obj.userType === "student") {
                 ElMessage.success('学生登录成功！')
-            } else {
+            } else if (obj.userType === "teacher"){
                 ElMessage.success('教师登录成功！')
+            }else {
+                ElMessage.success('管理员登录成功！')
             }
         }
 

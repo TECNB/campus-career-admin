@@ -75,6 +75,28 @@ const routes: Array<RouteRecordRaw> = [
                 path: "/setting",
                 component: () => import("../views/SettingView.vue"),
             },
+
+            // 下面是超级管理员的路由
+            {
+                name:'活动地点',
+                path: "/activity-place",
+                component: () => import("../views/PlaceView.vue"),
+            },
+            {
+                name:'添加活动地点',
+                path: "/updatePlace/:id",
+                component: () => import("../views/UpdatePlaceView.vue"),
+            },
+            // {
+            //     name:'设置',
+            //     path: "/setting",
+            //     component: () => import("../views/SettingView.vue"),
+            // },
+            // {
+            //     name:'设置',
+            //     path: "/setting",
+            //     component: () => import("../views/SettingView.vue"),
+            // },
         ],
     },
     {
