@@ -191,16 +191,18 @@ import type { UploadFile } from 'element-plus'
 // 引入接口
 import { addActivity, getActivityById, editActivity } from '../api/activity';
 import { getAllActivityPlace } from '../api/activityPlace';
+import { getAllActivityTargetAudience } from '../api/activityTargetAudience';
 
 
 import {
     category, allType, name, startTime, endTime, place, money, allMoney, nature,
     allNature, participantCount, shortcuts, jobPosition, applicationLink, targetAudience,
-    treeData, defaultProps, detail, area
+    defaultProps, detail, area
 } from '../constant/ActivityPublishForm';
 import { id } from "element-plus/es/locale";
 
 const allPlace = ref<any[]>([]);
+const treeData = ref<any[]>([]);
 const route = useRoute();
 
 // 是否为修改
@@ -225,6 +227,8 @@ onMounted(async () => {
     }).catch((err) => {
         console.log(err);
     });
+
+    loadTreeData()
 
     // 判断是否为编辑
     if (route.params.id === "create") {
@@ -384,6 +388,41 @@ const handleEdit = async () => {
         ElMessage.error('更新失败');
     } finally {
         loading.value = false;
+    }
+};
+
+// 获取并处理数据
+const loadTreeData = async () => {
+    try {
+        const res = await getAllActivityTargetAudience();
+        
+        if (res.code === 200) {
+            // 创建一个临时对象用于分组
+            const groupedData: { [key: string]: any } = {};
+            
+            res.data.forEach((item: any) => {
+                const { audienceLabel, audienceValue } = item;
+
+                // 检查标签是否已在分组对象中，不存在则创建
+                if (!groupedData[audienceLabel]) {
+                    groupedData[audienceLabel] = {
+                        label: audienceLabel,
+                        children: []
+                    };
+                }
+                
+                // 将当前项添加到对应标签的子节点数组
+                groupedData[audienceLabel].children.push({
+                    label: audienceValue,
+                    value: audienceValue
+                });
+            });
+
+            // 将分组对象转成数组形式，便于设置到treeData中
+            treeData.value = Object.values(groupedData);
+        }
+    } catch (error) {
+        console.error(error);
     }
 };
 </script>

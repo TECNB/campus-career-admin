@@ -144,8 +144,8 @@ const menusAdmin = [
         children: [
             { label: '活动日历', path: '/' },
             { label: '活动地点', path: '/activity-place' },
-            { label: '添加发送人群', path: '/employment-search' },
-            { label: '导入学生资料', path: '/job-search' },
+            { label: '发送人群', path: '/activity-target-audience' },
+            { label: '学生资料', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
 
         ],

@@ -87,6 +87,16 @@ const routes: Array<RouteRecordRaw> = [
                 path: "/updatePlace/:id",
                 component: () => import("../views/UpdatePlaceView.vue"),
             },
+            {
+                name:'发送人群',
+                path: "/activity-target-audience",
+                component: () => import("../views/TargetAudienceView.vue"),
+            },
+            {
+                name:'添加发送人群',
+                path: "/updateActivity-target-audience/:id",
+                component: () => import("../views/UpdateTargetAudienceView.vue"),
+            },
             // {
             //     name:'设置',
             //     path: "/setting",
