@@ -7,7 +7,7 @@
                 <p class="title" v-if="ifRegister">Sign Up</p>
                 <!-- 下面为用户名输入框 -->
                 <p class="text-sm text-left mt-2 -mb-3">用户名</p>
-                <el-input v-if="!ifRegister" v-model="username" placeholder="用户名或手机号" class="mt-4">
+                <el-input v-if="!ifRegister" v-model="username" placeholder="请输入登录账号" class="mt-4">
                     <template #prefix>
                         <el-icon class="el-input__icon">
                             <user />
@@ -33,8 +33,7 @@
                 </el-input>
                 <!-- 下面为密码输入框 -->
                 <p class="text-sm text-left mt-2 -mb-3">密码</p>
-                <el-input v-model="password" placeholder="密码" class="mt-4">
-
+                <el-input v-model="password" placeholder="请输入登录密码" class="mt-4">
                     <template #prefix>
                         <el-icon class="el-input__icon">
                             <Lock />
@@ -118,6 +117,7 @@ const handleLogin = async () => {
     // 初始化 loginData 为一个 JSON 对象
     let loginData: User = {
         userId: "",
+        studentId: "",
         username: "",
         passwordHash: "",
         userType: "teacher", // 根据需要设置默认值
@@ -136,12 +136,7 @@ const handleLogin = async () => {
         updatedAt: null
     };
 
-    // 根据用户名或手机号判断字段
-    if (isValidPhone(username.value)) {
-        loginData.phone = username.value;
-    } else {
-        loginData.username = username.value;
-    }
+    loginData.studentId = username.value;
     loginData.passwordHash = password.value;
 
 

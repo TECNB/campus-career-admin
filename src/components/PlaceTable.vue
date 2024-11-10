@@ -96,7 +96,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
-import { getAllActivityPlace,deleteActivityPlace } from '../api/activityPlace';
+import { getAllActivityPlace,deleteActivityPlace,searchActivityPlace } from '../api/activityPlace';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -120,6 +120,10 @@ const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
 const allData = ref<Activity[]>([]);
+const multipleSelection = ref<[]>([])
+
+// 是否搜索
+const isSearch = ref(false)
 
 let loading = ref(false);
 
@@ -137,16 +141,26 @@ watch(() => props.dateOrder, (newVal) => {
 });
 
 onMounted(async () => {
-    loading.value = true;
-    await getAllActivityPlace().then((res) => {
-        loading.value = false;
-        allData.value = res.data;
-
-        counts.value = allData.value.length;
-        tableData.value = allData.value.slice((page.value - 1) * pageSize.value, page.value * pageSize.value);
-
-    })
+    await fetchTableData();
 });
+
+const fetchTableData = async () => {
+    loading.value = true;
+    const data = {
+        page: page.value,
+        size: pageSize.value,
+    };
+    try {
+        const res = await getAllActivityPlace(data);
+        loading.value = false;
+        allData.value = res.data.records;
+        counts.value = res.data.total;
+        tableData.value = allData.value;
+    } catch (error) {
+        loading.value = false;
+        console.error('获取数据失败:', error);
+    }
+};
 
 const toggleFilter = () => {
     filterVisible.value = !filterVisible.value;
@@ -155,23 +169,32 @@ const toggleFilter = () => {
 // 选择筛选项
 const selectFilter = (value: string) => {
     selectedFilter.value = value;
-    console.log(selectedFilter.value);
-    filterData();
 };
 
-// 过滤数据
-const filterData = () => {
-    console.log('allData', allData.value)
-    const filtered = allData.value.filter(activity => {
-        const value = activity[selectedFilter.value as keyof Activity];
-        return value && value.toString().includes(input.value.trim());
-    });
-    tableData.value = filtered.slice(0, 10); // 这里假设分页大小为10，您可以根据实际需要修改
+// 搜索并筛选数据
+const filterData = async () => {
+    if (!selectedFilter.value || !input.value.trim()) {
+        await fetchTableData();
+        return;
+    }
+
+    loading.value = true;
+    try {
+        const res = await searchActivityPlace({
+            filterField: selectedFilter.value,
+            filterValue: input.value.trim(),
+            page: page.value,
+            size: pageSize.value
+        });
+        loading.value = false;
+        tableData.value = res.data.records;
+        counts.value = res.data.total;
+        isSearch.value = true;
+    } catch (error) {
+        loading.value = false;
+        console.error('搜索数据失败:', error);
+    }
 };
-const toUpdateActivity = (id: string) => {
-    console.log('toUpdateActivity')
-    router.push('/updatePlace/' + id)
-}
 
 const deletion = async (id: number) => {
     try {
@@ -183,11 +206,7 @@ const deletion = async (id: number) => {
 
         await deleteActivityPlace({ id });
         ElMessage.success('删除成功');
-
-        // 删除成功后更新表格数据
-        const updatedData = allData.value.filter((item) => item.id !== id);
-        allData.value = updatedData;
-        updateTableData();
+        await fetchTableData(); // 刷新数据
     } catch (error) {
         console.error(error);
         ElMessage.error('删除失败');
@@ -196,27 +215,27 @@ const deletion = async (id: number) => {
 
 // 处理每页显示数量变化逻辑
 const handleSizeChange = (val: number) => {
-    // 示例的处理每页显示数量变化逻辑
     pageSize.value = val;
-    updateTableData(); // 更新显示的数据
+    fetchTableData();
 };
 
 // 处理当前页变化逻辑
-const handleCurrentChange = (val: any) => {
-    // 示例的处理当前页变化逻辑
+const handleCurrentChange = (val: number) => {
     page.value = val;
-    updateTableData(); // 更新显示的数据
+    if (isSearch) {
+        filterData();
+    } else {
+        fetchTableData();
+    }
 };
 
-const updateTableData = () => {
-    const startIndex = (page.value - 1) * pageSize.value;
-    const endIndex = page.value * pageSize.value;
-    tableData.value = allData.value.slice(startIndex, endIndex);
-};
-
-const multipleSelection = ref<[]>([])
 const handleSelectionChange = (val: []) => {
-    multipleSelection.value = val
+    multipleSelection.value = val;
+};
+
+const toUpdateActivity = (id: string) => {
+    console.log('toUpdateActivity')
+    router.push('/updatePlace/' + id)
 }
 </script>
 

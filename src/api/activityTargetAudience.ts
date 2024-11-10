@@ -2,8 +2,8 @@ import axios from '.';
 import { R } from '../interfaces/R'; // 保留 R 接口
 
 // 获取所有活动目标受众
-export const getAllActivityTargetAudience = (): Promise<R<any>> => {
-    return axios.get<R<any>>('api/activity-target-audience');
+export const getAllActivityTargetAudience = (param:any): Promise<R<any>> => {
+    return axios.get<R<any>>('api/activity-target-audience',param);
 };
 
 // 根据 ID 获取活动目标受众
@@ -24,4 +24,9 @@ export const editActivityTargetAudience = (params: { id: string; audienceLabel: 
 // 删除活动目标受众
 export const deleteActivityTargetAudience = (params:any): Promise<R<any>> => {
     return axios.delete<R<any>>('api/activity-target-audience', params);
+};
+
+// 搜索活动目标受众
+export const searchActivityTargetAudience = (params: any): Promise<R<any>> => {
+    return axios.get<R<any>>('api/activity-target-audience/search', params);
 };

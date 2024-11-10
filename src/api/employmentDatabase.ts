@@ -3,8 +3,8 @@ import axios from '.';
 import { R } from '../interfaces/R'; // 保留 R 接口
 
 // 获取所有资料库
-export const getAllEmploymentDatabase = (): Promise<R<any>> => {
-    return axios.get<R<any>>('api/employment-database');
+export const getAllEmploymentDatabase = (param:any): Promise<R<any>> => {
+    return axios.get<R<any>>('api/employment-database',param);
 };
 
 // 根据 objectId 获取资料库
@@ -30,4 +30,9 @@ export const deleteEmploymentDatabase = (params: any): Promise<R<any>> => {
 // 下载附件
 export const download = (params: any): Promise<R<any>> => {
     return axios.post<R<any>>('api/employment-database/download',params);
+}
+
+// 搜索资料库
+export const searchEmploymentDatabase = (params: any): Promise<R<any>> => {
+    return axios.get<R<any>>('api/employment-database/search', params);
 }

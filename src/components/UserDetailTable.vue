@@ -6,13 +6,7 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input
-                    type="text"
-                    class="ml-2"
-                    placeholder="请输入文字进行搜索"
-                    v-model="input"
-                    @keyup.enter="filterData"
-                />
+                <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
             </div>
             <div class="FilterBox flex items-center cursor-pointer" @click="toggleFilter">
                 <el-icon>
@@ -21,67 +15,35 @@
                 <p class="ml-2">筛选</p>
             </div>
         </div>
-        
+
         <!-- 筛选选项 -->
         <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
-            <p
-                v-for="(option, index) in filterOptions"
-                :key="index"
-                :class="[
-                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
-                ]"
-                @click="selectFilter(option.value)"
-            >
+            <p v-for="(option, index) in filterOptions" :key="index" :class="[
+                selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
+            ]" @click="selectFilter(option.value)">
                 {{ option.label }}
             </p>
         </div>
 
         <!-- 表格数据 -->
         <el-scrollbar height="100%">
-            <el-table
-                :data="tableData"
-                class="tableBox"
-                table-layout="fixed"
-                @selection-change="handleSelectionChange"
-                v-loading="loading"
-                :row-style="{ height: '80px' }"
-            >
+            <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
+                v-loading="loading" :row-style="{ height: '80px' }">
                 <el-table-column type="selection" width="40" />
-                <el-table-column prop="category" label="活动内容">
+                <el-table-column prop="name" label="姓名" />
+                <el-table-column prop="gender" label="性别" />
+                <el-table-column prop="className" label="班级" />
+                <el-table-column prop="studentId" label="学号" />
+                <el-table-column prop="contactNumber" label="联系方式" />
+                <el-table-column prop="classTeacher" label="班主任" />
+                <el-table-column prop="graduationTutor" label="毕业设计导师" width="110"/>
+                <el-table-column prop="createdAt" label="创建时间">
                     <template #default="{ row }">
-                        <span>{{ row.category }}</span>
+                        <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="name" label="活动名称" width="120" />
-                <el-table-column prop="startTime" label="活动开始时间" width="160">
-                    <template #default="{ row }">
-                        <span>{{ new Date(row.startTime).toLocaleString() }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="endTime" label="活动结束时间" width="160">
-                    <template #default="{ row }">
-                        <span>{{ new Date(row.endTime).toLocaleString() }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="place" label="活动地点" />
-                <el-table-column prop="participantCount" label="活动人数" />
-                <el-table-column prop="money" label="薪资待遇" />
-                <el-table-column prop="nature" label="公司性质" />
-                <el-table-column prop="area" label="工作地点" width="160" />
-                <el-table-column prop="jobPosition" label="招聘岗位" />
-                <el-table-column prop="applicationLink" label="网申链接" width="160">
-                    <template #default="{ row }">
-                        <a :href="row.applicationLink" target="_blank">{{ row.applicationLink }}</a>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="targetAudience" label="发送人群" />
-                <el-table-column prop="activityImage" label="活动图片">
-                    <template #default="{ row }">
-                        <el-avatar :src="row.activityImage" size="large" shape="square" />
-                    </template>
-                </el-table-column>
-                <el-table-column prop="detail" label="活动详情" width="160" />
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType == 'teacher'">
+
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType === 'admin'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdateActivity(row.id)">
                             编辑
@@ -93,19 +55,12 @@
                 </el-table-column>
             </el-table>
         </el-scrollbar>
-        
+
         <!-- 分页 -->
         <el-config-provider :locale="zhCn">
-            <el-pagination
-                class="pageList"
-                :page-sizes="[10, 20, 30]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="counts"
-                :current-page.sync="page"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-            ></el-pagination>
+            <el-pagination class="pageList" :page-sizes="[10, 20, 30]" :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper" :total="counts" :current-page.sync="page"
+                @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
         </el-config-provider>
     </div>
 </template>
@@ -123,25 +78,18 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
-import { getAllActivity, deleteActivity,searchActivity } from '../api/activity';
+import { getAllUserDetails, deleteUserDetail,searchUserDetail } from '../api/userDetail';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
 
 
 const filterOptions = [
-    { label: '活动名称', value: 'name' },
-    { label: '活动开始时间', value: 'startTime' },
-    { label: '活动结束时间', value: 'endTime' },
-    { label: '活动地点', value: 'place' },
-    { label: '活动人数', value: 'participantCount' },
-    { label: '薪资待遇', value: 'money' },
-    { label: '公司性质', value: 'nature' },
-    { label: '工作地点', value: 'area' },
-    { label: '招聘岗位', value: 'jobPosition' },
-    { label: '发送人群', value: 'targetAudience' },
+    { label: '发送年级', value: 'audienceLabel' },
+    { label: '发送班级', value: 'audienceValue' },
+    { label: '创建时间', value: 'createdAt' },
 ];
-const selectedFilter = ref('name');  // 默认筛选条件
+const selectedFilter = ref('audienceLabel');  // 默认筛选条件
 const filterVisible = ref(false);
 
 // 使用userInfoStore
@@ -174,23 +122,6 @@ watch(() => props.dateOrder, (newVal) => {
         });
     }
 });
-// 通过watch监听props.typeOrder的变化
-watch(() => props.typeOrder, (newVal) => {
-    if (newVal === "招聘会") {
-        // 筛选出category为"招聘会"的数据
-        tableData.value = allData.value.filter((item) => item.category === "招聘会");
-    } else if (newVal === "宣讲会") {
-        // 筛选出category为"宣讲会"的数据
-        tableData.value = allData.value.filter((item) => item.category === "宣讲会");
-    } else if (newVal === "招聘公告") {
-        // 筛选出category为"招聘公告"的数据
-        tableData.value = allData.value.filter((item) => item.category === "招聘公告");
-    } else {
-        // 如果没有匹配项，则显示全部数据
-        tableData.value = allData.value;
-    }
-    counts.value = tableData.value.length;
-});
 
 onMounted(async () => {
     await fetchTableData();
@@ -203,7 +134,7 @@ const fetchTableData = async () => {
         size: pageSize.value,
     };
     try {
-        const res = await getAllActivity(data);
+        const res = await getAllUserDetails(data);
         loading.value = false;
         allData.value = res.data.records;
         counts.value = res.data.total;
@@ -232,7 +163,7 @@ const filterData = async () => {
 
     loading.value = true;
     try {
-        const res = await searchActivity({
+        const res = await searchUserDetail({
             filterField: selectedFilter.value,
             filterValue: input.value.trim(),
             page: page.value,
@@ -256,7 +187,7 @@ const deletion = async (id: number) => {
             type: 'warning',
         });
 
-        await deleteActivity({ id });
+        await deleteUserDetail({ id });
         ElMessage.success('删除成功');
         await fetchTableData(); // 刷新数据
     } catch (error) {
@@ -284,10 +215,9 @@ const handleCurrentChange = (val: number) => {
 const handleSelectionChange = (val: []) => {
     multipleSelection.value = val;
 };
-
 const toUpdateActivity = (id: string) => {
     console.log('toUpdateActivity')
-    router.push('/updateActivity/' + id)
+    router.push('/updateUser-detail/' + id)
 }
 </script>
 

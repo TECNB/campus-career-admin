@@ -18,12 +18,8 @@
                     {{ data.day.split('-')[2] }} <!-- 显示日期的日部分 -->
 
                     <!-- 动态 Popover 展示活动信息 -->
-                    <el-popover
-                        v-if="popoverVisible[data.day]"
-                        v-model:visible="popoverVisible[data.day]"
-                        width="100%"
-                        :teleported="false"
-                    >
+                    <el-popover v-if="popoverVisible[data.day]" v-model:visible="popoverVisible[data.day]" width="100%"
+                        :teleported="false">
                         <div v-for="activity in activityByDate[data.day]" :key="activity.id">
                             <p><strong>{{ activity.name }}</strong></p>
                             <p>时间: {{ new Date(activity.startTime).toLocaleString() }}</p>
@@ -51,7 +47,11 @@ const popoverVisible = ref<{ [key: string]: boolean }>({});
 onMounted(async () => {
     loading.value = true;
     try {
-        const res = await getAllActivity();
+        const data = {
+            page: 1,
+            size: 1000000000,
+        };
+        const res = await getAllActivity(data);
         allData.value = res.data.records;
 
         // 按日期字符串组织活动
