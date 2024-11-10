@@ -221,9 +221,13 @@ const imagePaths = ref<string[]>([])
 
 onMounted(async () => {
     console.log(route.params.id);
+    const data = {
+        page: 1,
+        size: 10000000
+    }
     // 接口getAllActivityPlace获取所有活动地点
-    await getAllActivityPlace().then((res) => {
-        allPlace.value = res.data;
+    await getAllActivityPlace(data).then((res) => {
+        allPlace.value = res.data.records;
     }).catch((err) => {
         console.log(err);
     });
@@ -394,33 +398,33 @@ const handleEdit = async () => {
 // 获取并处理数据
 const loadTreeData = async () => {
     try {
-        const res = await getAllActivityTargetAudience();
-        
-        if (res.code === 200) {
-            // 创建一个临时对象用于分组
+        const data = {
+            page: 1,
+            size: 10000000
+        }
+        await getAllActivityTargetAudience(data).then((res) => {
             const groupedData: { [key: string]: any } = {};
-            
-            res.data.forEach((item: any) => {
+
+            res.data.records.forEach((item: any) => {
                 const { audienceLabel, audienceValue } = item;
 
-                // 检查标签是否已在分组对象中，不存在则创建
                 if (!groupedData[audienceLabel]) {
                     groupedData[audienceLabel] = {
                         label: audienceLabel,
                         children: []
                     };
                 }
-                
-                // 将当前项添加到对应标签的子节点数组
+
                 groupedData[audienceLabel].children.push({
                     label: audienceValue,
                     value: audienceValue
                 });
             });
 
-            // 将分组对象转成数组形式，便于设置到treeData中
             treeData.value = Object.values(groupedData);
-        }
+        }).catch((err) => {
+            console.log(err);
+        });
     } catch (error) {
         console.error(error);
     }
