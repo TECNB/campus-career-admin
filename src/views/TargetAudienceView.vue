@@ -6,7 +6,7 @@
                     <p>发送人群查看</p>
                 </div>
                 <div class="FilterSection">
-                    <div class="FilterBox">
+                    <!-- <div class="FilterBox">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowTypeOrderPicker">
                             <p>显示：</p>
                             <p class="text-black font-medium">{{ typeOrder }}</p>
@@ -29,7 +29,7 @@
                                     @click="choseTypeOrder('招聘公告')">招聘公告</p>
                             </div>
                         </transition>
-                    </div>
+                    </div> -->
                     <div class="FilterBox">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
@@ -167,7 +167,7 @@ const toUpdate = (id: string) => {
                 margin-bottom: 20px;
             }
 
-            .FilterBox:nth-child(3) {
+            .FilterBox:nth-child(2) {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;

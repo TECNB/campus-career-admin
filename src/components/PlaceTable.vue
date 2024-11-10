@@ -103,16 +103,8 @@ const props = defineProps(['dateOrder', 'typeOrder']);
 
 
 const filterOptions = [
-    { label: '活动名称', value: 'name' },
-    { label: '活动开始时间', value: 'startTime' },
-    { label: '活动结束时间', value: 'endTime' },
-    { label: '活动地点', value: 'place' },
-    { label: '活动人数', value: 'participantCount' },
-    { label: '薪资待遇', value: 'money' },
-    { label: '公司性质', value: 'nature' },
-    { label: '工作地点', value: 'area' },
-    { label: '招聘岗位', value: 'jobPosition' },
-    { label: '发送人群', value: 'targetAudience' },
+    { label: '活动地点名称', value: 'name' },
+    { label: '创建时间', value: 'createdAt' },
 ];
 const selectedFilter = ref('name');  // 默认筛选条件
 const filterVisible = ref(false);
@@ -142,23 +134,6 @@ watch(() => props.dateOrder, (newVal) => {
             return a.createdAt < b.createdAt ? 1 : -1;
         });
     }
-});
-// 通过watch监听props.typeOrder的变化
-watch(() => props.typeOrder, (newVal) => {
-    if (newVal === "招聘会") {
-        // 筛选出category为"招聘会"的数据
-        tableData.value = allData.value.filter((item) => item.category === "招聘会");
-    } else if (newVal === "宣讲会") {
-        // 筛选出category为"宣讲会"的数据
-        tableData.value = allData.value.filter((item) => item.category === "宣讲会");
-    } else if (newVal === "招聘公告") {
-        // 筛选出category为"招聘公告"的数据
-        tableData.value = allData.value.filter((item) => item.category === "招聘公告");
-    } else {
-        // 如果没有匹配项，则显示全部数据
-        tableData.value = allData.value;
-    }
-    counts.value = tableData.value.length;
 });
 
 onMounted(async () => {
