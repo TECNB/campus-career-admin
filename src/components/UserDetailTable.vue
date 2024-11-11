@@ -81,15 +81,20 @@ import { Activity } from '../interfaces/Activity';
 import { getAllUserDetails, deleteUserDetail,searchUserDetail } from '../api/userDetail';
 
 
-const props = defineProps(['dateOrder', 'typeOrder']);
+const props = defineProps(['dateOrder', 'typeOrder','ifRefresh']);
 
 
 const filterOptions = [
-    { label: '发送年级', value: 'audienceLabel' },
-    { label: '发送班级', value: 'audienceValue' },
-    { label: '创建时间', value: 'createdAt' },
+    { label: '姓名', value: 'name' },
+    { label: '性别', value: 'gender' },
+    { label: '班级', value: 'className' },
+    { label: '学号', value: 'studentId' },
+    { label: '联系方式', value: 'contactNumber' },
+    { label: '班主任', value: 'classTeacher' },
+    { label: '毕业设计导师', value: 'graduationTutor' },
+    { label: '创建时间', value: 'createdAt' }
 ];
-const selectedFilter = ref('audienceLabel');  // 默认筛选条件
+const selectedFilter = ref('name');  // 默认筛选条件
 const filterVisible = ref(false);
 
 // 使用userInfoStore
@@ -121,6 +126,14 @@ watch(() => props.dateOrder, (newVal) => {
             return a.createdAt < b.createdAt ? 1 : -1;
         });
     }
+});
+
+// 通过watch监听props.dateOrder的变化
+watch(() => props.ifRefresh, async(newVal) => {
+    if (newVal === true) {
+        console.log('refresh', newVal)
+        await fetchTableData()
+    } 
 });
 
 onMounted(async () => {

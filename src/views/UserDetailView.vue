@@ -53,6 +53,12 @@
                         </transition>
 
                     </div>
+                    <div class="FilterBox" @click="handleFileUpload" v-if="userInfo.user?.userType == 'admin'">
+                        <el-icon>
+                            <Plus />
+                        </el-icon>
+                        <p>表格导入</p>
+                    </div>
                     <div class="FilterBox" @click="toUpdate('create')" v-if="userInfo.user?.userType == 'admin'">
                         <el-icon>
                             <Plus />
@@ -62,7 +68,9 @@
 
                 </div>
             </div>
-            <UserDetailTable :dateOrder="dateOrder" :typeOrder="typeOrder" />
+            <UserDetailTable :key="refreshKey" :dateOrder="dateOrder" :typeOrder="typeOrder" />
+            <!-- 隐藏的文件输入框 -->
+            <input type="file" ref="fileInput" @change="onFileChange" accept=".xls, .xlsx" style="display: none" />
         </el-scrollbar>
 
     </div>
@@ -83,8 +91,41 @@ const userInfo = userInfoStore();
 
 const dateOrder = ref<string>("默认排序")
 const typeOrder = ref<string>("所有活动")
+const refreshKey = ref(0); // 用于触发子组件重新渲染
 const ifShowDateOrderPicker = ref<boolean>(false)
 const ifShowTypeOrderPicker = ref<boolean>(false)
+
+const fileInput = ref<HTMLInputElement | null>(null);
+
+const handleFileUpload = () => {
+    // 触发文件选择框
+    fileInput.value?.click();
+};
+
+const onFileChange = async (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await fetch('http://localhost:5173/api/user-detail/importExcel', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (response.ok) {
+            refreshKey.value += 1; // 上传成功后更改 refreshKey 值，触发子组件刷新
+            ElMessage.success('文件上传成功！');
+        } else {
+            ElMessage.error('文件上传失败，请重试！');
+        }
+    } catch (error) {
+        ElMessage.error('上传过程中出现错误！');
+    }
+};
 
 
 // 选择日期排序
@@ -168,6 +209,25 @@ const toUpdate = (id: string) => {
             }
 
             .FilterBox:nth-child(2) {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 10px;
+
+
+
+                color: white;
+                background: rgba(63, 140, 255, 1);
+                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
+
+                border-radius: 12px;
+
+
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+
+            .FilterBox:nth-child(3) {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
