@@ -34,12 +34,12 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">姓名：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">滕恩长</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.name }}</p>
 
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">性别：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">男</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.gender }}</p>
                     </div>
                 </div>
 
@@ -47,12 +47,12 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">班级：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">软件2202</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
 
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">学号：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">220202050220</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.studentId }}</p>
                     </div>
                 </div>
 
@@ -60,12 +60,12 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">联系方式：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">19818283550</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.contactNumber }}</p>
 
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">班主任：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">王晨璐</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.classTeacher }}</p>
                     </div>
                 </div>
 
@@ -74,7 +74,7 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">毕业设计导师：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">冯志林</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.graduationTutor }}</p>
                     </div>
                 </div>
 
@@ -161,7 +161,7 @@ const id = ref('');
 const name = ref('');
 const gender = ref<'男' | '女'>('男');
 const className = ref('');
-const userId = ref('');
+const studentId = ref('');
 const contactNumber = ref('');
 const classTeacher = ref('');
 const graduationTutor = ref('');
@@ -171,6 +171,8 @@ const companyNature = ref('');
 const workLocation = ref([]);
 const employmentStatus = ref('实习');
 const companyName = ref('');
+
+const userDetail = ref<any>({});
 
 // 所有未来计划选项
 const allFuturePlan = [
@@ -199,23 +201,22 @@ const allNature = ref<any[]>([
 
 // 定义上传文件列表
 const fileList = ref<UploadFile[]>([]);
-const dialogImageUrl = ref('');
-const dialogVisible = ref(false);
 
 // 初始化
 onMounted(async () => {
     await getEmploymentSearchByUserId(route.params.id as string).then((res) => {
         const data = res.data;
+        console.log("userDetail.value", userDetail.value);
         // 如果不为空则填充表单字段,如果为空则重置表单字段
-        if (data){
+        if (data) {
             populateFormFields(data);
             isEdit.value = true;
             loading.value = true;
-        }else{
+        } else {
             isEdit.value = false;
             resetFormFields();
         }
-        
+
         loading.value = false;
     }).catch((err) => {
         console.log(err);
@@ -227,7 +228,7 @@ const resetFormFields = () => {
     name.value = '';
     gender.value = '男';
     className.value = '';
-    userId.value = '';
+    studentId.value = '';
     contactNumber.value = '';
     classTeacher.value = '';
     graduationTutor.value = '';
@@ -242,34 +243,34 @@ const resetFormFields = () => {
 
 // 填充表单字段
 const populateFormFields = (data: any) => {
+    userDetail.value = data.userDetail;
     id.value = data.id;
-    name.value = data.name;
-    gender.value = data.gender;
-    className.value = data.className;
-    userId.value = data.userId;
-    contactNumber.value = data.contactNumber;
-    classTeacher.value = data.classTeacher;
-    graduationTutor.value = data.graduationTutor;
+    name.value = data.userDetail.name;
+    gender.value = data.userDetail.gender;
+    className.value = data.userDetail.className;
+    studentId.value = data.userDetail.studentId;
+    contactNumber.value = data.userDetail.contactNumber;
+    classTeacher.value = data.userDetail.classTeacher;
+    graduationTutor.value = data.userDetail.graduationTutor;
     futurePlan.value = data.futurePlan;
     salary.value = data.salary;
     companyNature.value = data.companyNature;
     workLocation.value = data.workLocation.split('/');
     employmentStatus.value = data.employmentStatus;
-    companyName.value = data.companyName;
-    if (data.activityImage) {
-        fileList.value = [{
-            name: "activity-image",
-            url: data.activityImage,
-            status: 'success',
-            uid: Date.now()
-        }];
+    if (employmentStatus.value !== '暂无'){
+        companyName.value = ''
+    }else{
+        companyName.value = data.companyName;
     }
+    
 };
 
 // 取消操作
 const handleCancel = () => {
     ElMessage.success('取消成功');
-    router.push('/employment-search');
+    if (userInfoStore().user?.userType === 'teacher') {
+        router.push('/employment-search');
+    }
 };
 
 // 添加信息
@@ -279,7 +280,7 @@ const handleAdd = async () => {
         name: name.value,
         gender: gender.value,
         className: className.value,
-        userId: userInfoStore().user?.userId,
+        studentId: userInfoStore().user?.studentId,
         contactNumber: contactNumber.value,
         classTeacher: classTeacher.value,
         graduationTutor: graduationTutor.value,
@@ -288,14 +289,18 @@ const handleAdd = async () => {
         companyNature: companyNature.value,
         workLocation: workLocation.value.join('/'),
         employmentStatus: employmentStatus.value,
-        companyName: companyName.value,
-        activityImages: fileList.value.map((file) => file.url)
+        // 如果employmentStatus.value为暂无则companyName为空
+        companyName: employmentStatus.value === '暂无' ? '' : companyName.value,
     };
 
     try {
         await addEmploymentSearch(newData);
         ElMessage.success('发布成功');
-        router.push('/employment-search');
+        isEdit.value = true;
+        if (userInfoStore().user?.userType === 'teacher') {
+            router.push('/employment-search');
+        }
+
     } catch (error) {
         console.error(error);
         ElMessage.error('发布失败');
@@ -312,7 +317,7 @@ const handleEdit = async () => {
         name: name.value,
         gender: gender.value,
         className: className.value,
-        userId: userId.value,
+        studentId: studentId.value,
         contactNumber: contactNumber.value,
         classTeacher: classTeacher.value,
         graduationTutor: graduationTutor.value,
@@ -321,14 +326,16 @@ const handleEdit = async () => {
         companyNature: companyNature.value,
         workLocation: workLocation.value.join('/'),
         employmentStatus: employmentStatus.value,
-        companyName: companyName.value,
-        activityImage: fileList.value.length ? fileList.value[0].url : null
+        // 如果employmentStatus.value为暂无则companyName为空
+        companyName: employmentStatus.value === '暂无' ? '' : companyName.value,
     };
 
     try {
         await editEmploymentSearch(updatedData);
         ElMessage.success('更新成功');
-        router.push('/employment-search');
+        if (userInfoStore().user?.userType === 'teacher') {
+            router.push('/employment-search');
+        }
     } catch (error) {
         console.log(error);
         ElMessage.error('更新失败');
