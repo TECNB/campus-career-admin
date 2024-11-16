@@ -30,7 +30,7 @@
         <el-scrollbar height="90%">
             <div class="main flex flex-col justify-center gap-10 p-10">
                 <!-- 第一行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动内容：</p>
                         <el-select v-model="category" placeholder="请点击选择分类" size="large" clearable :teleported="false">
@@ -39,21 +39,21 @@
                         </el-select>
 
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动名称：</p>
                         <el-input v-model="name" placeholder="请输入名称" />
                     </div>
                 </div>
 
                 <!-- 第二行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动开始时间：</p>
                         <el-date-picker v-model="startTime" type="datetime" placeholder="请选择开始时间"
                             :shortcuts="shortcuts" />
 
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动结束时间：</p>
                         <el-date-picker v-model="endTime" type="datetime" placeholder="请选择结束时间"
                             :shortcuts="shortcuts" />
@@ -61,7 +61,7 @@
                 </div>
 
                 <!-- 第三行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动地点：</p>
                         <el-select v-model="place" placeholder="请点击选择分类" size="large" clearable :teleported="false">
@@ -70,7 +70,7 @@
                         </el-select>
 
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动人数：</p>
                         <el-input-number v-model="participantCount" :min="1" placeholder="请输入人数" />
                     </div>
@@ -78,7 +78,7 @@
 
 
                 <!-- 第四行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
                         <el-select v-model="money" placeholder="请点击选择分类" size="large" clearable :teleported="false">
@@ -86,7 +86,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">公司性质：</p>
                         <el-select v-model="nature" placeholder="请点击选择性质" size="large" clearable :teleported="false">
                             <el-option v-for="item in allNature" :key="item.objectId" :label="item.name"
@@ -97,25 +97,25 @@
 
 
                 <!-- 第五行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
                         <el-cascader size="large" :options="pcaTextArr" v-model="area" placeholder="请点击选择区域">
                         </el-cascader>
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">招聘岗位：</p>
                         <el-input v-model="jobPosition" placeholder="请输入具体岗位" />
                     </div>
                 </div>
 
                 <!-- 第六行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">网申链接：</p>
                         <el-input v-model="applicationLink" placeholder="请输入链接" />
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">发送人群：</p>
                         <el-tree-select v-model="targetAudience" :data="treeData" placeholder="请点击选择发送人群" size="large"
                             clearable :props="defaultProps" multiple show-checkbox collapse-tags
@@ -124,7 +124,7 @@
                 </div>
 
                 <!-- 第七行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">活动图片：</p>
                         <el-upload action="http://localhost:5173/api/activity/file" list-type="picture-card"
@@ -167,7 +167,7 @@
                 </div>
 
                 <!-- 第八行 -->
-                <div class="md:text-4xl font-extrabold text-2xl justify-between items-center gap-10">
+                <div class="md:flex md:flex-1  justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-start">
                         <p class="text-xl font-bold whitespace-nowrap">活动详情：</p>
                         <el-input v-model="detail" placeholder="请输入活动详情" :rows="5" type="textarea" />

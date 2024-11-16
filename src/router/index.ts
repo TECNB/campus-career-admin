@@ -103,7 +103,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("../views/UserDetailView.vue"),
             },
             {
-                name:'添加发送人群',
+                name:'添加学生资料',
                 path: "/updateUser-detail/:id",
                 component: () => import("../views/UpdateUserDetailView.vue"),
             },

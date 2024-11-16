@@ -36,7 +36,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">姓名：</p>
                         <el-input v-model="name" placeholder="请输入姓名" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">性别：</p>
                         <el-input v-model="gender" placeholder="请输入性别" />
                     </div>
@@ -48,7 +48,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">班级：</p>
                         <el-input v-model="className" placeholder="请输入班级" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">学号：</p>
                         <el-input v-model="studentId" placeholder="请输入学号" />
                     </div>
@@ -60,7 +60,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">联系方式：</p>
                         <el-input v-model="contactNumber" placeholder="请输入联系方式" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">班主任：</p>
                         <el-input v-model="classTeacher" placeholder="请输入班主任" />
                     </div>

@@ -1,25 +1,24 @@
 <template>
     <div class="AccountView">
-
         <div class="header">
-            <div class="title">
-                <p>添加发送人群详情</p>
+            <div class="">
+                <p class="md:text-4xl font-extrabold text-2xl">添加发送人群详情</p>
             </div>
             <div class="FilterSection">
-                <div class="FilterBox" @click="handleCancel">
+                <div class="FilterBox p-2 md:p-3" @click="handleCancel">
                     <el-icon>
                         <Close />
                     </el-icon>
                     <p>取消</p>
                 </div>
 
-                <div class="FilterBox" v-if="!isEdit" @click="handleAdd">
+                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>确定</p>
                 </div>
-                <div class="FilterBox" v-else @click="handleEdit">
+                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -31,12 +30,12 @@
         <el-scrollbar height="90%">
             <div class="main flex flex-col justify-center gap-10 p-10">
                 <!-- 第一行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">发送年级名称：</p>
                         <el-input v-model="audienceLabel" placeholder="请输入名称" />
                     </div>
-                    <div class="flex flex-1 justify-between items-center gap-10">
+                    <div class="flex flex-1 justify-between items-center gap-10 mt-2">
                         <div class="flex flex-1 justify-start items-center">
                             <p class="text-xl font-bold whitespace-nowrap">发送班级名称：</p>
                             <el-input v-model="audienceValue" placeholder="请输入名称" />
@@ -160,11 +159,6 @@ const handleEdit = async () => {
 
         padding: 30px 30px 0 30px;
 
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
         .FilterSection {
             display: flex;
             justify-content: center;
@@ -183,8 +177,6 @@ const handleEdit = async () => {
                 border-radius: 12px;
                 cursor: pointer;
 
-
-                padding: 12px;
                 margin-bottom: 20px;
             }
 
@@ -203,7 +195,6 @@ const handleEdit = async () => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
         }

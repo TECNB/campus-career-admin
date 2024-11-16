@@ -8,7 +8,7 @@
             <div class="">
                 <Header />
             </div>
-            <div class="h-[93%] ">
+            <div class="h-[93%]">
                 <router-view></router-view>
             </div>
         </div>

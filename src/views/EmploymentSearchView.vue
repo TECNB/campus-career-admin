@@ -6,7 +6,7 @@
                     <p>就业查询</p>
                 </div>
                 <div class="FilterSection">
-                    <div class="FilterBox !hidden md:block">
+                    <div class="FilterBox !hidden md:!block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowTypeOrderPicker">
                             <p>显示：</p>
                             <p class="text-black font-medium">{{ typeOrder }}</p>
@@ -30,7 +30,7 @@
                             </div>
                         </transition>
                     </div>
-                    <div class="FilterBox !hidden md:block">
+                    <div class="FilterBox !hidden md:!block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
                             <p class="text-black font-medium">{{ dateOrder }}</p>

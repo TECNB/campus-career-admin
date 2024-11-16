@@ -14,7 +14,7 @@
                     @keyup.enter="filterData"
                 />
             </div>
-            <div class="FilterBox md:flex items-center cursor-pointer !hidden" @click="toggleFilter">
+            <div class="FilterBox md:!flex items-center cursor-pointer !hidden" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
@@ -74,7 +74,7 @@
                 class="pageList"
                 :page-sizes="[10, 20, 30]"
                 :page-size="pageSize"
-                layout="sizes, prev, pager, next"
+                :layout="isMediumScreen ? 'total, sizes, prev, pager, next, jumper' : 'sizes, prev, pager, next'"
                 :total="counts"
                 :current-page.sync="page"
                 @size-change="handleSizeChange"
@@ -134,7 +134,7 @@ const isMediumScreen = ref(false);
 
 // 更新屏幕宽度的响应式逻辑
 const updateScreenSize = () => {
-  isMediumScreen.value = window.innerWidth >= 768;
+    isMediumScreen.value = window.innerWidth >= 768;
 };
 
 onBeforeUnmount(() => {
@@ -156,6 +156,8 @@ watch(() => props.dateOrder, (newVal) => {
 
 onMounted(async () => {
     await fetchTableData();
+    updateScreenSize(); // 初始化时检查屏幕大小
+    window.addEventListener("resize", updateScreenSize); // 监听窗口变化
 });
 
 const fetchTableData = async () => {

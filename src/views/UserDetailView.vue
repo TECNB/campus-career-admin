@@ -2,8 +2,8 @@
     <div class="AccountView">
         <el-scrollbar>
             <div class="header">
-                <div class="title">
-                    <p>学生资料查看</p>
+                <div class="">
+                    <p class="md:text-4xl font-extrabold text-3xl">学生资料查看</p>
                 </div>
                 <div class="FilterSection">
                     <!-- <div class="FilterBox">
@@ -30,7 +30,7 @@
                             </div>
                         </transition>
                     </div> -->
-                    <div class="FilterBox">
+                    <div class="FilterBox !hidden md:block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
                             <p class="text-black font-medium">{{ dateOrder }}</p>
@@ -53,7 +53,7 @@
                         </transition>
 
                     </div>
-                    <div class="FilterBox" @click="handleFileUpload" v-if="userInfo.user?.userType == 'admin'">
+                    <div class="FilterBox !hidden md:block" @click="handleFileUpload" v-if="userInfo.user?.userType == 'admin'">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -174,11 +174,6 @@ const toUpdate = (id: string) => {
         align-content: center;
 
         padding: 30px 30px 0 30px;
-
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
 
         .FilterSection {
             display: flex;

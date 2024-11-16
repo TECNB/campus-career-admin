@@ -8,7 +8,7 @@
                 </el-icon>
                 <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
             </div>
-            <div class="FilterBox md:flex items-center cursor-pointer !hidden" @click="toggleFilter">
+            <div class="FilterBox md:!flex items-center cursor-pointer !hidden" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
@@ -73,7 +73,7 @@
         <!-- 分页 -->
         <el-config-provider :locale="zhCn">
             <el-pagination class="pageList" :page-sizes="[10, 20, 30]" :page-size="pageSize"
-                layout="sizes, prev, pager, next" :total="counts" :current-page.sync="page"
+            :layout="isMediumScreen ? 'total, sizes, prev, pager, next, jumper' : 'sizes, prev, pager, next'" :total="counts" :current-page.sync="page"
                 @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
         </el-config-provider>
     </div>
@@ -140,7 +140,7 @@ const isMediumScreen = ref(false);
 
 // 更新屏幕宽度的响应式逻辑
 const updateScreenSize = () => {
-  isMediumScreen.value = window.innerWidth >= 768;
+    isMediumScreen.value = window.innerWidth >= 768;
 };
 
 onBeforeUnmount(() => {
@@ -182,6 +182,8 @@ watch(() => props.typeOrder, (newVal) => {
 
 onMounted(async () => {
     await fetchTableData();
+    updateScreenSize(); // 初始化时检查屏幕大小
+    window.addEventListener("resize", updateScreenSize); // 监听窗口变化
 });
 
 const fetchTableData = async () => {

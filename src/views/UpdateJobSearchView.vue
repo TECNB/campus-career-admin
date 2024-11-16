@@ -34,7 +34,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">企业名称：</p>
                         <el-input v-model="companyName" placeholder="请输入名称" />
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">岗位名称：</p>
                         <el-input v-model="positionName" placeholder="请输入名称" />
                     </div>
@@ -46,7 +46,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">HR：</p>
                         <el-input v-model="hrName" placeholder="请输入HR名称" />
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">联系电话：</p>
                         <el-input v-model="hrPhone" placeholder="请输入名称" />
                     </div>
@@ -62,7 +62,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">招聘人数：</p>
                         <el-input-number v-model="participantCount" :min="1" placeholder="请输入人数" />
                     </div>
@@ -78,7 +78,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
                         <el-cascader size="large" :options="pcaTextArr" v-model="area" placeholder="请点击选择区域">
                         </el-cascader>
@@ -93,7 +93,7 @@
                         <el-input v-model="applicationLink" placeholder="请输入链接" />
 
                     </div>
-                    <div class="flex flex-1 mt-4 justify-start items-center">
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">其他要求：</p>
                         <el-input v-model="additionalRequirements" placeholder="请输入其他要求" />
 

@@ -30,16 +30,15 @@
         <el-scrollbar height="90%">
             <div class="main flex flex-col justify-center gap-10 p-10">
                 <!-- 第一行 -->
-                <div class="fmd:flex md:flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">资料类别：</p>
                         <el-select v-model="category" placeholder="请点击选择类别" size="large" clearable :teleported="false">
                             <el-option v-for="item in allType" :key="item.objectId" :label="item.name"
                                 :value="item.name" />
                         </el-select>
-
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">标题：</p>
                         <el-input v-model="title" placeholder="请输入标题" />
                     </div>

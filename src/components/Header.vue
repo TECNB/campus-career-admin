@@ -1,6 +1,9 @@
 <template>
-    <div class="Header">
+    <div class="Header rounded-none md:rounded-2xl md:mx-6 md:mb-6 m-0 px-5">
         <div class="nav-tabs">
+            <el-icon size="20">
+                <Menu/>
+            </el-icon>
             <div v-for="(tab, index) in tabs" :key="index" :class="{ 'nav-tab-item': true, active: currentTab === index }"
                 @click="switchTab(index)">
                 <p>{{ tab.name }}</p>
@@ -164,13 +167,6 @@ const closeTab = (index: number) => {
 
     background-color: #fff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 14px;
-
-
-    padding: 0 20px 0 0;
-    margin-left: 24px;
-    margin-right: 24px;
-    margin-bottom: 10px;
 
 
     .nav-tabs {

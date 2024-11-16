@@ -30,7 +30,7 @@
                             </div>
                         </transition>
                     </div> -->
-                    <div class="FilterBox !hidden md:block">
+                    <div class="FilterBox !hidden md:!block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
                             <p class="text-black font-medium">{{ dateOrder }}</p>
@@ -57,7 +57,7 @@
                         <el-icon>
                             <Plus />
                         </el-icon>
-                        <p>发布活动地点</p>
+                        <p>发布发送人群</p>
                     </div>
 
                 </div>

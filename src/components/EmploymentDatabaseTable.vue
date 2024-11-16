@@ -6,32 +6,21 @@
                 <el-icon :size="16">
                     <Search />
                 </el-icon>
-                <input
-                    type="text"
-                    class="ml-2"
-                    placeholder="请输入文字进行搜索"
-                    v-model="input"
-                    @keyup.enter="filterData"
-                />
+                <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
             </div>
-            <div class="FilterBox md:flex items-center cursor-pointer !hidden" @click="toggleFilter">
+            <div class="FilterBox md:!flex items-center cursor-pointer !hidden" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
                 <p class="ml-2">筛选</p>
             </div>
         </div>
-        
+
         <!-- 筛选选项 -->
         <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
-            <p
-                v-for="(option, index) in filterOptions"
-                :key="index"
-                :class="[
-                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
-                ]"
-                @click="selectFilter(option.value)"
-            >
+            <p v-for="(option, index) in filterOptions" :key="index" :class="[
+                selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
+            ]" @click="selectFilter(option.value)">
                 {{ option.label }}
             </p>
         </div>
@@ -40,9 +29,9 @@
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
-                <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
+                <el-table-column type="selection" width="40" v-if="isMediumScreen" />
 
-                <el-table-column prop="id" label="序号" width="60" v-if="isMediumScreen"/>
+                <el-table-column prop="id" label="序号" width="60" v-if="isMediumScreen" />
                 <el-table-column prop="category" label="资料类别" width="80">
                     <template #default="{ row }">
                         <span>{{ row.category }}</span>
@@ -79,14 +68,15 @@
         <!-- 分页 -->
         <el-config-provider :locale="zhCn">
             <el-pagination class="pageList" :page-sizes="[10, 20, 30]" :page-size="pageSize"
-                layout="sizes, prev, pager, next" :total="counts" :current-page.sync="page"
-                @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
+                :layout="isMediumScreen ? 'total, sizes, prev, pager, next, jumper' : 'sizes, prev, pager, next'"
+                :total="counts" :current-page.sync="page" @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"></el-pagination>
         </el-config-provider>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted,onBeforeUnmount } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 // ElConfigProvider 组件
 import { ElConfigProvider } from 'element-plus';
 // 引入中文包
@@ -98,7 +88,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { EmploymentDatabase } from '../interfaces/EmploymentDatabase';
-import { getAllEmploymentDatabase, deleteEmploymentDatabase,download,searchEmploymentDatabase } from '../api/employmentDatabase';
+import { getAllEmploymentDatabase, deleteEmploymentDatabase, download, searchEmploymentDatabase } from '../api/employmentDatabase';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -137,11 +127,11 @@ const isMediumScreen = ref(false);
 
 // 更新屏幕宽度的响应式逻辑
 const updateScreenSize = () => {
-  isMediumScreen.value = window.innerWidth >= 768;
+    isMediumScreen.value = window.innerWidth >= 768;
 };
 
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
+    window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
 });
 
 
@@ -178,6 +168,8 @@ watch(() => props.typeOrder, (newVal) => {
 
 onMounted(async () => {
     await fetchTableData();
+    updateScreenSize(); // 初始化时检查屏幕大小
+    window.addEventListener("resize", updateScreenSize); // 监听窗口变化
 });
 
 const fetchTableData = async () => {
@@ -285,7 +277,7 @@ const downloadAllAttachments = async (attachment: string[]) => {
     if (response.ok) {
         // 转换响应为 Blob 对象
         const blob = await response.blob();
-        
+
         // 创建临时下载链接
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');

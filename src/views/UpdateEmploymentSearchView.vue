@@ -89,7 +89,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
                         <el-select v-model="salary" placeholder="请点击选择分类" size="large" clearable :teleported="false">
                             <el-option v-for="item in allMoney" :key="item.objectId" :label="item.name"
@@ -108,7 +108,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
                         <el-cascader size="large" :options="pcaTextArr" v-model="workLocation" placeholder="请点击选择区域">
                         </el-cascader>
@@ -125,7 +125,7 @@
                             <el-radio :label="'暂无'">暂无</el-radio>
                         </el-radio-group>
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap" v-if="employmentStatus === '实习'">实习单位：</p>
                         <p class="text-xl font-bold whitespace-nowrap" v-if="employmentStatus === '签约'">签约单位：</p>
                         <p class="text-xl font-bold whitespace-nowrap" v-else"></p>
