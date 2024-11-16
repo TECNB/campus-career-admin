@@ -3,10 +3,10 @@
         <el-scrollbar>
             <div class="header">
                 <div class="title">
-                    <p>活动查看</p>
+                    <p class="md:text-4xl font-extrabold text-3xl">活动查看</p>
                 </div>
                 <div class="FilterSection">
-                    <div class="FilterBox">
+                    <div class="FilterBox !hidden md:block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowTypeOrderPicker">
                             <p>显示：</p>
                             <p class="text-black font-medium">{{ typeOrder }}</p>
@@ -30,7 +30,7 @@
                             </div>
                         </transition>
                     </div>
-                    <div class="FilterBox">
+                    <div class="FilterBox !hidden md:block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
                             <p class="text-black font-medium">{{ dateOrder }}</p>
@@ -53,7 +53,7 @@
                         </transition>
 
                     </div>
-                    <div class="FilterBox" @click="toUpdate('create')" v-if="userInfo.user?.userType=='teacher'">
+                    <div class="FilterBoxAdd" @click="toUpdate('create')" v-if="userInfo.user?.userType=='teacher'">
                         <el-icon>
                             <Plus />
                         </el-icon>
@@ -134,11 +134,6 @@ const toUpdate = (id: string) => {
 
         padding: 30px 30px 0 30px;
 
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
         .FilterSection {
             display: flex;
             justify-content: center;
@@ -167,7 +162,7 @@ const toUpdate = (id: string) => {
                 margin-bottom: 20px;
             }
 
-            .FilterBox:nth-child(3) {
+            .FilterBoxAdd {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;

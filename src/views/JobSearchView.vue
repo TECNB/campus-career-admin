@@ -2,7 +2,7 @@
     <div class="AccountView">
         <el-scrollbar>
             <div class="header">
-                <div class="title">
+                <div class="">
                     <p class="md:text-4xl font-extrabold text-3xl">岗位搜索</p>
                 </div>
                 <div class="FilterSection">

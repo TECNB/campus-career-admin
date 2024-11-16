@@ -14,7 +14,7 @@
                     @keyup.enter="filterData"
                 />
             </div>
-            <div class="FilterBox flex items-center cursor-pointer" @click="toggleFilter">
+            <div class="FilterBox md:flex items-center cursor-pointer !hidden" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
@@ -46,7 +46,7 @@
                 v-loading="loading"
                 :row-style="{ height: '80px' }"
             >
-                <el-table-column type="selection" width="40" />
+                <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
                 <el-table-column prop="audienceLabel" label="发送年级" />
                 <el-table-column prop="audienceValue" label="发送班级" />
                 <el-table-column prop="createdAt" label="创建时间">
@@ -74,7 +74,7 @@
                 class="pageList"
                 :page-sizes="[10, 20, 30]"
                 :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="sizes, prev, pager, next"
                 :total="counts"
                 :current-page.sync="page"
                 @size-change="handleSizeChange"
@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted,onBeforeUnmount } from 'vue';
 // ElConfigProvider 组件
 import { ElConfigProvider } from 'element-plus';
 // 引入中文包
@@ -128,6 +128,18 @@ const multipleSelection = ref<[]>([])
 const isSearch = ref(false);
 
 let loading = ref(false);
+
+// 定义是否处于中等屏幕以上的状态
+const isMediumScreen = ref(false);
+
+// 更新屏幕宽度的响应式逻辑
+const updateScreenSize = () => {
+  isMediumScreen.value = window.innerWidth >= 768;
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
+});
 
 // 通过watch监听props.dateOrder的变化
 watch(() => props.dateOrder, (newVal) => {

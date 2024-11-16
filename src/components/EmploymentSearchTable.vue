@@ -8,7 +8,7 @@
                 </el-icon>
                 <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
             </div>
-            <div class="FilterBox flex items-center cursor-pointer" @click="toggleFilter">
+            <div class="FilterBox md:flex items-center cursor-pointer !hidden" @click="toggleFilter">
                 <el-icon>
                     <Operation />
                 </el-icon>
@@ -29,9 +29,9 @@
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
-                <el-table-column type="selection" width="40" />
+                <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
 
-                <el-table-column prop="id" label="序号" width="60" />
+                <el-table-column prop="id" label="序号" width="60" v-if="isMediumScreen"/>
                 <el-table-column prop="name" label="姓名" width="120" />
                 <el-table-column prop="gender" label="性别" width="80" />
                 <el-table-column prop="className" label="班级" width="150" />
@@ -73,14 +73,14 @@
         <!-- 分页 -->
         <el-config-provider :locale="zhCn">
             <el-pagination class="pageList" :page-sizes="[10, 20, 30]" :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="counts" :current-page.sync="page"
+                layout="sizes, prev, pager, next" :total="counts" :current-page.sync="page"
                 @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
         </el-config-provider>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted,onBeforeUnmount } from 'vue';
 // ElConfigProvider 组件
 import { ElConfigProvider } from 'element-plus';
 // 引入中文包
@@ -134,6 +134,18 @@ const multipleSelection = ref<[]>([])
 const isSearch = ref(false);
 
 let loading = ref(false);
+
+// 定义是否处于中等屏幕以上的状态
+const isMediumScreen = ref(false);
+
+// 更新屏幕宽度的响应式逻辑
+const updateScreenSize = () => {
+  isMediumScreen.value = window.innerWidth >= 768;
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
+});
 
 
 
