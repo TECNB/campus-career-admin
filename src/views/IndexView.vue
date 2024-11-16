@@ -2,7 +2,7 @@
     <div class="IndexView flex p-0 md:p-5">
         <!-- 仅在大屏幕上显示 sidebar (大于md) -->
         <div class="min-w-52 hidden md:block">
-            <Sidebar />
+            <Sidebar device="pc"/>
         </div>
         <div class="md:w-[86%] w-full h-full">
             <div class="">
@@ -34,18 +34,12 @@ import Header from '../components/Header.vue'
 
         position: fixed;
 
-
         height: 95%;
         width: 210px !important;
-
-
-
     }
 
     .main-container {
         // background: #f0f2f5;
-
-
         position: relative;
 
         height: 100%;
@@ -53,17 +47,11 @@ import Header from '../components/Header.vue'
         margin-left: 210px;
         background: #F2F8FC;
 
-
-
         .fixed-header {
             position: fixed;
             top: 0px;
 
-
-
             width: calc(100% - 300px);
-
-
         }
 
         .app-main {
@@ -71,11 +59,6 @@ import Header from '../components/Header.vue'
             height: 90%;
 
             position: relative;
-
-
-
-
-
             margin-top: 60px;
         }
     }

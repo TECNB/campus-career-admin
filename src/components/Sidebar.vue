@@ -1,11 +1,13 @@
 <template>
-    <div class="Sidebar">
-        <div class="sidebar-logo-container">
+    <div :class="[
+        'Sidebar rounded-none md:rounded-3xl z-[10000]',
+        props.device === 'phone' ? 'fixed top-0 left-0' : ''
+    ]">
+        <div class="sidebar-logo-container" v-if="props.device == 'pc'">
             <img class="h-8" src="../assets/images/logo.png">
             <p>数智就业</p>
         </div>
         <el-scrollbar height="90%">
-
             <ul>
                 <!-- 遍历菜单项 -->
                 <li v-for="(menu, index) in menus" :key="index">
@@ -37,10 +39,7 @@
                     </ul>
                 </li>
             </ul>
-
-
         </el-scrollbar>
-
     </div>
 </template>
 
@@ -59,12 +58,17 @@ const userInfo = userInfoStore();
 const router = useRouter();
 const route = useRoute();
 
+// props device
+const props = defineProps({
+    device: String,
+});
+
 const selectedMenu = ref<number | null>(0);
 const selectedSubMenu = ref<number | null>(null);
 // ifShowSubMenu
 const ifShowSubMenu = ref<boolean>(false);
 
-let menus:any = [];
+let menus: any = [];
 
 const menusStudent = [
     {
@@ -74,7 +78,7 @@ const menusStudent = [
         children: [
             { label: '活动日历', path: '/' },
             { label: '活动查看', path: '/activity' },
-            { label: '就业信息登记', path: '/updateEmployment-search/'+ userInfo.user!.studentId },
+            { label: '就业信息登记', path: '/updateEmployment-search/' + userInfo.user!.studentId },
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
 
@@ -155,16 +159,16 @@ const menusAdmin = [
 console.log(userInfo.user?.username)
 if (userInfo.user?.userType === 'student') {
     menus = menusStudent;
-} else if (userInfo.user?.userType === 'teacher'){
+} else if (userInfo.user?.userType === 'teacher') {
     menus = menusTeacher;
-}else {
+} else {
     menus = menusAdmin;
 }
 
 
-onMounted(async() => {
+onMounted(async () => {
     // 初始化选中的菜单
-    const index = menus.findIndex((menu:any) => menu.path === route.path);
+    const index = menus.findIndex((menu: any) => menu.path === route.path);
     if (index !== -1) {
         selectedMenu.value = index;
     }
@@ -212,7 +216,6 @@ const selectSubMenu = (parentIndex: number, childIndex: number, path: string) =>
 <style lang="scss" scoped>
 .Sidebar {
     height: 100%;
-    border-radius: 24px;
     background: #fff;
 
     .sidebar-logo-container {

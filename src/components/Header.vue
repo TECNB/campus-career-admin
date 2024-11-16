@@ -1,7 +1,7 @@
 <template>
     <div class="Header rounded-none md:rounded-2xl md:mx-6 md:mb-6 m-0 px-5">
         <div class="nav-tabs">
-            <el-icon size="20">
+            <el-icon size="20" class="!block md:!hidden mr-2" @click="showSlider">
                 <Menu/>
             </el-icon>
             <div v-for="(tab, index) in tabs" :key="index" :class="{ 'nav-tab-item': true, active: currentTab === index }"
@@ -13,7 +13,7 @@
             </div>
 
         </div>
-        <div class="user-tabs">
+        <div class="user-tabs ml-5">
             <!-- <el-icon size="20" class="!hidden md:block">
                 <Search />
             </el-icon>
@@ -32,12 +32,16 @@
                 <SwitchButton />
             </el-icon>
         </div>
+        <Sidebar device="phone" v-if="ifShowSidebar"/>
+        <MaskLayer :ifShow="ifShowSidebar" @click="showSlider"/>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useRouter, RouteLocationNormalizedLoaded } from 'vue-router';
+import Sidebar from '../components/Sidebar.vue'
+import MaskLayer from '../components/MaskLayer.vue'
 // 引入userInfoStore
 import  {userInfoStore}  from '../stores/UserInfoStore';
 
@@ -45,6 +49,12 @@ import  {userInfoStore}  from '../stores/UserInfoStore';
 const userInfo = userInfoStore();
 
 const isFullScreen = ref(false);
+// 控制Sidebar是否展示
+const ifShowSidebar = ref(false);
+
+const showSlider = () => {
+    ifShowSidebar.value = !ifShowSidebar.value;
+};
 
 const toggleFullScreen = () => {
     if (isFullScreen.value) {
