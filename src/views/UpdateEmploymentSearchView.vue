@@ -44,26 +44,25 @@
                 </div>
 
                 <!-- 第二行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">班级：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
 
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">学号：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.studentId }}</p>
                     </div>
                 </div>
 
                 <!-- 第三行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">联系方式：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.contactNumber }}</p>
-
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">班主任：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.classTeacher }}</p>
                     </div>
