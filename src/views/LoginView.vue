@@ -1,7 +1,7 @@
 <template>
     <div class="LoginView">
         <div class="login-box">
-            <img src="../assets/images/login/login-l.png" alt="" class="w-[60%] h-[90%] rounded-l-lg">
+            <img src="../assets/images/login/login-l.png" alt="" class="w-[60%] h-[90%] rounded-l-lg !hidden md:!block">
             <div class="login-form">
                 <p class="title" v-if="!ifRegister">Login</p>
                 <p class="title" v-if="ifRegister">Sign Up</p>

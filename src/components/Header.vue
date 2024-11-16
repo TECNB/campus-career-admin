@@ -1,9 +1,10 @@
 <template>
     <div class="Header rounded-none md:rounded-2xl md:mx-6 md:mb-6 m-0 px-5">
-        <div class="nav-tabs">
-            <el-icon size="20" class="!block md:!hidden mr-2" @click="showSlider">
+        <el-icon size="20" class="!block md:!hidden mr-2" @click="showSlider">
                 <Menu/>
             </el-icon>
+        <div class="nav-tabs">
+            
             <div v-for="(tab, index) in tabs" :key="index" :class="{ 'nav-tab-item': true, active: currentTab === index }"
                 @click="switchTab(index)">
                 <p>{{ tab.name }}</p>
@@ -26,7 +27,7 @@
             <div class="user-info">
                 <img class="w-8 h-8 rounded-full object-cover aspect-square"
                     :src="userInfo.user?.avatarUrl">
-                <p>{{ userInfo.user?.username }}</p>
+                <p class="text-nowrap">{{ userInfo.user?.username }}</p>
             </div>
             <el-icon size="20" @click="toLogin" class="cursor-pointer">
                 <SwitchButton />

@@ -2,11 +2,11 @@
     <div class="AccountView">
         <el-scrollbar>
             <div class="header">
-                <div class="title">
-                    <p>智能就业</p>
+                <div class="">
+                    <p class="md:text-4xl font-extrabold text-2xl">智能就业</p>
                 </div>
                 <div class="FilterSection">
-                    <div class="FilterBox">
+                    <div class="FilterBox !hidden md:!block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
                             <p>排序：</p>
                             <p class="text-black font-medium">{{ dateOrder }}</p>
@@ -152,11 +152,6 @@ const toggleIfShowTypeOrderPicker = () => {
         align-content: center;
 
         padding: 30px 30px 0 30px;
-
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
 
         .FilterSection {
             display: flex;

@@ -1,18 +1,19 @@
 <template>
-    <div class="Table p-10">
+    <div class="Table p-5 md:p-10">
         <!-- 顶部搜索栏 -->
         <div class="tableBar flex justify-between items-center mb-4">
-            <div class="SearchInput flex items-center">
-                <el-icon :size="16">
-                    <Search />
-                </el-icon>
-                <input
-                    type="text"
-                    class="ml-2"
-                    placeholder="请输入文字进行搜索"
-                    v-model="input"
-                    @keyup.enter="filterData"
-                />
+            <div class="SearchInput flex justify-between items-center">
+                <div class="">
+                    <el-icon :size="16">
+                        <Search />
+                    </el-icon>
+                    <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
+                </div>
+                <div class="!block md:!hidden" @click="toggleFilter">
+                    <el-icon :size="16">
+                        <Operation />
+                    </el-icon>
+                </div>
             </div>
             <div class="FilterBox md:!flex items-center cursor-pointer !hidden" @click="toggleFilter">
                 <el-icon>
@@ -21,32 +22,24 @@
                 <p class="ml-2">筛选</p>
             </div>
         </div>
-        
+
         <!-- 筛选选项 -->
-        <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
-            <p
-                v-for="(option, index) in filterOptions"
-                :key="index"
-                :class="[
-                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
-                ]"
-                @click="selectFilter(option.value)"
-            >
-                {{ option.label }}
-            </p>
-        </div>
+        <el-scrollbar>
+            <div class="flex justify-start items-center gap-8 mb-5" v-if="filterVisible">
+                <p v-for="(option, index) in filterOptions" :key="index" :class="[
+                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer whitespace-nowrap' : 'text-gray-500 cursor-pointer whitespace-nowrap'
+                ]" @click="selectFilter(option.value)">
+                    {{ option.label }}
+                </p>
+            </div>
+        </el-scrollbar>
+
 
         <!-- 表格数据 -->
         <el-scrollbar height="100%">
-            <el-table
-                :data="tableData"
-                class="tableBox"
-                table-layout="fixed"
-                @selection-change="handleSelectionChange"
-                v-loading="loading"
-                :row-style="{ height: '80px' }"
-            >
-                <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
+            <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
+                v-loading="loading" :row-style="{ height: '80px' }">
+                <el-table-column type="selection" width="40" v-if="isMediumScreen" />
                 <el-table-column prop="category" label="活动内容">
                     <template #default="{ row }">
                         <span>{{ row.category }}</span>
@@ -93,25 +86,19 @@
                 </el-table-column>
             </el-table>
         </el-scrollbar>
-        
+
         <!-- 分页 -->
         <el-config-provider :locale="zhCn">
-            <el-pagination
-                class="pageList"
-                :page-sizes="[10, 20, 30]"
-                :page-size="pageSize"
+            <el-pagination class="pageList" :page-sizes="[10, 20, 30]" :page-size="pageSize"
                 :layout="isMediumScreen ? 'total, sizes, prev, pager, next, jumper' : 'sizes, prev, pager, next'"
-                :total="counts"
-                :current-page.sync="page"
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-            ></el-pagination>
+                :total="counts" :current-page.sync="page" @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"></el-pagination>
         </el-config-provider>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted,onBeforeUnmount } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 // ElConfigProvider 组件
 import { ElConfigProvider } from 'element-plus';
 // 引入中文包
@@ -123,7 +110,7 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
-import { getAllActivity, deleteActivity,searchActivity } from '../api/activity';
+import { getAllActivity, deleteActivity, searchActivity } from '../api/activity';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -167,13 +154,13 @@ const isMediumScreen = ref(false);
 
 // 更新屏幕宽度的响应式逻辑
 const updateScreenSize = () => {
-    console.log('updateScreenSize:',window.innerWidth)
+    console.log('updateScreenSize:', window.innerWidth)
     isMediumScreen.value = window.innerWidth >= 768;
-    console.log('isMediumScreen:',isMediumScreen.value)
+    console.log('isMediumScreen:', isMediumScreen.value)
 };
 
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
+    window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
 });
 
 // 通过watch监听props.dateOrder的变化
@@ -319,8 +306,7 @@ const toUpdateActivity = (id: string) => {
     background: #fff;
     border-radius: 16px;
 
-    margin-right: 24px;
-    margin-left: 24px;
+    margin: 24px;
 
     .tableBar {
         display: flex;
@@ -330,9 +316,6 @@ const toUpdateActivity = (id: string) => {
 
         /* 输入框样式 */
         .SearchInput {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
             flex: 1;
 
             background-color: rgba(250, 250, 250, 1);

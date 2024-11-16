@@ -1,18 +1,19 @@
 <template>
-    <div class="Table p-10">
+    <div class="Table p-5 md:p-10">
         <!-- 顶部搜索栏 -->
         <div class="tableBar flex justify-between items-center mb-4">
-            <div class="SearchInput flex items-center">
-                <el-icon :size="16">
-                    <Search />
-                </el-icon>
-                <input
-                    type="text"
-                    class="ml-2"
-                    placeholder="请输入文字进行搜索"
-                    v-model="input"
-                    @keyup.enter="filterData"
-                />
+            <div class="SearchInput flex justify-between items-center">
+                <div class="">
+                    <el-icon :size="16">
+                        <Search />
+                    </el-icon>
+                    <input type="text" class="ml-2" placeholder="请输入文字进行搜索" v-model="input" @keyup.enter="filterData" />
+                </div>
+                <div class="!block md:!hidden" @click="toggleFilter">
+                    <el-icon :size="16">
+                        <Operation />
+                    </el-icon>
+                </div>
             </div>
             <div class="FilterBox md:!flex items-center cursor-pointer !hidden" @click="toggleFilter">
                 <el-icon>
@@ -21,20 +22,17 @@
                 <p class="ml-2">筛选</p>
             </div>
         </div>
-        
+
         <!-- 筛选选项 -->
-        <div class="mb-5 flex justify-start items-center gap-8" v-if="filterVisible">
-            <p
-                v-for="(option, index) in filterOptions"
-                :key="index"
-                :class="[
-                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer' : 'text-gray-500 cursor-pointer'
-                ]"
-                @click="selectFilter(option.value)"
-            >
-                {{ option.label }}
-            </p>
-        </div>
+        <el-scrollbar>
+            <div class="flex justify-start items-center gap-8 mb-5" v-if="filterVisible">
+                <p v-for="(option, index) in filterOptions" :key="index" :class="[
+                    selectedFilter === option.value ? 'text-blue-400 p-2 bg-blue-50 rounded-md cursor-pointer whitespace-nowrap' : 'text-gray-500 cursor-pointer whitespace-nowrap'
+                ]" @click="selectFilter(option.value)">
+                    {{ option.label }}
+                </p>
+            </div>
+        </el-scrollbar>
 
         <!-- 表格数据 -->
         <el-scrollbar height="100%">
@@ -275,9 +273,6 @@ const toUpdateActivity = (id: string) => {
 
         /* 输入框样式 */
         .SearchInput {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
             flex: 1;
 
             background-color: rgba(250, 250, 250, 1);

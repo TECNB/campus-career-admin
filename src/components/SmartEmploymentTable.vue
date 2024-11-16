@@ -1,13 +1,13 @@
 <template>
-    <div class="Table p-10">
+    <div class="Table p-5 md:p-10">
         <!-- 简历优化 -->
         <div class="mb-4">
             <p class="text-left text-2xl font-bold mb-4">一、简历优化</p>
-            <div class="flex gap-4">
+            <div class="flex gap-1 md:gap-4">
                 <a href="https://resume.io" target="_blank"
                     class="w-1/3 p-4 text-center bg-blue-500 text-white rounded-2xl hover:bg-blue-600 transition">
                     Resume.io
-                    <p class="text-sm mt-2">创建专业简历</p>
+                    <p class="text-sm mt-2 ">创建专业简历</p>
                 </a>
                 <a href="https://www.canva.com" target="_blank"
                     class="w-1/3 p-4 text-center bg-indigo-500 text-white rounded-2xl hover:bg-indigo-600 transition">
@@ -25,7 +25,7 @@
         <!-- 面试优化 -->
         <div class="mb-4">
             <p class="text-left text-2xl font-bold mb-4">二、面试优化</p>
-            <div class="flex gap-4">
+            <div class="flex gap-1 md:gap-4">
                 <a href="https://www.mockquestions.com" target="_blank"
                     class="w-1/3 p-4 text-center bg-green-500 text-white rounded-2xl hover:bg-green-600 transition">
                     MockQuestions
@@ -52,16 +52,16 @@
             <div class="space-y-4 mb-4">
                 <el-card v-for="resume in resumeRecords" :key="resume.id" class="hover-shadow transition"
                     style="border-radius: 12px;">
-                    <div class="flex items-center justify-between text-left">
-                        <div>
+                    <div class="flex items-center justify-between">
+                        <div class="text-left">
                             <p class="text-lg font-semibold">简历 {{ resume.title }}</p>
                             <p class="text-sm text-gray-600">创建时间：{{ resume.date }}</p>
                         </div>
-                        <div class="space-x-2">
+                        <div class="space-x-0 text-end">
                             <el-button text bg type="success" size="small" @click="check(resume.id)">
                                 查看
                             </el-button>
-                            <el-button text bg type="danger" size="small" @click="deletion(resume.id)">
+                            <el-button class="mt-3" text bg type="danger" size="small" @click="deletion(resume.id)">
                                 删除
                             </el-button>
                         </div>
@@ -77,16 +77,16 @@
                 <div class="space-y-4">
                     <el-card v-for="interview in interviewRecords" :key="interview.id" class="hover-shadow transition"
                         style="border-radius: 12px;">
-                        <div class="flex items-center justify-between text-left">
-                            <div>
+                        <div class="flex items-center justify-between">
+                            <div class="text-left">
                                 <p class="text-lg font-semibold">面试记录 {{ interview.title }}</p>
                                 <p class="text-sm text-gray-600">面试时间：{{ interview.date }}</p>
                             </div>
-                            <div class="space-x-2">
+                            <div class="space-x-0 text-end">
                                 <el-button text bg type="success" size="small" @click="check(interview.id)">
                                     查看
                                 </el-button>
-                                <el-button text bg type="danger" size="small" @click="deletion(interview.id)">
+                                <el-button class="mt-3" text bg type="danger" size="small" @click="deletion(interview.id)">
                                     删除
                                 </el-button>
                             </div>
