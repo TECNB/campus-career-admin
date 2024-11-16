@@ -1,24 +1,24 @@
 <template>
     <div class="AccountView">
         <div class="header">
-            <div class="title">
-                <p>发布资料详情</p>
+            <div class="">
+                <p class="md:text-4xl font-extrabold text-2xl">发布资料详情</p>
             </div>
             <div class="FilterSection">
-                <div class="FilterBox" @click="handleCancel">
+                <div class="FilterBox p-2 md:p-3" @click="handleCancel">
                     <el-icon>
                         <Close />
                     </el-icon>
                     <p>取消</p>
                 </div>
 
-                <div class="FilterBox" v-if="!isEdit" @click="handleAdd">
+                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>发布</p>
                 </div>
-                <div class="FilterBox" v-else @click="handleEdit">
+                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -30,7 +30,7 @@
         <el-scrollbar height="90%">
             <div class="main flex flex-col justify-center gap-10 p-10">
                 <!-- 第一行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="fmd:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">资料类别：</p>
                         <el-select v-model="category" placeholder="请点击选择类别" size="large" clearable :teleported="false">
@@ -39,14 +39,14 @@
                         </el-select>
 
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4">
                         <p class="text-xl font-bold whitespace-nowrap">标题：</p>
                         <el-input v-model="title" placeholder="请输入标题" />
                     </div>
                 </div>
 
                 <!-- 第二行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">上传附件：</p>
                         <el-upload class="w-1/2" drag action="http://localhost:5173/api/activity/file" multiple
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <!-- 第三行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-start">
                         <p class="text-xl font-bold whitespace-nowrap">资料详情：</p>
                         <el-input v-model="details" placeholder="请输入资料详情" :rows="10" type="textarea" />
@@ -252,11 +252,6 @@ const handlePictureCardPreview = (file: UploadFile) => {
 
         padding: 30px 30px 0 30px;
 
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
         .FilterSection {
             display: flex;
             justify-content: center;
@@ -276,7 +271,6 @@ const handlePictureCardPreview = (file: UploadFile) => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
 
@@ -295,7 +289,6 @@ const handlePictureCardPreview = (file: UploadFile) => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
         }

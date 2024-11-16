@@ -2,24 +2,24 @@
     <div class="AccountView">
 
         <div class="header">
-            <div class="title">
-                <p>添加活动地点详情</p>
+            <div class="">
+                <p class="md:text-4xl font-extrabold text-2xl">添加活动地点详情</p>
             </div>
             <div class="FilterSection">
-                <div class="FilterBox" @click="handleCancel">
+                <div class="FilterBox p-2 md:p-3" @click="handleCancel">
                     <el-icon>
                         <Close />
                     </el-icon>
                     <p>取消</p>
                 </div>
 
-                <div class="FilterBox" v-if="!isEdit" @click="handleAdd">
+                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>确定</p>
                 </div>
-                <div class="FilterBox" v-else @click="handleEdit">
+                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -149,11 +149,6 @@ const handleEdit = async () => {
 
         padding: 30px 30px 0 30px;
 
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
         .FilterSection {
             display: flex;
             justify-content: center;
@@ -173,7 +168,6 @@ const handleEdit = async () => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
 
@@ -192,7 +186,6 @@ const handleEdit = async () => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
         }

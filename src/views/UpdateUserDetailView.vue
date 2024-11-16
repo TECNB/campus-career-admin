@@ -2,24 +2,24 @@
     <div class="AccountView">
 
         <div class="header">
-            <div class="title">
-                <p>添加发送人群详情</p>
+            <div class="">
+                <p class="md:text-4xl font-extrabold text-xl">添加发送人群详情</p>
             </div>
             <div class="FilterSection">
-                <div class="FilterBox" @click="handleCancel">
+                <div class="FilterBox p-2 md:p-3" @click="handleCancel">
                     <el-icon>
                         <Close />
                     </el-icon>
                     <p>取消</p>
                 </div>
 
-                <div class="FilterBox" v-if="!isEdit" @click="handleAdd">
+                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>确定</p>
                 </div>
-                <div class="FilterBox" v-else @click="handleEdit">
+                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -31,43 +31,43 @@
         <el-scrollbar height="90%">
             <div class="main flex flex-col justify-center gap-10 p-10">
                 <!-- 第一行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">姓名：</p>
                         <el-input v-model="name" placeholder="请输入姓名" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4">
                         <p class="text-xl font-bold whitespace-nowrap">性别：</p>
                         <el-input v-model="gender" placeholder="请输入性别" />
                     </div>
                 </div>
 
                 <!-- 第二行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">班级：</p>
                         <el-input v-model="className" placeholder="请输入班级" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4">
                         <p class="text-xl font-bold whitespace-nowrap">学号：</p>
                         <el-input v-model="studentId" placeholder="请输入学号" />
                     </div>
                 </div>
 
                 <!-- 第三行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">联系方式：</p>
                         <el-input v-model="contactNumber" placeholder="请输入联系方式" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4">
                         <p class="text-xl font-bold whitespace-nowrap">班主任：</p>
                         <el-input v-model="classTeacher" placeholder="请输入班主任" />
                     </div>
                 </div>
 
                 <!-- 第四行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">毕业设计导师：</p>
                         <el-input v-model="graduationTutor" placeholder="请输入毕业设计导师" />

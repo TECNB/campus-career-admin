@@ -4,16 +4,12 @@ body {
     height: 100%;
     width: 100%;
     min-height: 100vh;
-    min-width: 100vh;
+    min-width: 100vw;
 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     overflow-y: hidden;
-
-    
-
-
 }
 
 * {
@@ -26,7 +22,7 @@ body {
 
 #app {
     min-height: 100vh;
-    min-width: 100vh;
+    min-width: 100vw;
 
     max-width: 2880px;
 

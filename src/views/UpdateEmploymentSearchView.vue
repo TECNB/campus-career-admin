@@ -3,23 +3,23 @@
 
         <div class="header">
             <div class="title">
-                <p>就业信息登记详情</p>
+                <p class="md:text-4xl font-extrabold text-2xl">就业信息登记详情</p>
             </div>
             <div class="FilterSection">
-                <div class="FilterBox" @click="handleCancel">
+                <div class="FilterBox p-2 md:p-3" @click="handleCancel">
                     <el-icon>
                         <Close />
                     </el-icon>
                     <p>取消</p>
                 </div>
 
-                <div class="FilterBox" v-if="!isEdit" @click="handleAdd">
+                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>确定</p>
                 </div>
-                <div class="FilterBox" v-else @click="handleEdit">
+                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
                     <el-icon>
                         <Plus />
                     </el-icon>
@@ -80,7 +80,7 @@
 
 
                 <!-- 第五行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">毕业意向：</p>
                         <el-select v-model="futurePlan" placeholder="请点击选择分类" size="large" clearable
@@ -89,7 +89,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4">
                         <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
                         <el-select v-model="salary" placeholder="请点击选择分类" size="large" clearable :teleported="false">
                             <el-option v-for="item in allMoney" :key="item.objectId" :label="item.name"
@@ -99,7 +99,7 @@
                 </div>
 
                 <!-- 第六行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">公司性质：</p>
                         <el-select v-model="companyNature" placeholder="请点击选择性质" size="large" clearable
@@ -108,7 +108,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
                         <el-cascader size="large" :options="pcaTextArr" v-model="workLocation" placeholder="请点击选择区域">
                         </el-cascader>
@@ -116,7 +116,7 @@
                 </div>
 
                 <!-- 第七行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">就业情况：</p>
                         <el-radio-group v-model="employmentStatus" size="large" class="">
@@ -125,7 +125,7 @@
                             <el-radio :label="'暂无'">暂无</el-radio>
                         </el-radio-group>
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 justify-start items-center mt-4">
                         <p class="text-xl font-bold whitespace-nowrap" v-if="employmentStatus === '实习'">实习单位：</p>
                         <p class="text-xl font-bold whitespace-nowrap" v-if="employmentStatus === '签约'">签约单位：</p>
                         <p class="text-xl font-bold whitespace-nowrap" v-else"></p>
@@ -366,11 +366,6 @@ const handleEdit = async () => {
 
         padding: 30px 30px 0 30px;
 
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
         .FilterSection {
             display: flex;
             justify-content: center;
@@ -390,7 +385,6 @@ const handleEdit = async () => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
 
@@ -409,7 +403,6 @@ const handleEdit = async () => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
         }

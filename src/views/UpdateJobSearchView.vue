@@ -1,71 +1,68 @@
 <template>
     <div class="AccountView">
-
         <div class="header">
-            <div class="title">
-                <p>岗位发布详情</p>
+            <div class="">
+                <p class="md:text-4xl font-extrabold text-2xl">岗位发布详情</p>
             </div>
             <div class="FilterSection">
-                <div class="FilterBox" @click="handleCancel">
+                <div class="FilterBox p-2 md:p-3" @click="handleCancel">
                     <el-icon>
                         <Close />
                     </el-icon>
                     <p>取消</p>
                 </div>
 
-                <div class="FilterBox" v-if="!isEdit" @click="handleAdd">
+                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>确定</p>
                 </div>
-                <div class="FilterBox" v-else @click="handleEdit">
+                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>更新</p>
                 </div>
-
             </div>
         </div>
         <el-scrollbar height="90%">
             <div class="main flex flex-col justify-center gap-10 p-10">
                 <!-- 第一行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">企业名称：</p>
                         <el-input v-model="companyName" placeholder="请输入名称" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 mt-4 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">岗位名称：</p>
                         <el-input v-model="positionName" placeholder="请输入名称" />
                     </div>
                 </div>
 
                 <!-- 第二行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">HR：</p>
                         <el-input v-model="hrName" placeholder="请输入HR名称" />
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 mt-4 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">联系电话：</p>
                         <el-input v-model="hrPhone" placeholder="请输入名称" />
                     </div>
                 </div>
 
                 <!-- 第三行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">专业要求：</p>
                         <el-select v-model="majorRequirement" placeholder="请点击选择专业" size="large" clearable
-                            :teleported="false">
+                            :teleported="false" multiple>
                             <el-option v-for="item in allMajor" :key="item.objectId" :label="item.name"
                                 :value="item.name" />
                         </el-select>
-
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 mt-4 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">招聘人数：</p>
                         <el-input-number v-model="participantCount" :min="1" placeholder="请输入人数" />
                     </div>
@@ -73,7 +70,7 @@
 
 
                 <!-- 第四行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
                         <el-select v-model="money" placeholder="请点击选择分类" size="large" clearable :teleported="false">
@@ -81,7 +78,7 @@
                                 :value="item.name" />
                         </el-select>
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 mt-4 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
                         <el-cascader size="large" :options="pcaTextArr" v-model="area" placeholder="请点击选择区域">
                         </el-cascader>
@@ -90,13 +87,13 @@
                 </div>
 
                 <!-- 第五行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">网申链接：</p>
                         <el-input v-model="applicationLink" placeholder="请输入链接" />
 
                     </div>
-                    <div class="flex flex-1 justify-start items-center">
+                    <div class="flex flex-1 mt-4 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">其他要求：</p>
                         <el-input v-model="additionalRequirements" placeholder="请输入其他要求" />
 
@@ -104,7 +101,7 @@
                 </div>
 
                 <!-- 第六行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-start">
                         <p class="text-xl font-bold whitespace-nowrap">企业简介：</p>
                         <el-input v-model="companyDescription" placeholder="请输入企业简介" :rows="5" type="textarea" />
@@ -134,7 +131,7 @@ const companyName = ref('');
 const positionName = ref('');
 const hrName = ref('');
 const hrPhone = ref('');
-const majorRequirement = ref('');
+const majorRequirement = ref<string[]>([]);  // 将其定义为数组以支持多选
 const participantCount = ref(0);
 const money = ref('');
 const area = ref<string[]>([]);
@@ -146,7 +143,8 @@ const companyDescription = ref('');
 const allMajor = ref<any[]>([
     { objectId: '1', name: '软件工程' },
     { objectId: '2', name: '机械自动化' },
-    { objectId: '3', name: '电气自动化' }
+    { objectId: '3', name: '电气自动化' },
+    { objectId: '4', name: '计算机科学' }
 ]);
 
 const allMoney = ref<any[]>([
@@ -174,7 +172,7 @@ onMounted(async () => {
             positionName.value = data.positionName;
             hrName.value = data.hrName;
             hrPhone.value = data.hrPhone;
-            majorRequirement.value = data.majorRequirement;
+            majorRequirement.value = data.majorRequirement.split('/');
             participantCount.value = data.participantCount;
             money.value = data.money;
             area.value = data.area.split('/');
@@ -230,7 +228,7 @@ const handleAdd = async () => {
         positionName: positionName.value,
         hrName: hrName.value,
         hrPhone: hrPhone.value,
-        majorRequirement: majorRequirement.value,
+        majorRequirement: majorRequirement.value.join('/'),
         participantCount: participantCount.value,
         money: money.value,
         area: area.value.join('/'),
@@ -260,7 +258,7 @@ const handleEdit = async () => {
         positionName: positionName.value,
         hrName: hrName.value,
         hrPhone: hrPhone.value,
-        majorRequirement: majorRequirement.value,
+        majorRequirement: majorRequirement.value.join('/'),
         participantCount: participantCount.value,
         money: money.value,
         area: area.value.join('/'),
@@ -304,10 +302,6 @@ const handleEdit = async () => {
 
         padding: 30px 30px 0 30px;
 
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
 
         .FilterSection {
             display: flex;
@@ -328,7 +322,6 @@ const handleEdit = async () => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
 
@@ -347,7 +340,6 @@ const handleEdit = async () => {
                 cursor: pointer;
 
 
-                padding: 12px;
                 margin-bottom: 20px;
             }
         }

@@ -303,7 +303,8 @@ const toUpdateActivity = (id: string) => {
     background: #fff;
     border-radius: 16px;
 
-    margin: 24px;
+    margin-right: 24px;
+    margin-left: 24px;
 
     .tableBar {
         display: flex;

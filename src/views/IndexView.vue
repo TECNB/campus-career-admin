@@ -1,13 +1,14 @@
 <template>
-    <div class="IndexView">
-        <div class="sidebar-container">
+    <div class="IndexView flex p-0 md:p-5">
+        <!-- 仅在大屏幕上显示 sidebar (大于md) -->
+        <div class="min-w-52 hidden md:block">
             <Sidebar />
         </div>
-        <div class="main-container">
-            <div class="fixed-header">
+        <div class="md:w-[86%] w-full h-full">
+            <div class="">
                 <Header />
             </div>
-            <div class="app-main">
+            <div class="h-[93%] ">
                 <router-view></router-view>
             </div>
         </div>
@@ -25,12 +26,8 @@ import Header from '../components/Header.vue'
 .IndexView {
     height: 100vh;
     background: #F2F8FC;
-    padding: 20px;
-    
-    
-    
-    
-    .sidebar-container{
+
+    .sidebar-container {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -40,32 +37,33 @@ import Header from '../components/Header.vue'
 
         height: 95%;
         width: 210px !important;
-        
-    
-        
+
+
+
     }
+
     .main-container {
         // background: #f0f2f5;
-        
+
 
         position: relative;
 
         height: 100%;
-        
+
         margin-left: 210px;
         background: #F2F8FC;
-        
-        
+
+
 
         .fixed-header {
             position: fixed;
             top: 0px;
 
-            
-            
+
+
             width: calc(100% - 300px);
 
-            
+
         }
 
         .app-main {
@@ -75,9 +73,9 @@ import Header from '../components/Header.vue'
             position: relative;
 
 
-            
-            
-            
+
+
+
             margin-top: 60px;
         }
     }

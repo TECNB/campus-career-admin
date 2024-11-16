@@ -11,13 +11,13 @@
 
         </div>
         <div class="user-tabs">
-            <el-icon size="20">
+            <!-- <el-icon size="20" class="!hidden md:block">
                 <Search />
             </el-icon>
-            <el-icon size="20">
+            <el-icon size="20" class="!hidden md:block">
                 <Bell />
-            </el-icon>
-            <el-icon size="20" @click="toggleFullScreen" class="cursor-pointer">
+            </el-icon> -->
+            <el-icon size="20" @click="toggleFullScreen" class="cursor-pointer !hidden md:!block">
                 <FullScreen />
             </el-icon>
             <div class="user-info">
@@ -26,7 +26,7 @@
                 <p>{{ userInfo.user?.username }}</p>
             </div>
             <el-icon size="20" @click="toLogin" class="cursor-pointer">
-                <Tools />
+                <SwitchButton />
             </el-icon>
         </div>
     </div>
@@ -160,7 +160,6 @@ const closeTab = (index: number) => {
     align-items: center;
 
 
-    width: 100%;
     height: 50px;
 
     background-color: #fff;
@@ -169,7 +168,9 @@ const closeTab = (index: number) => {
 
 
     padding: 0 20px 0 0;
-    margin: 24px;
+    margin-left: 24px;
+    margin-right: 24px;
+    margin-bottom: 10px;
 
 
     .nav-tabs {
