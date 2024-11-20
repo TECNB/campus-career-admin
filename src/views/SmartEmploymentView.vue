@@ -1,10 +1,9 @@
 <template>
     <div class="AccountView">
         <el-scrollbar>
-            <div class="header">
-                <div class="">
-                    <p class="md:text-4xl font-extrabold text-2xl">智能就业</p>
-                </div>
+            <div class="flex justify-between content-center px-7 pt-7">
+                <p class="md:text-4xl font-extrabold text-2xl">智能就业</p>
+
                 <div class="FilterSection">
                     <div class="FilterBox !hidden md:!block">
                         <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
@@ -146,82 +145,71 @@ const toggleIfShowTypeOrderPicker = () => {
 .AccountView {
     height: 100%;
 
-    .header {
+    .FilterSection {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-content: center;
+        gap: 10px;
 
-        padding: 30px 30px 0 30px;
-
-        .FilterSection {
+        .FilterBox {
             display: flex;
-            justify-content: center;
-            align-content: center;
+            justify-content: flex-start;
+            align-items: center;
             gap: 10px;
+            position: relative;
 
-            .FilterBox {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-                position: relative;
-
-                cursor: pointer;
+            cursor: pointer;
 
 
 
-                color: rgba(160, 174, 192, 1);
-                background: white;
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
+            color: rgba(160, 174, 192, 1);
+            background: white;
+            box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
 
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-
-            .FilterBox:nth-child(2) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
+            border-radius: 12px;
 
 
-
-                color: white;
-                background: rgba(63, 140, 255, 1);
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-
-            .FilterBox:nth-child(3) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-
-
-
-                color: white;
-                background: rgba(63, 140, 255, 1);
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
+            padding: 12px;
+            margin-bottom: 20px;
         }
 
+        .FilterBox:nth-child(2) {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
 
 
+
+            color: white;
+            background: rgba(63, 140, 255, 1);
+            box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
+
+            border-radius: 12px;
+
+
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .FilterBox:nth-child(3) {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+
+
+
+            color: white;
+            background: rgba(63, 140, 255, 1);
+            box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
+
+            border-radius: 12px;
+
+
+            padding: 12px;
+            margin-bottom: 20px;
+        }
     }
 }
 </style>

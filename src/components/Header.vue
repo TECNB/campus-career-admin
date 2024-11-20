@@ -1,5 +1,5 @@
 <template>
-    <div class="Header rounded-none md:rounded-2xl md:mx-6 md:mb-6 m-0 px-5">
+    <div class="Header rounded-none md:rounded-2xl md:mx-6 md:mb-6 m-0 px-5 md:pr-5 md:pl-0">
         <el-icon size="20" class="!block md:!hidden mr-2" @click="showSlider">
                 <Menu/>
             </el-icon>
@@ -14,7 +14,7 @@
             </div>
 
         </div>
-        <div class="user-tabs ml-5">
+        <div class="user-tabs ml-5 md:ml-0">
             <!-- <el-icon size="20" class="!hidden md:block">
                 <Search />
             </el-icon>

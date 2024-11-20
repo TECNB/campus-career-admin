@@ -57,7 +57,7 @@
                             <p class="text-lg font-semibold">简历 {{ resume.title }}</p>
                             <p class="text-sm text-gray-600">创建时间：{{ resume.date }}</p>
                         </div>
-                        <div class="space-x-0 text-end">
+                        <div class="space-y-0 text-end">
                             <el-button text bg type="success" size="small" @click="check(resume.id)">
                                 查看
                             </el-button>
@@ -82,7 +82,7 @@
                                 <p class="text-lg font-semibold">面试记录 {{ interview.title }}</p>
                                 <p class="text-sm text-gray-600">面试时间：{{ interview.date }}</p>
                             </div>
-                            <div class="space-x-0 text-end">
+                            <div class="space-y-0 text-end">
                                 <el-button text bg type="success" size="small" @click="check(interview.id)">
                                     查看
                                 </el-button>

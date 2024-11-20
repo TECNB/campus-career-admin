@@ -217,7 +217,7 @@ const toUpdateActivity = (id: string) => {
 
 const deletion = async (id: number) => {
     try {
-        await ElMessageBox.confirm('确定删除该活动吗？', '提示', {
+        await ElMessageBox.confirm('确定删除该发送人群吗？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',

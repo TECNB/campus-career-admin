@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ActivityCalendar: typeof import('./src/components/ActivityCalendar.vue')['default']
     ActivityTable: typeof import('./src/components/ActivityTable.vue')['default']
+    BaseTable: typeof import('./src/components/BaseTable.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCalendar: typeof import('element-plus/es')['ElCalendar']
@@ -32,6 +33,8 @@ declare module 'vue' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     EmploymentDatabaseTable: typeof import('./src/components/EmploymentDatabaseTable.vue')['default']
     EmploymentSearchTable: typeof import('./src/components/EmploymentSearchTable.vue')['default']
+    FilterBox: typeof import('./src/components/FilterBox.vue')['default']
+    FilterSection: typeof import('./src/components/FilterSection.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     JobSearchTable: typeof import('./src/components/JobSearchTable.vue')['default']
     MaskLayer: typeof import('./src/components/MaskLayer.vue')['default']
