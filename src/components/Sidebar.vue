@@ -79,6 +79,7 @@ const menusStudent = [
             { label: '活动日历', path: '/' },
             { label: '活动查看', path: '/activity' },
             { label: '就业信息登记', path: '/updateEmployment-search/' + userInfo.user!.studentId },
+            { label: '岗位智匹', path: '/job-recommend' },
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
 
@@ -100,9 +101,11 @@ const menusStudent = [
         icon: 'Collection',
         path: '/employment-database'
     },
-
-    // { label: '数据', icon: 'TrendCharts', path: '/data' },
-    { label: '设置', icon: 'Setting', path: '/setting' },
+    {
+        label: '个人信息',
+        icon: 'User',
+        path: '/updateUser-info/' + + userInfo.user!.studentId
+    },
 ];
 
 const menusTeacher = [
@@ -135,9 +138,11 @@ const menusTeacher = [
         icon: 'Collection',
         path: '/employment-database'
     },
-
-    // { label: '数据', icon: 'TrendCharts', path: '/data' },
-    { label: '设置', icon: 'Setting', path: '/setting' },
+    {
+        label: '个人信息登记',
+        icon: 'User',
+        path: '/user-info'
+    },
 ];
 
 const menusAdmin = [
@@ -154,7 +159,6 @@ const menusAdmin = [
 
         ],
     },
-    { label: '设置', icon: 'Setting', path: '/setting' },
 ];
 console.log(userInfo.user?.username)
 if (userInfo.user?.userType === 'student') {

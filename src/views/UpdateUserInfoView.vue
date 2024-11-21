@@ -3,7 +3,7 @@
 
         <div class="header">
             <div class="title">
-                <p class="md:text-4xl font-extrabold text-2xl">就业信息登记详情</p>
+                <p class="md:text-4xl font-extrabold text-2xl">个人信息登记详情</p>
             </div>
             <div class="FilterSection">
                 <div class="FilterBox p-2 md:p-3" @click="handleCancel">
@@ -33,6 +33,10 @@
                 <!-- 第一行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">学生照片：</p>
+                        <!-- <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.name }}</p> -->
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">姓名：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.name }}</p>
 
@@ -46,12 +50,12 @@
                 <!-- 第二行 -->
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">班级：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">学号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.studentId }}</p>
 
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
-                        <p class="text-xl font-bold whitespace-nowrap">学号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">身份证号：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.studentId }}</p>
                     </div>
                 </div>
@@ -59,12 +63,16 @@
                 <!-- 第三行 -->
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">联系方式：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">年级：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.contactNumber }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
-                        <p class="text-xl font-bold whitespace-nowrap">班主任：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.classTeacher }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">专业：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">班级：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
                     </div>
                 </div>
 
@@ -72,8 +80,12 @@
                 <!-- 第四行 -->
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">毕业设计导师：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.graduationTutor }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">班级职务：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">专业方向：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
                     </div>
                 </div>
 
@@ -81,36 +93,36 @@
                 <!-- 第五行 -->
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">毕业意向：</p>
-                        <el-select v-model="futurePlan" placeholder="请点击选择分类" size="large" clearable multiple
-                            :teleported="false">
-                            <el-option v-for="item in allFuturePlan" :key="item.objectId" :label="item.name"
-                                :value="item.name" />
-                        </el-select>
+                        <p class="text-xl font-bold whitespace-nowrap">出生日期：</p>
+                        <el-date-picker v-model="startTime" type="datetime" placeholder="请选择开始时间"
+                            :shortcuts="shortcuts" />
+
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
-                        <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
-                        <el-select v-model="salary" placeholder="请点击选择分类" size="large" clearable multiple :teleported="false">
-                            <el-option v-for="item in allMoney" :key="item.objectId" :label="item.name"
-                                :value="item.name" />
-                        </el-select>
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">入学日期：</p>
+                        <el-date-picker v-model="endTime" type="datetime" placeholder="请选择结束时间"
+                            :shortcuts="shortcuts" />
+                    </div>
+                    <div class="flex flex-1 mt-4 md:mt-0 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">预计毕业时间：</p>
+                        <el-date-picker v-model="endTime" type="datetime" placeholder="请选择结束时间"
+                            :shortcuts="shortcuts" />
                     </div>
                 </div>
 
                 <!-- 第六行 -->
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">公司性质：</p>
-                        <el-select v-model="companyNature" placeholder="请点击选择性质" size="large" clearable multiple
-                            :teleported="false">
-                            <el-option v-for="item in allNature" :key="item.objectId" :label="item.name"
-                                :value="item.name" />
-                        </el-select>
+                        <p class="text-xl font-bold whitespace-nowrap">籍贯：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
                     </div>
-                    <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
-                        <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
-                        <el-cascader size="large" :options="pcaTextArr" v-model="workLocation" placeholder="请点击选择区域" :props="{ multiple: true }">
-                        </el-cascader>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">生源地：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">民族：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
                     </div>
                 </div>
 
@@ -164,14 +176,46 @@ const studentId = ref('');
 const contactNumber = ref('');
 const classTeacher = ref('');
 const graduationTutor = ref('');
-const futurePlan = ref([]);
-const salary = ref([]);
-const companyNature = ref([]);
+const futurePlan = ref('');
+const salary = ref('');
+const companyNature = ref('');
 const workLocation = ref([]);
 const employmentStatus = ref('实习');
 const companyName = ref('');
+const startTime = ref('');
+const endTime = ref('');
 
 const userDetail = ref<any>({});
+
+// 定义日期选择器的快捷选项
+const shortcuts = [
+    {
+        text: '今天',
+        value: () => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return today;
+        },
+    },
+    {
+        text: '明天',
+        value: () => {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            return tomorrow;
+        },
+    },
+    {
+        text: '一周后',
+        value: () => {
+            const nextWeek = new Date();
+            nextWeek.setDate(nextWeek.getDate() + 7);
+            nextWeek.setHours(0, 0, 0, 0);
+            return nextWeek;
+        },
+    },
+];
 
 // 所有未来计划选项
 const allFuturePlan = [
@@ -231,9 +275,9 @@ const resetFormFields = () => {
     contactNumber.value = '';
     classTeacher.value = '';
     graduationTutor.value = '';
-    futurePlan.value = [];
-    salary.value = [];
-    companyNature.value = [];
+    futurePlan.value = '';
+    salary.value = '';
+    companyNature.value = '';
     workLocation.value = [];
     employmentStatus.value = '实习';
     companyName.value = '';
@@ -251,9 +295,9 @@ const populateFormFields = (data: any) => {
     contactNumber.value = data.userDetail.contactNumber;
     classTeacher.value = data.userDetail.classTeacher;
     graduationTutor.value = data.userDetail.graduationTutor;
-    futurePlan.value = data.futurePlan.split('/');
-    salary.value = data.salary.split('/');
-    companyNature.value = data.companyNature.split('/');
+    futurePlan.value = data.futurePlan;
+    salary.value = data.salary;
+    companyNature.value = data.companyNature;
     workLocation.value = data.workLocation.split('/');
     employmentStatus.value = data.employmentStatus;
     if (employmentStatus.value !== '暂无'){
@@ -320,9 +364,9 @@ const handleEdit = async () => {
         contactNumber: contactNumber.value,
         classTeacher: classTeacher.value,
         graduationTutor: graduationTutor.value,
-        futurePlan: futurePlan.value.join('/'),
-        salary: salary.value.join('/'),
-        companyNature: companyNature.value.join('/'),
+        futurePlan: futurePlan.value,
+        salary: salary.value,
+        companyNature: companyNature.value,
         workLocation: workLocation.value.join('/'),
         employmentStatus: employmentStatus.value,
         // 如果employmentStatus.value为暂无则companyName为空

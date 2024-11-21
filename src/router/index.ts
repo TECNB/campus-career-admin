@@ -75,6 +75,21 @@ const routes: Array<RouteRecordRaw> = [
                 path: "/setting",
                 component: () => import("../views/SettingView.vue"),
             },
+            {
+                name:'岗位智匹',
+                path: "/job-recommend",
+                component: () => import("../views/JobRecommendView.vue"),
+            },
+            {
+                name:'个人信息',
+                path: "/user-info",
+                component: () => import("../views/UserInfoView.vue"),
+            },
+            {
+                name:'个人信息登记',
+                path: "/updateUser-info/:id",
+                component: () => import("../views/UpdateUserInfoView.vue"),
+            },
 
             // 下面是超级管理员的路由
             {

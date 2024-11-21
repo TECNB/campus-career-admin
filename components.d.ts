@@ -36,6 +36,7 @@ declare module 'vue' {
     FilterBox: typeof import('./src/components/FilterBox.vue')['default']
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
+    JobRecommendTable: typeof import('./src/components/JobRecommendTable.vue')['default']
     JobSearchTable: typeof import('./src/components/JobSearchTable.vue')['default']
     MaskLayer: typeof import('./src/components/MaskLayer.vue')['default']
     PlaceTable: typeof import('./src/components/PlaceTable.vue')['default']
