@@ -46,6 +46,7 @@ declare module 'vue' {
     SmartEmploymentTable: typeof import('./src/components/SmartEmploymentTable.vue')['default']
     TargetAudienceTable: typeof import('./src/components/TargetAudienceTable.vue')['default']
     UserDetailTable: typeof import('./src/components/UserDetailTable.vue')['default']
+    UserInfoTable: typeof import('./src/components/UserInfoTable.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
