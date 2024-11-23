@@ -90,6 +90,21 @@ const routes: Array<RouteRecordRaw> = [
                 path: "/updateUser-info/:id",
                 component: () => import("../views/UpdateUserInfoView.vue"),
             },
+            {
+                name:'政治面貌详情',
+                path: "/updatePolitical-status/:id",
+                component: () => import("../views/UpdatePoliticalStatus.vue"),
+            },
+            {
+                name:'特殊群体详情',
+                path: "/updateSpecial-group/:id",
+                component: () => import("../views/UpdateSpecialGroup.vue"),
+            },
+            {
+                name:'谈话记录详情',
+                path: "/conversation-records/:id",
+                component: () => import("../views/ConversationRecordsView.vue"),
+            },
 
             // 下面是超级管理员的路由
             {
