@@ -4,20 +4,15 @@
         <div class="mb-4">
             <p class="text-left text-2xl font-bold mb-4">一、简历优化</p>
             <div class="flex gap-1 md:gap-4">
-                <a href="https://resume.io" target="_blank"
-                    class="w-1/3 p-4 text-center bg-blue-500 text-white rounded-2xl hover:bg-blue-600 transition">
-                    Resume.io
-                    <p class="text-sm mt-2 ">创建专业简历</p>
+                <a href="https://zzjc.jysd.com/" target="_blank"
+                    class="w-1/2 p-4 text-center bg-blue-500 text-white rounded-2xl hover:bg-blue-600 transition">
+                    浙江工业大学之江学院
+                    <p class="text-sm mt-2 ">简历优化实验室</p>
                 </a>
-                <a href="https://www.canva.com" target="_blank"
-                    class="w-1/3 p-4 text-center bg-indigo-500 text-white rounded-2xl hover:bg-indigo-600 transition">
-                    Canva
-                    <p class="text-sm mt-2">设计美观简历</p>
-                </a>
-                <a href="https://novoresume.com" target="_blank"
-                    class="w-1/3 p-4 text-center bg-purple-500 text-white rounded-2xl hover:bg-purple-600 transition">
-                    Novoresume
-                    <p class="text-sm mt-2">简历模板和建议</p>
+                <a href="https://mp.weixin.qq.com/s/02RqiwQ9O5b0jqoEnrD5uw" target="_blank"
+                    class="w-1/2 p-4 text-center bg-purple-500 text-white rounded-2xl hover:bg-purple-600 transition">
+                    @之江ers，之江学院简历优化实验室已上线，来定制你的专属简历吧
+                    <p class="text-sm mt-2">使用教程</p>
                 </a>
             </div>
         </div>

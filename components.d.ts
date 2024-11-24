@@ -10,6 +10,7 @@ declare module 'vue' {
     ActivityCalendar: typeof import('./src/components/ActivityCalendar.vue')['default']
     ActivityTable: typeof import('./src/components/ActivityTable.vue')['default']
     BaseTable: typeof import('./src/components/BaseTable.vue')['default']
+    ConversationRecordsTable: typeof import('./src/components/ConversationRecordsTable.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCalendar: typeof import('element-plus/es')['ElCalendar']

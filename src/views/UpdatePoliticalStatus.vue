@@ -72,7 +72,7 @@
                 </div>
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">发展转正时间：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">党员转正时间：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.fullMemberDate }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">

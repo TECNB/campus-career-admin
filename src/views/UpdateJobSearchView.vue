@@ -175,7 +175,7 @@ onMounted(async () => {
             majorRequirement.value = data.majorRequirement.split('/');
             participantCount.value = data.participantCount;
             money.value = data.money;
-            area.value = data.area.split('/');
+            area.value = data.area.split(',');
             applicationLink.value = data.applicationLink;
             additionalRequirements.value = data.additionalRequirements;
             companyDescription.value = data.companyDescription;
@@ -231,7 +231,7 @@ const handleAdd = async () => {
         majorRequirement: majorRequirement.value.join('/'),
         participantCount: participantCount.value,
         money: money.value,
-        area: area.value.join('/'),
+        area: area.value.join(','),
         applicationLink: applicationLink.value,
         additionalRequirements: additionalRequirements.value,
         companyDescription: companyDescription.value,
@@ -261,7 +261,7 @@ const handleEdit = async () => {
         majorRequirement: majorRequirement.value.join('/'),
         participantCount: participantCount.value,
         money: money.value,
-        area: area.value.join('/'),
+        area: area.value.join(','),
         applicationLink: applicationLink.value,
         additionalRequirements: additionalRequirements.value,
         companyDescription: companyDescription.value,

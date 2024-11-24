@@ -2,7 +2,7 @@
     <div class="AccountView">
         <el-scrollbar>
             <div class="header">
-                <p class="md:text-4xl font-extrabold text-3xl">学生资料查看</p>
+                <p class="md:text-4xl font-extrabold text-3xl">谈话记录详情</p>
                 <FilterSection
                     :typeOrder="typeOrder"
                     :dateOrder="dateOrder"
@@ -17,7 +17,7 @@
                     @import="handleFileUpload"
                 />
             </div>
-            <UserDetailTable :key="refreshKey" :dateOrder="dateOrder" :typeOrder="typeOrder" />
+            <ConversationRecordsTable :key="refreshKey" :dateOrder="dateOrder" :typeOrder="typeOrder" />
             <!-- 隐藏的文件输入框 -->
             <input type="file" ref="fileInput" @change="onFileChange" accept=".xls, .xlsx" style="display: none" />
         </el-scrollbar>
@@ -28,7 +28,7 @@
 import { ref } from "vue";
 import router from "../router";
 import { userInfoStore } from "../stores/UserInfoStore";
-import UserDetailTable from "../components/UserDetailTable.vue";
+import ConversationRecordsTable from "../components/ConversationRecordsTable.vue";
 
 const userInfo = userInfoStore();
 

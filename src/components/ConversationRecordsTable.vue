@@ -38,33 +38,35 @@
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
-
-                <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
-
-                <el-table-column prop="id" label="序号" width="60" v-if="isMediumScreen"/>
-                <el-table-column prop="matchLevel" label="匹配程度" width="120" />
-                <el-table-column prop="companyName" label="企业名称" width="120" />
-                <el-table-column prop="positionName" label="岗位名称" width="120" />
-                <el-table-column prop="hrName" label="HR" width="100" />
-                <el-table-column prop="hrPhone" label="联系电话" width="140" />
-                <el-table-column prop="majorRequirement" label="专业要求" width="160" />
-                <el-table-column prop="participantCount" label="招聘人数" width="100" />
-                <el-table-column prop="money" label="薪资待遇" width="120" />
-                <el-table-column prop="area" label="工作地点" width="160" />
-                <el-table-column prop="applicationLink" label="网申链接" width="160">
+                <el-table-column type="selection" width="40" v-if="isMediumScreen" />
+                <el-table-column prop="conversationTime" label="谈话时间" />
+                <el-table-column prop="university" label="院校" />
+                <el-table-column prop="conversationTarget" label="谈话对象" />
+                <el-table-column prop="participantCount" label="谈话人数" />
+                <el-table-column prop="otherTopics" label="其他谈话主题" />
+                <el-table-column prop="conversationTopic" label="谈话主题" />
+                <el-table-column prop="studentId" label="学号" />
+                <el-table-column prop="conversationType" label="谈话类型" />
+                <el-table-column prop="parentContact" label="联系家长" />
+                <el-table-column prop="department" label="院系" />
+                <el-table-column prop="conversationTeacher" label="谈话教师" />
+                <el-table-column prop="conversationLocation" label="谈话地点" />
+                <el-table-column prop="conversationContent" label="谈话内容" />
+                <el-table-column prop="status" label="状态" />
+                <el-table-column prop="attentionLevel" label="关注等级" />
+                <el-table-column prop="createdAt" label="创建时间">
                     <template #default="{ row }">
-                        <a :href="row.applicationLink" target="_blank">{{ row.applicationLink }}</a>
+                        <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="additionalRequirements" label="其他要求" width="160" />
-                <el-table-column prop="companyDescription" label="企业简介" />
-
-                <!-- 操作栏 -->
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType == 'teacher'">
+                <el-table-column prop="updatedAt" label="最后更新时间">
                     <template #default="{ row }">
-                        <el-button text bg type="success" size="small" @click="toUpdateJob(row.id)">
-                            编辑
-                        </el-button>
+                        <span>{{ new Date(row.updatedAt).toLocaleString() }}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType === 'admin'">
+                    <template #default="{ row }">
                         <el-button text bg type="danger" size="small" @click="deletion(row.id)">
                             删除
                         </el-button>
@@ -76,14 +78,15 @@
         <!-- 分页 -->
         <el-config-provider :locale="zhCn">
             <el-pagination class="pageList" :page-sizes="[10, 20, 30]" :page-size="pageSize"
-            :layout="isMediumScreen ? 'total, sizes, prev, pager, next, jumper' : 'sizes, prev, pager, next'" :total="counts" :current-page.sync="page"
-                @size-change="handleSizeChange" @current-change="handleCurrentChange"></el-pagination>
+                :layout="isMediumScreen ? 'total, sizes, prev, pager, next, jumper' : 'sizes, prev, pager, next'"
+                :total="counts" :current-page.sync="page" @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"></el-pagination>
         </el-config-provider>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted,onBeforeUnmount } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 // ElConfigProvider 组件
 import { ElConfigProvider } from 'element-plus';
 // 引入中文包
@@ -94,47 +97,43 @@ import { userInfoStore } from '../stores/UserInfoStore';
 
 import router from '../router/index';
 
-import { JobSearch } from '../interfaces/JobSearch';
-import { smartJobSearch, deleteJobSearch,searchJobSearch } from '../api/jobSearch';
+import { Activity } from '../interfaces/Activity';
+import { getAllUserDetails, deleteUserDetail, searchUserDetail } from '../api/userDetail';
 
 
-const props = defineProps(['dateOrder', 'typeOrder']);
+const props = defineProps(['dateOrder', 'typeOrder', 'ifRefresh']);
+
+
 const filterOptions = [
-    { label: '企业名称', value: 'companyName' },
-    { label: '岗位名称', value: 'positionName' },
-    { label: 'HR', value: 'hrName' },
-    { label: '联系电话', value: 'hrPhone' },
-    { label: '专业要求', value: 'majorRequirement' },
-    { label: '招聘人数', value: 'participantCount' },
-    { label: '薪资待遇', value: 'money' },
-    { label: '工作地点', value: 'area' },
-    { label: '网申链接', value: 'applicationLink' },
-    { label: '其他要求', value: 'additionalRequirements' },
-    { label: '企业简介', value: 'companyDescription' }
+    { label: '姓名', value: 'name' },
+    { label: '性别', value: 'gender' },
+    { label: '班级', value: 'className' },
+    { label: '学号', value: 'studentId' },
+    { label: '联系方式', value: 'contactNumber' },
+    { label: '班主任', value: 'classTeacher' },
+    { label: '毕业设计导师', value: 'graduationTutor' },
+    { label: '创建时间', value: 'createdAt' }
 ];
-const selectedFilter = ref('companyName');  // 默认筛选条件
+const selectedFilter = ref('name');  // 默认筛选条件
 const filterVisible = ref(false);
+
 // 使用userInfoStore
 const userInfo = userInfoStore();
 
 
 const input = ref('');
-
-const tableData = ref<JobSearch[]>([]);
-
+const tableData = ref<Activity[]>([]);
 
 const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
-// const user = 'admin';
-const allData = ref<JobSearch[]>([]);
+const allData = ref<Activity[]>([]);
 const multipleSelection = ref<[]>([])
 
 // 是否搜索
 const isSearch = ref(false);
 
 let loading = ref(false);
-
 
 // 定义是否处于中等屏幕以上的状态
 const isMediumScreen = ref(false);
@@ -145,9 +144,8 @@ const updateScreenSize = () => {
 };
 
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
+    window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
 });
-
 
 // 通过watch监听props.dateOrder的变化
 watch(() => props.dateOrder, (newVal) => {
@@ -161,25 +159,13 @@ watch(() => props.dateOrder, (newVal) => {
         });
     }
 });
-// 通过watch监听props.typeOrder的变化
-watch(() => props.typeOrder, (newVal) => {
-    if (newVal === "2000-5000") {
-        // 筛选出category为"2000-5000"的数据
-        tableData.value = allData.value.filter((item) => item.money === "2000-5000");
-    } else if (newVal === "5000-8000") {
-        // 筛选出category为"5000-8000"的数据
-        tableData.value = allData.value.filter((item) => item.money === "5000-8000");
-    } else if (newVal === "8000-15000") {
-        // 筛选出category为"8000-15000"的数据
-        tableData.value = allData.value.filter((item) => item.money === "8000-15000");
-    }else if (newVal === "15000以上") {
-        // 筛选出category为"15000以上"的数据
-        tableData.value = allData.value.filter((item) => item.money === "15000以上");
-    } else {
-        // 如果没有匹配项，则显示全部数据
-        tableData.value = allData.value;
+
+// 通过watch监听props.dateOrder的变化
+watch(() => props.ifRefresh, async (newVal) => {
+    if (newVal === true) {
+        console.log('refresh', newVal)
+        await fetchTableData()
     }
-    counts.value = tableData.value.length;
 });
 
 onMounted(async () => {
@@ -193,10 +179,9 @@ const fetchTableData = async () => {
     const data = {
         page: page.value,
         size: pageSize.value,
-        studentId: userInfo.user?.studentId
     };
     try {
-        const res = await smartJobSearch(data);
+        const res = await getAllUserDetails(data);
         loading.value = false;
         allData.value = res.data.records;
         counts.value = res.data.total;
@@ -225,7 +210,7 @@ const filterData = async () => {
 
     loading.value = true;
     try {
-        const res = await searchJobSearch({
+        const res = await searchUserDetail({
             filterField: selectedFilter.value,
             filterValue: input.value.trim(),
             page: page.value,
@@ -243,13 +228,13 @@ const filterData = async () => {
 
 const deletion = async (id: number) => {
     try {
-        await ElMessageBox.confirm('确定删除该岗位吗？', '提示', {
+        await ElMessageBox.confirm('确定删除该学生资料吗？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
         });
 
-        await deleteJobSearch({ id });
+        await deleteUserDetail({ id });
         ElMessage.success('删除成功');
         await fetchTableData(); // 刷新数据
     } catch (error) {
@@ -277,10 +262,9 @@ const handleCurrentChange = (val: number) => {
 const handleSelectionChange = (val: []) => {
     multipleSelection.value = val;
 };
-
-const toUpdateJob = (id: string) => {
-    console.log('toUpdate')
-    router.push('/updateJob-search/' + id)
+const toUpdateActivity = (id: string) => {
+    console.log('toUpdateActivity')
+    router.push('/updateUser-detail/' + id)
 }
 </script>
 
@@ -299,7 +283,6 @@ const toUpdateJob = (id: string) => {
     margin: 24px;
 
     .tableBar {
-        width: 100%;
         display: flex;
         justify-content: space-between;
         align-content: center;
@@ -314,7 +297,7 @@ const toUpdateJob = (id: string) => {
 
 
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
 
             input {
                 outline: none;
@@ -342,7 +325,7 @@ const toUpdateJob = (id: string) => {
 
 
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
     }
 }
