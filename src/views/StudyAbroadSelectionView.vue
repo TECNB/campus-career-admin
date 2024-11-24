@@ -1,179 +1,102 @@
 <template>
-    <div class="AccountView">
+    <div class="h-full">
         <el-scrollbar>
-            <div class="header">
-                <div class="title">
-                    <p>留学智选</p>
+            <div class="flex justify-between content-center px-7 pt-7">
+                <p class="md:text-4xl font-extrabold text-3xl">留学智选</p>
+            </div>
+            <div class="flex justify-center content-center gap-5 p-7">
+                <!-- 左侧主区域 -->
+                <div class="w-2/3 grid grid-cols-2 gap-5">
+                    <div
+                        v-for="(item, index) in studyOptions"
+                        :key="index"
+                        class="bg-white rounded-lg shadow-md p-4 h-[250px] sm:h-[300px] lg:h-[300px] flex flex-col"
+                    >
+                        <!-- 标题加点击事件 -->
+                        <p
+                            @click="handleClick(item.link)"
+                            class="text-lg text-left text-blue-400 cursor-pointer hover:text-black truncate"
+                        >
+                            {{ item.title }}
+                        </p>
+                        <p class="mt-2 mb-1 text-gray-500 text-left">{{ item.date }}</p>
+                        <!-- 图片加点击事件 -->
+                        <img
+                            :src="item.image"
+                            :alt="item.title"
+                            @click="handleClick(item.link)"
+                            class="w-full h-3/4 rounded-lg object-cover mt-auto cursor-pointer"
+                        />
+                    </div>
                 </div>
-                <div class="FilterSection">
-                    <div class="FilterBox">
-                        <div class="flex justify-center items-center gap-3" @click="toggleIfShowTypeOrderPicker">
-                            <p>显示：</p>
-                            <p class="text-black font-medium">{{ typeOrder }}</p>
-                            <el-icon v-if="ifShowTypeOrderPicker">
-                                <ArrowUpBold />
-                            </el-icon>
-                            <el-icon v-else>
-                                <ArrowDownBold />
-                            </el-icon>
-                        </div>
-                        <transition name="fade">
-                            <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3"
-                                v-if="ifShowTypeOrderPicker">
-                                <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('正常')">
-                                    正常</p>
-                                <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseTypeOrder('封禁')">封禁</p>
+                <!-- 右侧列表区域 -->
+                <div class="w-1/3 flex flex-col justify-start content-center bg-blue-100 p-3">
+                    <div
+                        v-for="(item, index) in studyOptions"
+                        :key="index"
+                        class="flex justify-center content-center gap-3 px-7 py-5 border-b border-gray-300"
+                    >
+                        <!-- 左侧日期部分 -->
+                        <div class="flex flex-col justify-center content-center">
+                            <div class="bg-blue-400 px-2 py-1">
+                                <p class="text-white">{{ new Date(item.date).getDate() }}</p>
                             </div>
-                        </transition>
-                    </div>
-                    <div class="FilterBox">
-                        <div class="flex justify-center items-center gap-3" @click="toggleIfShowDateOrderPicker">
-                            <p>排序：</p>
-                            <p class="text-black font-medium">{{ dateOrder }}</p>
-                            <el-icon v-if="ifShowDateOrderPicker">
-                                <ArrowUpBold />
-                            </el-icon>
-                            <el-icon v-else>
-                                <ArrowDownBold />
-                            </el-icon>
-                        </div>
-                        <transition name="fade">
-                            <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg p-3 z-50"
-                                v-if="ifShowDateOrderPicker">
-                                <p class="text-left hover:text-accent-100 cursor-pointer"
-                                    @click="choseDateOrder('日期倒序')">
-                                    日期倒序</p>
-                                <p class="text-left mt-5 hover:text-accent-100 cursor-pointer"
-                                    @click="choseDateOrder('日期正序')">日期正序</p>
+                            <div class="bg-white px-2 py-1">
+                                <p class="text-nowrap">
+                                    {{ new Date(item.date).getFullYear() }}-{{ (new Date(item.date).getMonth() + 1).toString().padStart(2, '0') }}
+                                </p>
                             </div>
-                        </transition>
-
+                        </div>
+                        <!-- 右侧标题加点击事件 -->
+                        <div class="flex flex-col justify-center content-center">
+                            <p
+                                @click="handleClick(item.link)"
+                                class="text-left text-gray-500 cursor-pointer hover:text-black"
+                            >
+                                {{ item.title }}
+                            </p>
+                        </div>
                     </div>
-                    <!-- <div class="FilterBox">
-                        <el-icon>
-                            <Plus />
-                        </el-icon>
-                        <p>添加订单</p>
-                    </div> -->
-
                 </div>
             </div>
-            <ActivityTable :dateOrder="dateOrder" :typeOrder="typeOrder"/>
         </el-scrollbar>
-
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+// 定义跳转逻辑
+const handleClick = (link: string) => {
+    window.open(link, '_blank'); // 在新标签页中打开链接
+};
 
-import ActivityTable from "../components/ActivityTable.vue"
-
-const dateOrder = ref<string>("默认排序")
-const typeOrder = ref<string>("所有用户")
-const ifShowDateOrderPicker = ref<boolean>(false)
-const ifShowTypeOrderPicker = ref<boolean>(false)
-
-
-// 选择日期排序
-const choseDateOrder = (order: string) => {
-    dateOrder.value = order
-    ifShowDateOrderPicker.value = false
-}
-// 选择类型排序
-const choseTypeOrder = (order: string) => {
-    typeOrder.value = order
-    ifShowTypeOrderPicker.value = false
-}
-
-// 控制是否显示日期排序选择框
-const toggleIfShowDateOrderPicker = () => {
-    ifShowDateOrderPicker.value = !ifShowDateOrderPicker.value
-}
-// 控制是否显示类型排序选择框
-const toggleIfShowTypeOrderPicker = () => {
-    ifShowTypeOrderPicker.value = !ifShowTypeOrderPicker.value
-}
+// 示例数据
+const studyOptions = [
+    {
+        title: "25fall可冲！乔治城大学新开金融经济硕士！",
+        date: "2024-11-21",
+        image: "http://localhost:8080/pic1.jpeg",
+        link: "https://www.example.com/article1", // 跳转链接
+    },
+    {
+        title: "25fall藤校新开项目！Cornell DSDA无G可冲",
+        date: "2024-11-22",
+        image: "http://localhost:8080/pic2.jpeg",
+        link: "https://www.example.com/article2",
+    },
+    {
+        title: "2025 U.S.News 美国大学排名全新发布！",
+        date: "2024-11-23",
+        image: "http://localhost:8080/pic3.jpeg",
+        link: "https://www.example.com/article3",
+    },
+    {
+        title: "2025fall英国QS排名前100院校新增硕士项目",
+        date: "2024-11-24",
+        image: "http://localhost:8080/pic4.jpeg",
+        link: "https://www.example.com/article4",
+    },
+    
+];
 </script>
 
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-
-.AccountView {
-    height: 100%;
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-content: center;
-
-        padding: 30px 30px 0 30px;
-
-        .title {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
-        .FilterSection {
-            display: flex;
-            justify-content: center;
-            align-content: center;
-            gap: 10px;
-
-            .FilterBox {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-                position: relative;
-
-                cursor: pointer;
-
-
-
-                color: rgba(160, 174, 192, 1);
-                background: white;
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-
-            .FilterBox:nth-child(3) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-
-
-
-                color: white;
-                background: rgba(63, 140, 255, 1);
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-        }
-
-
-
-    }
-}
-</style>
+<style lang="scss" scoped></style>
