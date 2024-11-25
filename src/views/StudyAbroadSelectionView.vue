@@ -34,7 +34,7 @@
                     <div
                         v-for="(item, index) in studyOptions"
                         :key="index"
-                        class="flex justify-center content-center gap-3 px-7 py-5 border-b border-gray-300"
+                        class="flex justify-start content-center gap-3 px-7 py-5 border-b border-gray-300"
                     >
                         <!-- 左侧日期部分 -->
                         <div class="flex flex-col justify-center content-center">
@@ -72,10 +72,10 @@ const handleClick = (link: string) => {
 // 示例数据
 const studyOptions = [
     {
-        title: "25fall可冲！乔治城大学新开金融经济硕士！",
+        title: "2025QS世界大学排名发布之后，英国前100高校留学申请有何新变化？",
         date: "2024-11-21",
-        image: "http://localhost:8080/pic1.jpeg",
-        link: "https://www.example.com/article1", // 跳转链接
+        image: "http://localhost:8080/pic1.png",
+        link: "https://mp.weixin.qq.com/s/JmSGyim7Zy7BvMXN9nNnUQ", // 跳转链接
     },
     {
         title: "25fall藤校新开项目！Cornell DSDA无G可冲",

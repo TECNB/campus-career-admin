@@ -51,11 +51,18 @@
             <p>{{ importLabel }}</p>
         </div>
 
-        <div class="FilterBoxAdd" @click="onAdd" v-if="showAddButton">
+        <div class="FilterBoxAdd cursor-pointer" @click="onAdd" v-if="showAddButton">
             <el-icon>
                 <Plus />
             </el-icon>
             <p>{{ addLabel }}</p>
+        </div>
+        <!-- 批量删除按钮 -->
+        <div class="FilterBoxDelete cursor-pointer bg-red-500 opacity-80" @click="onBatchDelete" v-if="showBatchDeleteButton">
+            <el-icon>
+                <Delete />
+            </el-icon>
+            <p>{{ batchDeleteLabel }}</p>
         </div>
     </div>
 </template>
@@ -72,9 +79,21 @@ const props = defineProps({
     addLabel: String,
     showImportButton: Boolean,
     importLabel: String,
+    showBatchDeleteButton: Boolean, // 是否显示批量删除按钮
+    batchDeleteLabel: String,      // 批量删除按钮的文字
 });
 
-const emits = defineEmits(["update:typeOrder", "update:dateOrder", "add", "import"]);
+const emits = defineEmits([
+    "update:typeOrder",
+    "update:dateOrder",
+    "add",
+    "import",
+    "batchDelete", // 批量删除事件
+]);
+
+const onBatchDelete = () => {
+    emits("batchDelete");
+};
 
 const ifShowTypeOrderPicker = ref(false);
 const ifShowDateOrderPicker = ref(false);
@@ -155,6 +174,24 @@ const onImport = () => {
 
         color: white;
         background: rgba(63, 140, 255, 1);
+        box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
+
+        border-radius: 12px;
+
+
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+    .FilterBoxDelete {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+
+
+
+        color: white;
+        // background: rgba(63, 140, 255, 1);
         box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
 
         border-radius: 12px;
