@@ -110,7 +110,7 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
-                        <el-cascader size="large" :options="pcaTextArr" v-model="workLocation" placeholder="请点击选择区域"
+                        <el-cascader size="large" :options="pcaTextArr" v-model="workLocation" placeholder="请点击选择区域" collapse-tags
                             :props="{ multiple: true }">
                         </el-cascader>
                     </div>

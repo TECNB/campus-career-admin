@@ -111,6 +111,7 @@ import router from '../router/index';
 
 import { Activity } from '../interfaces/Activity';
 import { getAllActivity, deleteActivity, searchActivity } from '../api/activity';
+import { getUserInfoById } from '../api/userInfo';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
@@ -206,11 +207,31 @@ const fetchTableData = async () => {
         size: pageSize.value,
     };
     try {
+        let className = '';
+        console.log(userInfo.user?.userType);
+        
+        // 判断用户类型是否为学生
+        if (userInfo.user?.userType === 'student') {
+            // 获取学生的班级名称
+            await getUserInfoById(userInfo.user?.studentId!).then((res) => {
+                className = res.data.className;
+            });
+        }
+
+        // 获取所有活动数据
         const res = await getAllActivity(data);
         loading.value = false;
         allData.value = res.data.records;
         counts.value = res.data.total;
-        tableData.value = allData.value;
+
+        // 学生端数据筛选
+        if (userInfo.user?.userType === 'student' && className) {
+            tableData.value = allData.value.filter((item: any) => 
+                item.targetAudience?.includes(className)
+            );
+        } else {
+            tableData.value = allData.value;
+        }
     } catch (error) {
         loading.value = false;
         console.error('获取数据失败:', error);
