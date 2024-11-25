@@ -6,13 +6,22 @@
 
                 <FilterSection :typeOrder="typeOrder" :dateOrder="dateOrder"
                     :typeOptions="['2000-5000', '5000-8000', '8000-15000', '15000以上']" :dateOptions="['日期倒序', '日期正序']"
-                    :showAddButton="userInfo.user?.userType === 'teacher'" addLabel="发布岗位"
-                    :showBatchDeleteButton="userInfo.user?.userType === 'teacher'" batchDeleteLabel="批量删除"
-                    @update:typeOrder="typeOrder = $event" @update:dateOrder="dateOrder = $event"
-                    @add="toUpdate('create')" @batchDelete="handleBatchDelete" />
+                    :showAddButton="userInfo.user?.userType === 'teacher'"
+                    addLabel="发布岗位"
+                    :showBatchDeleteButton="userInfo.user?.userType === 'teacher'" 
+                    batchDeleteLabel="批量删除"
+                    :showImportButton="userInfo.user?.userType === 'teacher'"
+                    importLabel="表格导入"
+                    @update:typeOrder="typeOrder = $event" 
+                    @update:dateOrder="dateOrder = $event"
+                    @add="toUpdate('create')" 
+                    @batchDelete="handleBatchDelete" 
+                    @import="handleFileUpload"/>
             </div>
             <JobSearchTable :key="tableKey" :dateOrder="dateOrder" :typeOrder="typeOrder"
                 @selectionChange="updateSelectedIds" />
+                <!-- 隐藏的文件输入框 -->
+            <input type="file" ref="fileInput" @change="onFileChange" accept=".xls, .xlsx" style="display: none" />
         </el-scrollbar>
     </div>
 </template>
@@ -31,6 +40,35 @@ const typeOrder = ref("所有薪资待遇");
 
 const selectedIds = ref<string[]>([]);
 const tableKey = ref(0);
+const fileInput = ref<HTMLInputElement | null>(null);
+
+const handleFileUpload = () => {
+    fileInput.value?.click();
+};
+const onFileChange = async (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+        const response = await fetch("http://localhost:5173/api/user-info/importExcel", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (response.ok) {
+            tableKey.value += 1;
+            ElMessage.success("文件上传成功！");
+        } else {
+            ElMessage.error("文件上传失败，请重试！");
+        }
+    } catch (error) {
+        ElMessage.error("上传过程中出现错误！");
+    }
+};
 
 const updateSelectedIds = (ids: string[]) => {
     selectedIds.value = ids;

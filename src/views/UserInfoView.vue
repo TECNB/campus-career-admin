@@ -1,7 +1,7 @@
 <template>
-    <div class="AccountView">
+    <div class="h-full">
         <el-scrollbar>
-            <div class="header">
+            <div class="flex justify-between content-center px-7 pt-7">
                 <p class="md:text-4xl font-extrabold text-3xl">个人信息查看</p>
                 <FilterSection
                     :typeOrder="typeOrder"
@@ -72,95 +72,4 @@ const toUpdate = (id: string) => {
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-
-.AccountView {
-    height: 100%;
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-content: center;
-
-        padding: 30px 30px 0 30px;
-
-        .FilterSection {
-            display: flex;
-            justify-content: center;
-            align-content: center;
-            gap: 10px;
-
-            .FilterBox:nth-child(1) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-                position: relative;
-
-                cursor: pointer;
-
-
-
-                color: rgba(160, 174, 192, 1);
-                background: white;
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-
-            .FilterBox:nth-child(2) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-
-
-
-                color: white;
-                background: rgba(63, 140, 255, 1);
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-
-            .FilterBox:nth-child(3) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-
-
-
-                color: white;
-                background: rgba(63, 140, 255, 1);
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-
-                border-radius: 12px;
-
-
-                padding: 12px;
-                margin-bottom: 20px;
-            }
-        }
-
-
-
-    }
-}
 </style>
