@@ -96,9 +96,10 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import { userInfoStore } from '../stores/UserInfoStore';
 
 import router from '../router/index';
+import { useRoute } from 'vue-router';
 
 import { Activity } from '../interfaces/Activity';
-import { getAllUserDetails, deleteUserDetail, searchUserDetail } from '../api/userDetail';
+import { getAllConversationRecords, deleteConversationRecord, searchConversationRecord,getConversationRecordById } from '../api/conversationRecords';
 
 
 const props = defineProps(['dateOrder', 'typeOrder', 'ifRefresh']);
@@ -116,6 +117,9 @@ const filterOptions = [
 ];
 const selectedFilter = ref('name');  // 默认筛选条件
 const filterVisible = ref(false);
+// 获取路由参数
+const route = useRoute();
+const studentId = route.params.id as string;
 
 // 使用userInfoStore
 const userInfo = userInfoStore();
@@ -181,7 +185,7 @@ const fetchTableData = async () => {
         size: pageSize.value,
     };
     try {
-        const res = await getAllUserDetails(data);
+        const res = await getConversationRecordById(data,studentId);
         loading.value = false;
         allData.value = res.data.records;
         counts.value = res.data.total;
@@ -210,7 +214,7 @@ const filterData = async () => {
 
     loading.value = true;
     try {
-        const res = await searchUserDetail({
+        const res = await deleteConversationRecord({
             filterField: selectedFilter.value,
             filterValue: input.value.trim(),
             page: page.value,
@@ -234,7 +238,7 @@ const deletion = async (id: number) => {
             type: 'warning',
         });
 
-        await deleteUserDetail({ id });
+        await searchConversationRecord({ id });
         ElMessage.success('删除成功');
         await fetchTableData(); // 刷新数据
     } catch (error) {

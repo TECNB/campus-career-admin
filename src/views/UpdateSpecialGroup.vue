@@ -65,9 +65,9 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">谈话记录：</p>
-                        <!-- 跳转到/conversation-records + userInfo.user.studentId -->
+                        <!-- 跳转到/conversation-records/+router的id -->
                         <el-button type="primary"
-                            @click="router.push('/conversation-records/' + userInfo.user?.studentId)">
+                            @click="router.push('/conversation-records/' + studentId)">
                             查看
                         </el-button>
                     </div>
@@ -101,6 +101,9 @@ const userInfo = userInfoStore();
 
 // 是否为修改模式
 const route = useRoute();
+// 获取路由参数
+const studentId = route.params.id as string;
+
 const isEdit = ref(false);
 const loading = ref(false);
 
@@ -164,7 +167,7 @@ const populateFormFields = (data: any) => {
 const handleCancel = () => {
     ElMessage.success('取消成功');
     if (userInfoStore().user?.userType === 'teacher') {
-        router.push('/special-group');
+        router.push('/user-info');
     }
 };
 
@@ -187,7 +190,7 @@ const handleAdd = async () => {
         ElMessage.success('添加成功');
         isEdit.value = true;
         if (userInfoStore().user?.userType === 'teacher') {
-            router.push('/special-group');
+            router.push('/user-info');
         }
     } catch (error) {
         console.error(error);
@@ -216,7 +219,7 @@ const handleEdit = async () => {
         await editSpecialGroup(updatedData);
         ElMessage.success('更新成功');
         if (userInfoStore().user?.userType === 'teacher') {
-            router.push('/special-group-management');
+            router.push('/user-info');
         }
     } catch (error) {
         console.log(error);

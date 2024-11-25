@@ -142,9 +142,10 @@ const companyDescription = ref('');
 // 定义下拉选项
 const allMajor = ref<any[]>([
     { objectId: '1', name: '软件工程' },
-    { objectId: '2', name: '机械自动化' },
-    { objectId: '3', name: '电气自动化' },
-    { objectId: '4', name: '计算机科学' }
+    { objectId: '2', name: '自动化' },
+    { objectId: '3', name: '电子信息工程' },
+    { objectId: '4', name: '计算机科学与技术' },
+    { objectId: '5', name: '电气工程与智能控制' },
 ]);
 
 const allMoney = ref<any[]>([

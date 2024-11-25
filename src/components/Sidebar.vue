@@ -154,7 +154,6 @@ const menusAdmin = [
             { label: '活动日历', path: '/' },
             { label: '活动地点', path: '/activity-place' },
             { label: '发送人群', path: '/activity-target-audience' },
-            { label: '学生资料', path: '/user-detail' },
             { label: '智能就业', path: '/smart-employment' },
 
         ],

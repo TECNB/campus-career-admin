@@ -45,7 +45,7 @@
                 <el-table-column prop="gender" label="性别" width="80" />
                 <el-table-column prop="className" label="班级" width="150" />
                 <el-table-column prop="studentId" label="学号" width="130" />
-                <el-table-column prop="contactNumber" label="联系电话" width="130" />
+                <el-table-column prop="phone" label="联系电话" width="130" />
                 <el-table-column prop="classTeacher" label="班主任" width="120" />
                 <el-table-column prop="graduationTutor" label="毕业导师" width="120" />
                 <el-table-column prop="futurePlan" label="毕业意向" width="120">

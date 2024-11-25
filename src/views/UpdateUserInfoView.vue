@@ -49,6 +49,10 @@
                 <!-- 第二行 -->
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">手机号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.phone }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">学号：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.studentId }}</p>
                     </div>

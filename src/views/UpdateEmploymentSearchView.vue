@@ -34,12 +34,12 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">姓名：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.name }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userInfo.name }}</p>
 
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">性别：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.gender }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userInfo.gender }}</p>
                     </div>
                 </div>
 
@@ -47,12 +47,12 @@
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">班级：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.className }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userInfo.className }}</p>
 
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">学号：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.studentId }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userInfo.studentId }}</p>
                     </div>
                 </div>
 
@@ -60,11 +60,11 @@
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">联系方式：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.contactNumber }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userInfo.phone }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">班主任：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.classTeacher }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userInfo.classTeacher }}</p>
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">毕业设计导师：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.graduationTutor }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userInfo.graduationTutor }}</p>
                     </div>
                 </div>
 
@@ -90,7 +90,8 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">薪资待遇：</p>
-                        <el-select v-model="salary" placeholder="请点击选择分类" size="large" clearable multiple :teleported="false">
+                        <el-select v-model="salary" placeholder="请点击选择分类" size="large" clearable multiple
+                            :teleported="false">
                             <el-option v-for="item in allMoney" :key="item.objectId" :label="item.name"
                                 :value="item.name" />
                         </el-select>
@@ -109,7 +110,8 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">工作地点：</p>
-                        <el-cascader size="large" :options="pcaTextArr" v-model="workLocation" placeholder="请点击选择区域" :props="{ multiple: true }">
+                        <el-cascader size="large" :options="pcaTextArr" v-model="workLocation" placeholder="请点击选择区域"
+                            :props="{ multiple: true }">
                         </el-cascader>
                     </div>
                 </div>
@@ -161,7 +163,7 @@ const name = ref('');
 const gender = ref<'男' | '女'>('男');
 const className = ref('');
 const studentId = ref('');
-const contactNumber = ref('');
+const phone = ref('');
 const classTeacher = ref('');
 const graduationTutor = ref('');
 const futurePlan = ref([]);
@@ -171,7 +173,7 @@ const workLocation = ref([]);
 const employmentStatus = ref('实习');
 const companyName = ref('');
 
-const userDetail = ref<any>({});
+const userInfo = ref<any>({});
 
 // 所有未来计划选项
 const allFuturePlan = [
@@ -205,7 +207,7 @@ const fileList = ref<UploadFile[]>([]);
 onMounted(async () => {
     await getEmploymentSearchByUserId(route.params.id as string).then((res) => {
         const data = res.data;
-        console.log("userDetail.value", userDetail.value);
+        console.log("userInfo.value", userInfo.value);
         // 如果不为空则填充表单字段,如果为空则重置表单字段
         if (data) {
             populateFormFields(data);
@@ -228,7 +230,7 @@ const resetFormFields = () => {
     gender.value = '男';
     className.value = '';
     studentId.value = '';
-    contactNumber.value = '';
+    phone.value = '';
     classTeacher.value = '';
     graduationTutor.value = '';
     futurePlan.value = [];
@@ -242,26 +244,31 @@ const resetFormFields = () => {
 
 // 填充表单字段
 const populateFormFields = (data: any) => {
-    userDetail.value = data.userDetail;
+    userInfo.value = data.userInfo;
     id.value = data.id;
-    name.value = data.userDetail.name;
-    gender.value = data.userDetail.gender;
-    className.value = data.userDetail.className;
-    studentId.value = data.userDetail.studentId;
-    contactNumber.value = data.userDetail.contactNumber;
-    classTeacher.value = data.userDetail.classTeacher;
-    graduationTutor.value = data.userDetail.graduationTutor;
+    name.value = data.userInfo.name;
+    gender.value = data.userInfo.gender;
+    className.value = data.userInfo.className;
+    studentId.value = data.userInfo.studentId;
+    phone.value = data.userInfo.phone;
+    classTeacher.value = data.userInfo.classTeacher;
+    graduationTutor.value = data.userInfo.graduationTutor;
     futurePlan.value = data.futurePlan.split('/');
     salary.value = data.salary.split('/');
     companyNature.value = data.companyNature.split('/');
-    workLocation.value = data.workLocation.split('/');
+    console.log("data.workLocation", data.workLocation);
+    // 将传入的值拆分并设置到 workLocation.value
+    workLocation.value = data.workLocation
+        .split('/') // 按 "/" 分割为字符串数组
+        .map((location: string) => location.split(',')); // 每个字符串按 "," 再次分割
+    console.log("data.workLocation.split('/')", data.workLocation.split('/'));
     employmentStatus.value = data.employmentStatus;
-    if (employmentStatus.value !== '暂无'){
+    if (employmentStatus.value !== '暂无') {
         companyName.value = ''
-    }else{
+    } else {
         companyName.value = data.companyName;
     }
-    
+
 };
 
 // 取消操作
@@ -280,7 +287,7 @@ const handleAdd = async () => {
         gender: gender.value,
         className: className.value,
         studentId: userInfoStore().user?.studentId,
-        contactNumber: contactNumber.value,
+        phone: phone.value,
         classTeacher: classTeacher.value,
         graduationTutor: graduationTutor.value,
         futurePlan: futurePlan.value,
@@ -311,13 +318,14 @@ const handleAdd = async () => {
 // 编辑信息
 const handleEdit = async () => {
     loading.value = true;
+    console.log("workLocation.value", workLocation.value);
     const updatedData = {
         id: id.value,
         name: name.value,
         gender: gender.value,
         className: className.value,
         studentId: studentId.value,
-        contactNumber: contactNumber.value,
+        phone: phone.value,
         classTeacher: classTeacher.value,
         graduationTutor: graduationTutor.value,
         futurePlan: futurePlan.value.join('/'),

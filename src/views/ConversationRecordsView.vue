@@ -10,7 +10,7 @@
                     :dateOptions="['日期倒序', '日期正序']"
                     :showAddButton="userInfo.user?.userType === 'admin'"
                     addLabel="发布学生资料"
-                    :showImportButton="userInfo.user?.userType === 'admin'"
+                    :showImportButton="userInfo.user?.userType === 'teacher'"
                     importLabel="表格导入"
                     @update:typeOrder="typeOrder = $event" @update:dateOrder="dateOrder = $event"
                     @add="toUpdate('create')"
@@ -50,7 +50,7 @@ const onFileChange = async (event: Event) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("http://localhost:5173/api/user-detail/importExcel", {
+        const response = await fetch("http://localhost:5173/api/conversation-records/importExcel", {
             method: "POST",
             body: formData,
         });
