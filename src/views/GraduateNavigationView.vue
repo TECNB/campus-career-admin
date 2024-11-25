@@ -34,7 +34,7 @@
                     <div
                         v-for="(item, index) in studyOptions"
                         :key="index"
-                        class="flex justify-center content-center gap-3 px-7 py-5 border-b border-gray-300"
+                        class="flex justify-start content-center gap-3 px-7 py-5 border-b border-gray-300"
                     >
                         <!-- 左侧日期部分 -->
                         <div class="flex flex-col justify-center content-center">
@@ -72,30 +72,29 @@ const handleClick = (link: string) => {
 // 示例数据
 const studyOptions = [
     {
-        title: "25fall可冲！乔治城大学新开金融经济硕士！",
+        title: "大量院校改考408，考前复习刷题规划快收！",
         date: "2024-11-21",
-        image: "http://localhost:8080/pic1.jpeg",
-        link: "https://www.example.com/article1", // 跳转链接
+        image: "http://localhost:8080/pic6.png",
+        link: "https://mp.weixin.qq.com/s/Rjw1WkSB_o1gBPbqQO8YnQ", // 跳转链接
     },
     {
-        title: "25fall藤校新开项目！Cornell DSDA无G可冲",
+        title: "2025年考研时间，定了！",
         date: "2024-11-22",
-        image: "http://localhost:8080/pic2.jpeg",
-        link: "https://www.example.com/article2",
+        image: "http://localhost:8080/pic7.png",
+        link: "https://mp.weixin.qq.com/s/MfL5HbNx7Dtz0UwWoH7v8g",
     },
     {
-        title: "2025 U.S.News 美国大学排名全新发布！",
+        title: "教育学333今年变动较大，不看影响复习！",
         date: "2024-11-23",
-        image: "http://localhost:8080/pic3.jpeg",
-        link: "https://www.example.com/article3",
+        image: "http://localhost:8080/pic8.png",
+        link: "https://mp.weixin.qq.com/s/weSxbVDwQZ92lNmSRdu6Bg",
     },
     {
-        title: "2025fall英国QS排名前100院校新增硕士项目",
+        title: "欢迎报考！浙江海洋大学2025年硕士研究生招生章程发布",
         date: "2024-11-24",
-        image: "http://localhost:8080/pic4.jpeg",
-        link: "https://www.example.com/article4",
+        image: "http://localhost:8080/pic9.png",
+        link: "https://mp.weixin.qq.com/s/GwvdgN-iR_ZtsTeOO7SZpg",
     },
-    
 ];
 </script>
 
