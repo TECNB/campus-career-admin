@@ -290,9 +290,9 @@ const handleAdd = async () => {
         phone: phone.value,
         classTeacher: classTeacher.value,
         graduationTutor: graduationTutor.value,
-        futurePlan: futurePlan.value,
-        salary: salary.value,
-        companyNature: companyNature.value,
+        futurePlan: futurePlan.value.join('/'),
+        salary: salary.value.join('/'),
+        companyNature: companyNature.value.join('/'),
         workLocation: workLocation.value.join('/'),
         employmentStatus: employmentStatus.value,
         // 如果employmentStatus.value为暂无则companyName为空

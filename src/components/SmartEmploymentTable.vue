@@ -128,7 +128,7 @@ onMounted(() => {
 const fetchRecords = async () => {
     try {
         // 获取简历数据
-        const resumeResponse = await getUserFile({ fileType: 'resume', userId: userInfo.user?.userId });
+        const resumeResponse = await getUserFile({ fileType: 'resume', userId: userInfo.user?.studentId });
         if (resumeResponse && resumeResponse.data) {
             resumeRecords.value = resumeResponse.data.map((record: any) => ({
                 id: record.id,
@@ -140,7 +140,7 @@ const fetchRecords = async () => {
         }
 
         // 获取面试数据
-        const interviewResponse = await getUserFile({ fileType: 'interview', userId: userInfo.user?.userId });
+        const interviewResponse = await getUserFile({ fileType: 'interview', userId: userInfo.user?.studentId });
         if (interviewResponse && interviewResponse.data) {
             interviewRecords.value = interviewResponse.data.map((record: any) => ({
                 id: record.id,

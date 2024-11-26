@@ -36,3 +36,8 @@ export const getEmploymentSearchByUserId = (userId: string): Promise<R<any>> => 
 export const searchEmploymentSearch = (params: any): Promise<R<any>> => {
     return axios.get<R<any>>('api/employment-search/search', params);
 }
+
+// 批量删除就业信息
+export const batchDeleteEmploymentSearch = (params: any): Promise<R<any>> => {
+    return axios.delete<R<any>>('api/employment-search/batch', params);
+}

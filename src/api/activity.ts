@@ -36,3 +36,8 @@ export const uploadActivityFile = (params: any): Promise<R<any>> => {
 export const searchActivity = (params: any): Promise<R<any>> => {
     return axios.get<R<any>>('api/activity/search', params);
 }
+
+// 批量删除活动
+export const batchDeleteActivity = (params: any): Promise<R<any>> => {
+    return axios.delete<R<any>>('api/activity/batch', params);
+}

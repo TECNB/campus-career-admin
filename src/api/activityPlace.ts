@@ -30,3 +30,8 @@ export const deleteActivityPlace = (params: any): Promise<R<any>> => {
 export const searchActivityPlace = (params: any): Promise<R<any>> => {
     return axios.get<R<any>>('api/activity-place/search', params);
 };
+
+// 批量删除活动地点
+export const batchDeleteActivityPlace = (params: any): Promise<R<any>> => {
+    return axios.delete<R<any>>('api/activity-place/batch', params);
+}

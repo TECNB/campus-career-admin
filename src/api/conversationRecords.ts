@@ -30,3 +30,8 @@ export const deleteConversationRecord = (params: any): Promise<R<any>> => {
 export const searchConversationRecord = (params: any): Promise<R<any>> => {
     return axios.get<R<any>>('api/conversation-records/search', params);
 };
+
+// 批量删除谈话记录
+export const batchDeleteConversationRecord = (params: any): Promise<R<any>> => {
+    return axios.delete<R<any>>('api/conversation-records/batch', params);
+}

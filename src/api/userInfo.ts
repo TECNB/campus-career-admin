@@ -30,3 +30,8 @@ export const deleteUserInfo = (params: any): Promise<R<any>> => {
 export const searchUserInfo = (params: any): Promise<R<any>> => {
     return axios.get<R<any>>('api/user-info/search', params);
 };
+
+// 批量删除用户详细信息
+export const batchDeleteUserInfo = (params: any): Promise<R<any>> => {
+    return axios.delete<R<any>>('api/user-info/batch', params);
+}

@@ -36,3 +36,8 @@ export const download = (params: any): Promise<R<any>> => {
 export const searchEmploymentDatabase = (params: any): Promise<R<any>> => {
     return axios.get<R<any>>('api/employment-database/search', params);
 }
+
+// 批量删除资料库
+export const batchDeleteEmploymentDatabase = (params: any): Promise<R<any>> => {
+    return axios.delete<R<any>>('api/employment-database/batch', params);
+}

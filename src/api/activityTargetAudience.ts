@@ -30,3 +30,8 @@ export const deleteActivityTargetAudience = (params:any): Promise<R<any>> => {
 export const searchActivityTargetAudience = (params: any): Promise<R<any>> => {
     return axios.get<R<any>>('api/activity-target-audience/search', params);
 };
+
+// 批量删除活动目标受众
+export const batchDeleteActivityTargetAudience = (params: any): Promise<R<any>> => {
+    return axios.delete<R<any>>('api/activity-target-audience/batch', params);
+}
