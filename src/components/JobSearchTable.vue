@@ -132,7 +132,6 @@ const counts = ref(tableData.value.length);
 const page = ref(1);
 // const user = 'admin';
 const allData = ref<JobSearch[]>([]);
-const multipleSelection = ref<[]>([])
 
 // 是否搜索
 const isSearch = ref(false);

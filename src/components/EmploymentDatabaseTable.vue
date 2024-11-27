@@ -101,6 +101,11 @@ import { getAllEmploymentDatabase, deleteEmploymentDatabase, download, searchEmp
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
+const emits = defineEmits(["selectionChange"]);
+
+
+const selectedIds = ref<string[]>([]);
+
 const filterOptions = [
     { label: '资料类别', value: 'category' },
     { label: '资料标题', value: 'title' },
@@ -266,8 +271,10 @@ const handleCurrentChange = (val: number) => {
     }
 };
 
-const handleSelectionChange = (val: []) => {
-    multipleSelection.value = val;
+const handleSelectionChange = (selection: any[]) => {
+    // 提取选中的 ID
+    selectedIds.value = selection.map((item) => item.id);
+    emits("selectionChange", selectedIds.value);
 };
 
 const downloadAllAttachments = async (attachment: string[]) => {

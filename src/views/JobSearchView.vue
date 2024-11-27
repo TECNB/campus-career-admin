@@ -38,9 +38,28 @@ const userInfo = userInfoStore();
 const dateOrder = ref("默认排序");
 const typeOrder = ref("所有薪资待遇");
 
+const fileInput = ref<HTMLInputElement | null>(null);
+
 const selectedIds = ref<string[]>([]);
 const tableKey = ref(0);
-const fileInput = ref<HTMLInputElement | null>(null);
+
+const updateSelectedIds = (ids: string[]) => {
+    selectedIds.value = ids;
+};
+
+const handleBatchDelete = async () => {
+    if (selectedIds.value.length === 0) {
+        return ElMessage.warning("请选择要删除的岗位");
+    }
+    try {
+        await deleteJobSearchBatch(selectedIds.value);
+        ElMessage.success("批量删除成功");
+        selectedIds.value = [];
+        tableKey.value++; // 更新 key 值以刷新组件
+    } catch (error) {
+        ElMessage.error("批量删除失败，请重试");
+    }
+};
 
 const handleFileUpload = () => {
     fileInput.value?.click();
@@ -70,26 +89,8 @@ const onFileChange = async (event: Event) => {
     }
 };
 
-const updateSelectedIds = (ids: string[]) => {
-    selectedIds.value = ids;
-};
-
 const toUpdate = (id: string) => {
     router.push("/updateJob-search/" + id);
-};
-
-const handleBatchDelete = async () => {
-    if (selectedIds.value.length === 0) {
-        return ElMessage.warning("请选择要删除的岗位");
-    }
-    try {
-        await deleteJobSearchBatch(selectedIds.value);
-        ElMessage.success("批量删除成功");
-        selectedIds.value = [];
-        tableKey.value++; // 更新 key 值以刷新组件
-    } catch (error) {
-        ElMessage.error("批量删除失败，请重试");
-    }
 };
 </script>
 
