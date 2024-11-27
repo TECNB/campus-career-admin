@@ -41,3 +41,8 @@ export const smartJobSearch = (params: any): Promise<R<any>> => {
 export const deleteJobSearchBatch = (params: any): Promise<R<any>> => {
     return axios.delete<R<any>>('api/job-search/batch', params);
 }
+
+// 智能匹配岗位后的搜索
+export const searchJobSearchAfterMatch = (params: any): Promise<R<any>> => {
+    return axios.get<R<any>>('api/job-search/search-match', params);
+}

@@ -130,14 +130,30 @@ const props = defineProps(['dateOrder', 'typeOrder', 'ifRefresh']);
 
 
 const filterOptions = [
-    { label: '姓名', value: 'name' },
-    { label: '性别', value: 'gender' },
-    { label: '班级', value: 'className' },
     { label: '学号', value: 'studentId' },
-    { label: '联系方式', value: 'contactNumber' },
-    { label: '班主任', value: 'classTeacher' },
-    { label: '毕业设计导师', value: 'graduationTutor' },
-    { label: '创建时间', value: 'createdAt' }
+    { label: '身份证号', value: 'idCard' },
+    { label: '年级', value: 'grade' },
+    { label: '专业', value: 'major' },
+    { label: '班级', value: 'className' },
+    { label: '班级职务', value: 'classRole' },
+    { label: '专业方向', value: 'specialization' },
+    { label: '出生日期', value: 'birthDate' },
+    { label: '入学日期', value: 'admissionDate' },
+    { label: '预计毕业时间', value: 'expectedGraduation' },
+    { label: '籍贯', value: 'nativePlace' },
+    { label: '生源地', value: 'sourcePlace' },
+    { label: '民族', value: 'ethnicity' },
+    { label: '户口所在地', value: 'residence' },
+    { label: '家庭住址', value: 'homeAddress' },
+    { label: '辅导员姓名', value: 'counselor' },
+    { label: '辅导员手机号', value: 'counselorPhone' },
+    { label: '班主任姓名', value: 'classTeacher' },
+    { label: '班主任手机号', value: 'classTeacherPhone' },
+    { label: '毕设导师姓名', value: 'graduationTutor' },
+    { label: '毕设导师手机号', value: 'graduationTutorPhone' },
+    { label: '寝室号', value: 'dormitoryNumber' },
+    { label: '红旗网络', value: 'networkStatus' },
+    { label: '寝室成员名单', value: 'dormitoryMembers' },
 ];
 const selectedFilter = ref('name');  // 默认筛选条件
 const filterVisible = ref(false);

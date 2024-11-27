@@ -73,7 +73,7 @@ const onFileChange = async (event: Event) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("http://localhost:5173/api/user-info/importExcel", {
+        const response = await fetch("http://localhost:5173/api/job-search/importExcel", {
             method: "POST",
             body: formData,
         });

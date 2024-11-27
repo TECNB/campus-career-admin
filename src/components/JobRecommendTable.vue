@@ -39,9 +39,6 @@
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
 
-                <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
-
-                <el-table-column prop="id" label="序号" width="60" v-if="isMediumScreen"/>
                 <el-table-column prop="matchLevel" label="匹配程度" width="120" />
                 <el-table-column prop="companyName" label="企业名称" width="120" />
                 <el-table-column prop="positionName" label="岗位名称" width="120" />
@@ -95,11 +92,12 @@ import { userInfoStore } from '../stores/UserInfoStore';
 import router from '../router/index';
 
 import { JobSearch } from '../interfaces/JobSearch';
-import { smartJobSearch, deleteJobSearch,searchJobSearch } from '../api/jobSearch';
+import { smartJobSearch, deleteJobSearch,searchJobSearch,searchJobSearchAfterMatch } from '../api/jobSearch';
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
 const filterOptions = [
+    { label: '匹配程度', value: 'matchLevel' },
     { label: '企业名称', value: 'companyName' },
     { label: '岗位名称', value: 'positionName' },
     { label: 'HR', value: 'hrName' },
@@ -225,7 +223,8 @@ const filterData = async () => {
 
     loading.value = true;
     try {
-        const res = await searchJobSearch({
+        const res = await searchJobSearchAfterMatch({
+            studentId: userInfo.user?.studentId,
             filterField: selectedFilter.value,
             filterValue: input.value.trim(),
             page: page.value,

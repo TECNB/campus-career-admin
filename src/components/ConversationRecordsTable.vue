@@ -43,7 +43,7 @@
                 <el-table-column prop="university" label="院校" />
                 <el-table-column prop="conversationTarget" label="谈话对象" />
                 <el-table-column prop="participantCount" label="谈话人数" />
-                <el-table-column prop="otherTopics" label="其他谈话主题" />
+                <el-table-column prop="otherTopics" label="其他谈话主题" width="110"/>
                 <el-table-column prop="conversationTopic" label="谈话主题" />
                 <el-table-column prop="studentId" label="学号" />
                 <el-table-column prop="conversationType" label="谈话类型" />
@@ -106,14 +106,21 @@ const props = defineProps(['dateOrder', 'typeOrder', 'ifRefresh']);
 
 
 const filterOptions = [
-    { label: '姓名', value: 'name' },
-    { label: '性别', value: 'gender' },
-    { label: '班级', value: 'className' },
+    { label: '谈话时间', value: 'conversationTime' },
+    { label: '院校', value: 'university' },
+    { label: '谈话对象', value: 'conversationTarget' },
+    { label: '谈话人数', value: 'participantCount' },
+    { label: '其他谈话主题', value: 'otherTopics' },
+    { label: '谈话主题', value: 'conversationTopic' },
     { label: '学号', value: 'studentId' },
-    { label: '联系方式', value: 'contactNumber' },
-    { label: '班主任', value: 'classTeacher' },
-    { label: '毕业设计导师', value: 'graduationTutor' },
-    { label: '创建时间', value: 'createdAt' }
+    { label: '谈话类型', value: 'conversationType' },
+    { label: '联系家长', value: 'parentContact' },
+    { label: '院系', value: 'department' },
+    { label: '谈话教师', value: 'conversationTeacher' },
+    { label: '谈话地点', value: 'conversationLocation' },
+    { label: '谈话内容', value: 'conversationContent' },
+    { label: '状态', value: 'status' },
+    { label: '关注等级', value: 'attentionLevel' },
 ];
 const selectedFilter = ref('name');  // 默认筛选条件
 const filterVisible = ref(false);
@@ -214,7 +221,7 @@ const filterData = async () => {
 
     loading.value = true;
     try {
-        const res = await deleteConversationRecord({
+        const res = await searchConversationRecord({
             filterField: selectedFilter.value,
             filterValue: input.value.trim(),
             page: page.value,
@@ -238,7 +245,7 @@ const deletion = async (id: number) => {
             type: 'warning',
         });
 
-        await searchConversationRecord({ id });
+        await deleteConversationRecord({ id });
         ElMessage.success('删除成功');
         await fetchTableData(); // 刷新数据
     } catch (error) {
