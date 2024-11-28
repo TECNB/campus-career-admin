@@ -51,6 +51,14 @@
             <p>{{ importLabel }}</p>
         </div>
 
+        <!-- 表格导出按钮 -->
+        <div class="FilterBoxExport cursor-pointer bg-green-500 opacity-80" @click="onExport" v-if="showExportButton">
+            <el-icon>
+                <Download />
+            </el-icon>
+            <p>{{ exportLabel }}</p>
+        </div>
+
         <div class="FilterBoxAdd cursor-pointer" @click="onAdd" v-if="showAddButton">
             <el-icon>
                 <Plus />
@@ -58,7 +66,8 @@
             <p>{{ addLabel }}</p>
         </div>
         <!-- 批量删除按钮 -->
-        <div class="FilterBoxDelete cursor-pointer bg-red-500 opacity-80" @click="onBatchDelete" v-if="showBatchDeleteButton">
+        <div class="FilterBoxDelete cursor-pointer bg-red-500 opacity-80" @click="onBatchDelete"
+            v-if="showBatchDeleteButton">
             <el-icon>
                 <Delete />
             </el-icon>
@@ -81,6 +90,8 @@ const props = defineProps({
     importLabel: String,
     showBatchDeleteButton: Boolean, // 是否显示批量删除按钮
     batchDeleteLabel: String,      // 批量删除按钮的文字
+    showExportButton: Boolean, // 是否显示导出按钮
+    exportLabel: String,      // 导出按钮的文字
 });
 
 const emits = defineEmits([
@@ -89,6 +100,7 @@ const emits = defineEmits([
     "add",
     "import",
     "batchDelete", // 批量删除事件
+    "export", // 导出事件
 ]);
 
 const onBatchDelete = () => {
@@ -122,6 +134,10 @@ const onAdd = () => {
 
 const onImport = () => {
     emits("import");
+};
+
+const onExport = () => {
+    emits("export");
 };
 </script>
 
@@ -182,7 +198,27 @@ const onImport = () => {
         padding: 12px;
         margin-bottom: 20px;
     }
+
     .FilterBoxDelete {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+
+
+
+        color: white;
+        // background: rgba(63, 140, 255, 1);
+        box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
+
+        border-radius: 12px;
+
+
+        padding: 12px;
+        margin-bottom: 20px;
+    }
+
+    .FilterBoxExport {
         display: flex;
         justify-content: flex-start;
         align-items: center;

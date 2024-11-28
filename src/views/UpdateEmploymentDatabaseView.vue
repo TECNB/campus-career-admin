@@ -98,7 +98,8 @@ let loading = ref(false);
 const allType = ref<any[]>([
     { objectId: '1', name: '就业资料' },
     { objectId: '2', name: '考研资料' },
-    { objectId: '3', name: '出国资料' }
+    { objectId: '3', name: '出国资料' },
+    { objectId: '4', name: '考公资料' }
 ]);
 
 // 定义上传文件列表

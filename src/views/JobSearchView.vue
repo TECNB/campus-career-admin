@@ -12,11 +12,14 @@
                     batchDeleteLabel="批量删除"
                     :showImportButton="userInfo.user?.userType === 'teacher'"
                     importLabel="表格导入"
+                    :showExportButton="userInfo.user?.userType === 'teacher'" 
+                    exportLabel="导出表格" 
                     @update:typeOrder="typeOrder = $event" 
                     @update:dateOrder="dateOrder = $event"
                     @add="toUpdate('create')" 
                     @batchDelete="handleBatchDelete" 
-                    @import="handleFileUpload"/>
+                    @import="handleFileUpload"
+                    @export="handleExport"/>
             </div>
             <JobSearchTable :key="tableKey" :dateOrder="dateOrder" :typeOrder="typeOrder"
                 @selectionChange="updateSelectedIds" />
@@ -86,6 +89,43 @@ const onFileChange = async (event: Event) => {
         }
     } catch (error) {
         ElMessage.error("上传过程中出现错误！");
+    }
+};
+
+const handleExport = async () => {
+    try {
+        // 发送导出请求
+        const response = await fetch("http://localhost:5173/api/job-search/exportExcel", {
+            method: "GET",
+        });
+
+        if (response.ok) {
+            // 将响应转换为 Blob 对象
+            const blob = await response.blob();
+
+            // 创建下载链接
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+
+            // 设置文件名，确保与后端导出一致
+            link.setAttribute("download", "岗位信息.xlsx");
+            document.body.appendChild(link);
+
+            // 自动触发下载
+            link.click();
+
+            // 清理临时链接
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+            ElMessage.success("文件导出成功！");
+        } else {
+            ElMessage.error("文件导出失败，请重试！");
+        }
+    } catch (error) {
+        console.error("导出过程中出现错误：", error);
+        ElMessage.error("导出过程中出现错误！");
     }
 };
 
