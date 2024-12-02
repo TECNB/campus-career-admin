@@ -48,9 +48,27 @@ const onFileChange = async (event: Event) => {
             body: formData,
         });
 
-        if (response.ok) {
-            refreshKey.value += 1;
-            ElMessage.success("文件上传成功！");
+        // 检查响应类型
+        const contentType = response.headers.get("content-type");
+
+        if (response.ok && contentType?.includes("application/json")) {
+            const json = await response.json();
+            if (json.message === "导入成功") {
+                ElMessage.success("文件上传成功！");
+                refreshKey.value += 1;
+            } else {
+                ElMessage.error("上传失败：" + json.error);
+            }
+        } else if (response.ok && contentType?.includes("application/vnd.ms-excel")) {
+            // 下载错误 Excel 文件
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "error_data.xlsx"; // 下载文件名
+            a.click();
+            window.URL.revokeObjectURL(url);
+            ElMessage.error("导入文件包含错误，请查看下载的错误文件！");
         } else {
             ElMessage.error("文件上传失败，请重试！");
         }

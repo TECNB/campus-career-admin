@@ -42,6 +42,7 @@
                 <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
 
                 <el-table-column prop="id" label="序号" width="60" v-if="isMediumScreen"/>
+                <el-table-column prop="displayId" label="展位号" width="120" />
                 <el-table-column prop="companyName" label="企业名称" width="120" />
                 <el-table-column prop="positionName" label="岗位名称" width="120" />
                 <el-table-column prop="hrName" label="HR" width="100" />
