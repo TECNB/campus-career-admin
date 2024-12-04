@@ -127,7 +127,10 @@ import { getSpecialGroupById } from '../api/specialGroup';
 
 
 const props = defineProps(['dateOrder', 'typeOrder', 'ifRefresh']);
+const emits = defineEmits(["selectionChange"]);
 
+
+const selectedIds = ref<string[]>([]);
 
 const filterOptions = [
     { label: '学号', value: 'studentId' },
@@ -321,8 +324,10 @@ const handleCurrentChange = (val: number) => {
     }
 };
 
-const handleSelectionChange = (val: []) => {
-    multipleSelection.value = val;
+const handleSelectionChange = (selection: any[]) => {
+    // 提取选中的 ID
+    selectedIds.value = selection.map((item) => item.id);
+    emits("selectionChange", selectedIds.value);
 };
 const toUpdateActivity = (id: string) => {
     console.log('toUpdateActivity')

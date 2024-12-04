@@ -52,12 +52,26 @@
         </div>
 
         <!-- 表格导出按钮 -->
-        <div class="FilterBoxExport cursor-pointer bg-green-500 opacity-80" @click="onExport" v-if="showExportButton">
-            <el-icon>
+        <div class="FilterBoxExport  relative cursor-pointer bg-green-500 opacity-80" @click="toggleExportPicker"
+            v-if="showExportButton">
+            <el-icon color="white">
                 <Download />
             </el-icon>
-            <p>{{ exportLabel }}</p>
+            <p class="!text-white">{{ exportLabel }}</p>
+            <transition name="fade">
+                <div class="absolute top-16 right-0 w-full rounded-xl bg-white shadow-lg px-3 pb-3"
+                    v-if="ifShowExportPicker">
+                    <p class="text-left hover:text-accent-100 cursor-pointer mt-2" @click="onExport('database')">
+                        数据库表格
+                    </p>
+                    <p class="text-left hover:text-accent-100 cursor-pointer mt-2" @click="onExport('standard')">
+                        标准表格
+                    </p>
+                </div>
+            </transition>
         </div>
+
+
 
         <div class="FilterBoxAdd cursor-pointer" @click="onAdd" v-if="showAddButton">
             <el-icon>
@@ -103,12 +117,9 @@ const emits = defineEmits([
     "export", // 导出事件
 ]);
 
-const onBatchDelete = () => {
-    emits("batchDelete");
-};
-
 const ifShowTypeOrderPicker = ref(false);
 const ifShowDateOrderPicker = ref(false);
+const ifShowExportPicker = ref(false); // 控制导出选项弹出
 
 const toggleTypePicker = () => {
     ifShowTypeOrderPicker.value = !ifShowTypeOrderPicker.value;
@@ -116,6 +127,10 @@ const toggleTypePicker = () => {
 
 const toggleDatePicker = () => {
     ifShowDateOrderPicker.value = !ifShowDateOrderPicker.value;
+};
+
+const toggleExportPicker = () => {
+    ifShowExportPicker.value = !ifShowExportPicker.value;
 };
 
 const choseTypeOrder = (option: string) => {
@@ -136,8 +151,13 @@ const onImport = () => {
     emits("import");
 };
 
-const onExport = () => {
-    emits("export");
+const onBatchDelete = () => {
+    emits("batchDelete");
+};
+
+const onExport = (type: string) => {
+    emits("export", type);
+    ifShowExportPicker.value = false; // 关闭弹出框
 };
 </script>
 
@@ -226,7 +246,7 @@ const onExport = () => {
 
 
 
-        color: white;
+        color: rgba(160, 174, 192, 1);
         // background: rgba(63, 140, 255, 1);
         box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
 

@@ -6,11 +6,14 @@
                 <FilterSection :typeOrder="typeOrder" :dateOrder="dateOrder" :typeOptions="[]"
                     :dateOptions="['日期倒序', '日期正序']" :showAddButton="userInfo.user?.userType === 'teacher'"
                     addLabel="发布学生资料" :showImportButton="userInfo.user?.userType === 'teacher'" importLabel="表格导入"
-                    :showExportButton="userInfo.user?.userType === 'teacher'" exportLabel="导出表格" @update:typeOrder="typeOrder = $event"
-                    @update:dateOrder="dateOrder = $event" @add="toUpdate('create')" @import="handleFileUpload"
-                    @export="handleExport" />
+                    :showExportButton="userInfo.user?.userType === 'teacher'" exportLabel="导出表格"
+                    :showBatchDeleteButton="userInfo.user?.userType === 'teacher'" batchDeleteLabel="批量删除"
+                    @update:typeOrder="typeOrder = $event" @update:dateOrder="dateOrder = $event"
+                    @add="toUpdate('create')" @import="handleFileUpload" @export="handleExport"
+                    @batchDelete="handleBatchDelete" />
             </div>
-            <UserInfoTable :key="refreshKey" :dateOrder="dateOrder" :typeOrder="typeOrder" />
+            <UserInfoTable :key="tableKey" :dateOrder="dateOrder" :typeOrder="typeOrder"
+                @selectionChange="updateSelectedIds" />
             <!-- 隐藏的文件输入框 -->
             <input type="file" ref="fileInput" @change="onFileChange" accept=".xls, .xlsx" style="display: none" />
         </el-scrollbar>
@@ -22,13 +25,36 @@ import { ref } from "vue";
 import router from "../router";
 import { userInfoStore } from "../stores/UserInfoStore";
 import UserInfoTable from "../components/UserInfoTable.vue";
+import { batchDeleteUserInfo } from "../api/userInfo";
 
 const userInfo = userInfoStore();
 
 const dateOrder = ref("默认排序");
 const typeOrder = ref("所有活动");
-const refreshKey = ref(0);
 const fileInput = ref<HTMLInputElement | null>(null);
+
+const selectedIds = ref<string[]>([]);
+const tableKey = ref(0);
+
+const updateSelectedIds = (ids: string[]) => {
+    console.log("ids", ids);
+    selectedIds.value = ids;
+};
+
+const handleBatchDelete = async () => {
+    console.log("selectedIds", selectedIds.value);
+    if (selectedIds.value.length === 0) {
+        return ElMessage.warning("请选择要删除的学生个人信息");
+    }
+    try {
+        await batchDeleteUserInfo(selectedIds.value);
+        ElMessage.success("批量删除成功");
+        selectedIds.value = [];
+        tableKey.value++; // 更新 key 值以刷新组件
+    } catch (error) {
+        ElMessage.error("批量删除失败，请重试");
+    }
+};
 
 const handleFileUpload = () => {
     fileInput.value?.click();
@@ -55,7 +81,7 @@ const onFileChange = async (event: Event) => {
             const json = await response.json();
             if (json.message === "导入成功") {
                 ElMessage.success("文件上传成功！");
-                refreshKey.value += 1;
+                tableKey.value += 1;
             } else {
                 ElMessage.error("上传失败：" + json.error);
             }
@@ -65,7 +91,7 @@ const onFileChange = async (event: Event) => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "error_data.xlsx"; // 下载文件名
+            a.download = "user_info_error_data.xlsx"; // 下载文件名
             a.click();
             window.URL.revokeObjectURL(url);
             ElMessage.error("导入文件包含错误，请查看下载的错误文件！");
@@ -77,10 +103,16 @@ const onFileChange = async (event: Event) => {
     }
 };
 
-const handleExport = async () => {
+const handleExport = async (type: string) => {
+    const apiUrl = type === "database"
+        ? "http://localhost:5173/api/user-info/exportExcel"
+        : "http://localhost:5173/api/user-info/downloadStandardTemplate";
+
+    const fileName = type === "database" ? "学生个人信息.xlsx" : "学生个人信息模板.xlsx";
+
     try {
         // 发送导出请求
-        const response = await fetch("http://localhost:5173/api/user-info/exportExcel", {
+        const response = await fetch(apiUrl, {
             method: "GET",
         });
 
@@ -93,8 +125,8 @@ const handleExport = async () => {
             const link = document.createElement("a");
             link.href = url;
 
-            // 设置文件名，确保与后端导出一致
-            link.setAttribute("download", "用户信息.xlsx");
+            // 设置文件名
+            link.setAttribute("download", fileName);
             document.body.appendChild(link);
 
             // 自动触发下载
@@ -104,7 +136,7 @@ const handleExport = async () => {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
 
-            ElMessage.success("文件导出成功！");
+            ElMessage.success(`${fileName} 导出成功！`);
         } else {
             ElMessage.error("文件导出失败，请重试！");
         }
