@@ -45,6 +45,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./src/components/Sidebar.vue')['default']
     SmartEmploymentTable: typeof import('./src/components/SmartEmploymentTable.vue')['default']
+    StudentIntentionTable: typeof import('./src/components/StudentIntentionTable.vue')['default']
     TargetAudienceTable: typeof import('./src/components/TargetAudienceTable.vue')['default']
     UserDetailTable: typeof import('./src/components/UserDetailTable.vue')['default']
     UserInfoTable: typeof import('./src/components/UserInfoTable.vue')['default']

@@ -34,50 +34,27 @@
             </div>
         </el-scrollbar>
 
-        <!-- 表格数据 -->
+
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
-
                 <el-table-column type="selection" width="40" v-if="isMediumScreen" />
-
-                <el-table-column prop="id" label="序号" width="60" v-if="isMediumScreen" />
-                <el-table-column prop="displayId" label="展位号" width="120" />
-                <el-table-column prop="companyName" label="企业名称" width="120" />
-                <el-table-column prop="positionName" label="岗位名称" width="120" />
-                <el-table-column prop="hrName" label="HR" width="100" />
-                <el-table-column prop="hrPhone" label="联系电话" width="140" />
-                <el-table-column prop="majorRequirement" label="专业要求" width="160" />
-                <el-table-column prop="participantCount" label="招聘人数" width="100" />
-                <el-table-column prop="money" label="薪资待遇" width="120" />
-                <el-table-column prop="area" label="工作地点" width="160" />
-                <el-table-column prop="applicationLink" label="网申链接" width="160">
+                <el-table-column prop="name" label="学生姓名" />
+                <el-table-column prop="phone" label="学生联系方式" />
+                <el-table-column prop="companyName" label="心仪企业名称" />
+                <el-table-column prop="positionName" label="企业岗位名称" />
+                <el-table-column prop="hrPhone" label="企业联系方式" />
+                <el-table-column prop="money" label="薪资待遇" />
+                <el-table-column prop="area" label="工作地点" />
+                <el-table-column prop="createdAt" label="记录创建时间">
                     <template #default="{ row }">
-                        <a :href="row.applicationLink" target="_blank">{{ row.applicationLink }}</a>
+                        <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="additionalRequirements" label="其他要求" width="160" />
-                <el-table-column prop="companyDescription" label="企业简介" />
-
-                <!-- 操作栏 -->
-                <el-table-column label="操作" width="200" align="center">
+                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType === 'admin'">
                     <template #default="{ row }">
-                        <el-button text bg type="success" size="small" @click="toUpdateJob(row.id)"
-                            v-if="userInfo.user?.userType == 'teacher'">
-                            编辑
-                        </el-button>
-                        <el-button text bg type="danger" size="small" @click="deletion(row.id)"
-                            v-if="userInfo.user?.userType == 'teacher'">
+                        <el-button text bg type="danger" size="small" @click="deletion(row.id)">
                             删除
-                        </el-button>
-                        <el-button text bg type="success" size="small"
-                            @click="handleAddIntention(userInfo.user?.studentId!, row.id)"
-                            v-if="!interestedCompanies.includes(row.id)">
-                            感兴趣
-                        </el-button>
-                        <el-button text bg type="warning" size="small"
-                            @click="handleDeleteIntention(userInfo.user?.studentId!, row.id)" v-else>
-                            不感兴趣
                         </el-button>
                     </template>
                 </el-table-column>
@@ -95,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount, defineEmits } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 // ElConfigProvider 组件
 import { ElConfigProvider } from 'element-plus';
 // 引入中文包
@@ -106,9 +83,8 @@ import { userInfoStore } from '../stores/UserInfoStore';
 
 import router from '../router/index';
 
-import { JobSearch } from '../interfaces/JobSearch';
-import { getAllJobSearch, deleteJobSearch, searchJobSearch } from '../api/jobSearch';
-import { addStudentIntention, getStudentIntentionByStudentId, deleteStudentIntention } from '../api/studentIntention';
+import { Activity } from '../interfaces/Activity';
+import { getAllStudentIntention, deleteStudentIntention, searchStudentIntention } from '../api/studentIntention';
 import { getUserInfoById } from '../api/userInfo';
 
 
@@ -118,56 +94,51 @@ const emits = defineEmits(["selectionChange"]);
 
 const selectedIds = ref<string[]>([]);
 
+
 const filterOptions = [
-    { label: '企业名称', value: 'companyName' },
-    { label: '岗位名称', value: 'positionName' },
-    { label: 'HR', value: 'hrName' },
-    { label: '联系电话', value: 'hrPhone' },
-    { label: '专业要求', value: 'majorRequirement' },
-    { label: '招聘人数', value: 'participantCount' },
+    { label: '学生姓名', value: 'name' },
+    { label: '学生联系方式', value: 'phone' },
+    { label: '心仪企业名称', value: 'companyName' },
+    { label: '企业岗位名称', value: 'positionName' },
+    { label: '企业联系方式', value: 'hrPhone' },
     { label: '薪资待遇', value: 'money' },
     { label: '工作地点', value: 'area' },
-    { label: '网申链接', value: 'applicationLink' },
-    { label: '其他要求', value: 'additionalRequirements' },
-    { label: '企业简介', value: 'companyDescription' }
+    { label: '记录创建时间', value: 'createdAt' },
 ];
-const selectedFilter = ref('companyName');  // 默认筛选条件
+const selectedFilter = ref('name');  // 默认筛选条件
 const filterVisible = ref(false);
+
 // 使用userInfoStore
 const userInfo = userInfoStore();
 
-const interestedCompanies = ref<number[]>([]); // 存储学生感兴趣的公司ID
-
 
 const input = ref('');
-
-const tableData = ref<JobSearch[]>([]);
-
+const tableData = ref<Activity[]>([]);
 
 const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
-// const user = 'admin';
-const allData = ref<JobSearch[]>([]);
+const allData = ref<Activity[]>([]);
+const multipleSelection = ref<[]>([])
 
 // 是否搜索
 const isSearch = ref(false);
 
 let loading = ref(false);
 
-
 // 定义是否处于中等屏幕以上的状态
 const isMediumScreen = ref(false);
 
 // 更新屏幕宽度的响应式逻辑
 const updateScreenSize = () => {
+    console.log('updateScreenSize:', window.innerWidth)
     isMediumScreen.value = window.innerWidth >= 768;
+    console.log('isMediumScreen:', isMediumScreen.value)
 };
 
 onBeforeUnmount(() => {
     window.removeEventListener("resize", updateScreenSize); // 组件卸载时移除监听器
 });
-
 
 // 通过watch监听props.dateOrder的变化
 watch(() => props.dateOrder, (newVal) => {
@@ -183,18 +154,15 @@ watch(() => props.dateOrder, (newVal) => {
 });
 // 通过watch监听props.typeOrder的变化
 watch(() => props.typeOrder, (newVal) => {
-    if (newVal === "2000-5000") {
-        // 筛选出category为"2000-5000"的数据
-        tableData.value = allData.value.filter((item) => item.money === "2000-5000");
-    } else if (newVal === "5000-8000") {
-        // 筛选出category为"5000-8000"的数据
-        tableData.value = allData.value.filter((item) => item.money === "5000-8000");
-    } else if (newVal === "8000-15000") {
-        // 筛选出category为"8000-15000"的数据
-        tableData.value = allData.value.filter((item) => item.money === "8000-15000");
-    } else if (newVal === "15000以上") {
-        // 筛选出category为"15000以上"的数据
-        tableData.value = allData.value.filter((item) => item.money === "15000以上");
+    if (newVal === "招聘会") {
+        // 筛选出category为"招聘会"的数据
+        tableData.value = allData.value.filter((item) => item.category === "招聘会");
+    } else if (newVal === "宣讲会") {
+        // 筛选出category为"宣讲会"的数据
+        tableData.value = allData.value.filter((item) => item.category === "宣讲会");
+    } else if (newVal === "招聘公告") {
+        // 筛选出category为"招聘公告"的数据
+        tableData.value = allData.value.filter((item) => item.category === "招聘公告");
     } else {
         // 如果没有匹配项，则显示全部数据
         tableData.value = allData.value;
@@ -206,20 +174,7 @@ onMounted(async () => {
     await fetchTableData();
     updateScreenSize(); // 初始化时检查屏幕大小
     window.addEventListener("resize", updateScreenSize); // 监听窗口变化
-    if (userInfo?.user?.userType === "student") {
-        await fetchStudentIntention(userInfo.user.studentId);
-    }
 });
-
-// 获取学生意向
-const fetchStudentIntention = async (studentId: string) => {
-    try {
-        const { data } = await getStudentIntentionByStudentId(studentId);
-        interestedCompanies.value = data.map((item: any) => item.companyId); // 提取companyId
-    } catch (error) {
-        console.error("获取学生意向失败", error);
-    }
-};
 
 const fetchTableData = async () => {
     loading.value = true;
@@ -228,11 +183,31 @@ const fetchTableData = async () => {
         size: pageSize.value,
     };
     try {
-        const res = await getAllJobSearch(data);
+        let className = '';
+        console.log(userInfo.user?.userType);
+
+        // 判断用户类型是否为学生
+        if (userInfo.user?.userType === 'student') {
+            // 获取学生的班级名称
+            await getUserInfoById(userInfo.user?.studentId!).then((res) => {
+                className = res.data.className;
+            });
+        }
+
+        // 获取所有活动数据
+        const res = await getAllStudentIntention(data);
         loading.value = false;
         allData.value = res.data.records;
         counts.value = res.data.total;
-        tableData.value = allData.value;
+
+        // 学生端数据筛选
+        if (userInfo.user?.userType === 'student' && className) {
+            tableData.value = allData.value.filter((item: any) =>
+                item.targetAudience?.includes(className)
+            );
+        } else {
+            tableData.value = allData.value;
+        }
     } catch (error) {
         loading.value = false;
         console.error('获取数据失败:', error);
@@ -257,7 +232,7 @@ const filterData = async () => {
 
     loading.value = true;
     try {
-        const res = await searchJobSearch({
+        const res = await searchStudentIntention({
             filterField: selectedFilter.value,
             filterValue: input.value.trim(),
             page: page.value,
@@ -275,13 +250,13 @@ const filterData = async () => {
 
 const deletion = async (id: number) => {
     try {
-        await ElMessageBox.confirm('确定删除该岗位吗？', '提示', {
+        await ElMessageBox.confirm('确定删除该活动吗？', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning',
         });
 
-        await deleteJobSearch({ id });
+        await deleteStudentIntention({ id });
         ElMessage.success('删除成功');
         await fetchTableData(); // 刷新数据
     } catch (error) {
@@ -289,58 +264,6 @@ const deletion = async (id: number) => {
         ElMessage.error('删除失败');
     }
 };
-
-// 添加感兴趣
-const handleAddIntention = async (studentId: string, id: number) => {
-    try {
-        // 获取用户信息
-        const userInfoRes = (await getUserInfoById(studentId)).data;
-        if (!userInfoRes) {
-            throw new Error('未找到用户信息');
-        }
-
-        // 构造数据
-        const dataToSend = {
-            studentId: studentId,
-            companyId: id,
-            name: userInfoRes.name,
-            phone: userInfoRes.phone,
-            companyName: tableData.value[id].companyName,
-            positionName: tableData.value[id].positionName,
-            hrPhone: tableData.value[id].hrPhone,
-            money: tableData.value[id].money,
-            area: tableData.value[id].area,
-        };
-
-        // 调用添加学生意向的 API
-        const response = await addStudentIntention(dataToSend);
-        if (response.code === 200) {
-            ElMessage.success('添加成功');
-            interestedCompanies.value.push(id);
-        } else {
-            throw new Error(response.message || '添加失败');
-        }
-    } catch (error) {
-        console.error(error);
-        ElMessage.error('添加失败');
-    }
-};
-
-// 删除感兴趣
-const handleDeleteIntention = async (studentId: string, companyId: number) => {
-    try {
-        // 构造formdata数据
-        const dataToSend = new FormData();
-        dataToSend.append('studentId', studentId);
-        dataToSend.append('companyId', companyId.toString());
-        
-        await deleteStudentIntention(dataToSend);
-        interestedCompanies.value = interestedCompanies.value.filter(id => id !== companyId);
-    } catch (error) {
-        console.error("删除感兴趣失败", error);
-    }
-};
-
 
 // 处理每页显示数量变化逻辑
 const handleSizeChange = (val: number) => {
@@ -364,9 +287,9 @@ const handleSelectionChange = (selection: any[]) => {
     emits("selectionChange", selectedIds.value);
 };
 
-const toUpdateJob = (id: string) => {
-    console.log('toUpdate')
-    router.push('/updateJob-search/' + id)
+const toUpdateActivity = (id: string) => {
+    console.log('toUpdateActivity')
+    router.push('/updateActivity/' + id)
 }
 </script>
 
@@ -385,7 +308,6 @@ const toUpdateJob = (id: string) => {
     margin: 24px;
 
     .tableBar {
-        width: 100%;
         display: flex;
         justify-content: space-between;
         align-content: center;
@@ -400,7 +322,7 @@ const toUpdateJob = (id: string) => {
 
 
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
 
             input {
                 outline: none;
@@ -428,7 +350,7 @@ const toUpdateJob = (id: string) => {
 
 
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
     }
 }

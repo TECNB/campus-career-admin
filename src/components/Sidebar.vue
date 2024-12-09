@@ -119,7 +119,7 @@ const menusTeacher = [
             { label: '就业查询', path: '/employment-search' },
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
-
+            { label: '学生意向', path: '/student-intention' },
         ],
     },
     {

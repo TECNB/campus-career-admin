@@ -75,7 +75,7 @@ const onFileChange = async (event: Event) => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "activity_target_audience_error_data.xlsx"; // 下载文件名
+            a.download = "conversation_records_error_data.xlsx"; // 下载文件名
             a.click();
             window.URL.revokeObjectURL(url);
             ElMessage.error("导入文件包含错误，请查看下载的错误文件！");
@@ -92,7 +92,7 @@ const handleExport = async (type: string) => {
         ? "http://localhost:5173/api/conversation-records/exportExcel"
         : "http://localhost:5173/api/conversation-records/downloadStandardTemplate";
 
-    const fileName = type === "database" ? "活动发送人群.xlsx" : "活动发送人群模板.xlsx";
+    const fileName = type === "database" ? "谈话记录.xlsx" : "谈话记录模板.xlsx";
 
     try {
         // 发送导出请求

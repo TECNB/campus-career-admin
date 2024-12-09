@@ -47,6 +47,13 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("../views/SmartEmploymentView.vue"),
             },
             {
+                name: '学生意向',
+                path: "/student-intention",
+                component: () => import("../views/StudentIntentionView.vue"),
+            },
+
+
+            {
                 name: '就业资料库',
                 path: "/employment-database",
                 component: () => import("../views/EmploymentDatabaseView.vue"),
