@@ -74,25 +74,25 @@ const studyOptions = [
     {
         title: "大量院校改考408，考前复习刷题规划快收！",
         date: "2024-11-21",
-        image: "http://localhost:8080/pic6.png",
+        image: "http://10.248.6.72:8080/pic6.png",
         link: "https://mp.weixin.qq.com/s/Rjw1WkSB_o1gBPbqQO8YnQ", // 跳转链接
     },
     {
         title: "2025年考研时间，定了！",
         date: "2024-11-22",
-        image: "http://localhost:8080/pic7.png",
+        image: "http://10.248.6.72:8080/pic7.png",
         link: "https://mp.weixin.qq.com/s/MfL5HbNx7Dtz0UwWoH7v8g",
     },
     {
         title: "教育学333今年变动较大，不看影响复习！",
         date: "2024-11-23",
-        image: "http://localhost:8080/pic8.png",
+        image: "http://10.248.6.72:8080/pic8.png",
         link: "https://mp.weixin.qq.com/s/weSxbVDwQZ92lNmSRdu6Bg",
     },
     {
         title: "欢迎报考！浙江海洋大学2025年硕士研究生招生章程发布",
         date: "2024-11-24",
-        image: "http://localhost:8080/pic9.png",
+        image: "http://10.248.6.72:8080/pic9.png",
         link: "https://mp.weixin.qq.com/s/GwvdgN-iR_ZtsTeOO7SZpg",
     },
 ];

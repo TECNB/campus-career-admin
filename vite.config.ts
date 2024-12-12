@@ -28,7 +28,11 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
         // 显示请求代理后的真实地址
         bypass(req, res, options) {
-          const proxyUrl = new URL(req.url || "", options.target)?.href || "";
+          const url = req.url || ""; // 确保 req.url 不为 undefined
+          const rewriteFunction = options.rewrite || ((path) => path); // 确保 options.rewrite 是一个函数
+          const proxyUrl = new URL(rewriteFunction(url), options.target)?.href || "";
+          console.log("proxyUrl", proxyUrl);
+          req.headers["x-req-proxyUrl"] = proxyUrl;
           res.setHeader("x-res-proxyUrl", proxyUrl);
         },
       },

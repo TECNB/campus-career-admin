@@ -84,6 +84,20 @@
                 <el-table-column prop="dormitoryNumber" label="寝室号" />
                 <el-table-column prop="networkStatus" label="红旗网络" />
                 <el-table-column prop="dormitoryMembers" label="寝室成员名单" />
+                <el-table-column prop="email" label="电子邮箱" />
+                <el-table-column prop="qqNumber" label="QQ号码" />
+                <el-table-column prop="wechatId" label="微信号码" />
+                <el-table-column prop="douyinId" label="抖音账号" />
+                <el-table-column prop="parent1Name" label="家长1姓名" />
+                <el-table-column prop="parent1Phone" label="家长1手机号" />
+                <el-table-column prop="parent1Company" label="家长1工作单位" />
+                <el-table-column prop="parent1Job" label="家长1职业" />
+                <el-table-column prop="parent2Name" label="家长2姓名" />
+                <el-table-column prop="parent2Phone" label="家长2手机号" />
+                <el-table-column prop="parent2Company" label="家长2工作单位" />
+                <el-table-column prop="parent2Job" label="家长2职业" />
+                <el-table-column prop="emergencyContactName" label="紧急联系人姓名" />
+                <el-table-column prop="emergencyContactPhone" label="紧急联系人手机号" />
 
 
                 <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType === 'admin'">

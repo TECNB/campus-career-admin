@@ -48,7 +48,7 @@
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">上传附件：</p>
-                        <el-upload class="w-1/2" drag action="http://localhost:5173/api/activity/file" multiple
+                        <el-upload class="w-1/2" drag action="http://10.248.6.72:81/api/activity/file" multiple
                             accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.ppt,.pptx,.mp4,.avi,.mov" :file-list="fileList"
                             :on-success="handleUploadSuccess">
                             <el-icon class="el-icon--upload">

@@ -78,18 +78,6 @@
                     </div>
                 </div>
 
-                <!-- 第四行 -->
-                <div class="flex flex-1 justify-between items-center gap-10">
-                    <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">班级职务：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.classRole }}</p>
-                    </div>
-                    <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">专业方向：</p>
-                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.specialization }}</p>
-                    </div>
-                </div>
-
                 <!-- 出生日期相关 -->
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
@@ -121,6 +109,20 @@
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.ethnicity }}</p>
                     </div>
                 </div>
+
+
+                <!-- 第四行 -->
+                <div class="flex flex-1 justify-between items-center gap-10">
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">班级职务：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.classRole }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">专业方向：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.specialization }}</p>
+                    </div>
+                </div>
+
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">户口所在地：</p>
@@ -238,6 +240,79 @@
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.branchDeputySecretary }}</p>
                     </div>
                 </div>
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">电子邮箱：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.email }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">QQ号码：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.qqNumber }}</p>
+                    </div>
+                </div>
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">微信号码：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.wechatId }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">抖音账号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.douyinId }}</p>
+                    </div>
+                </div>
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <!-- 家长1信息 -->
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长1姓名：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent1Name }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长1手机号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent1Phone }}</p>
+                    </div>
+                </div>
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长1工作单位：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent1Company }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长1职业：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent1Job }}</p>
+                    </div>
+                </div>
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <!-- 家长2信息 -->
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长2姓名：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent2Name }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长2手机号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent2Phone }}</p>
+                    </div>
+                </div>
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长2工作单位：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent2Company }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">家长2职业：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent2Job }}</p>
+                    </div>
+                </div>
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <!-- 紧急联系人信息 -->
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">紧急联系人姓名：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.emergencyContactName }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">紧急联系人手机号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.emergencyContactPhone }}</p>
+                    </div>
+                </div>
             </div>
         </el-scrollbar>
     </div>
@@ -318,29 +393,24 @@ const userDetail = ref<any>({
     partyHours: '', // 党建工时
     branchSecretary: '', // 党支部书记姓名
     branchDeputySecretary: '', // 党支部副书记姓名
+    email: '',
+    qqNumber: '',
+    wechatId: '',
+    douyinId: '',
+    parent1Name: '',
+    parent1Phone: '',
+    parent1Company: '',
+    parent1Job: '',
+    parent2Name: '',
+    parent2Phone: '',
+    parent2Company: '',
+    parent2Job: '',
+    emergencyContactName: '',
+    emergencyContactPhone: '',
 });
 
 // 定义上传文件列表
 const fileList = ref<UploadFile[]>([]);
-const imageUrl = ref('')
-
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    response,
-    uploadFile
-) => {
-    imageUrl.value = URL.createObjectURL(uploadFile.raw!)
-}
-
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-    if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-        ElMessage.error('Avatar picture must be JPG/PNG format!')
-        return false
-    } else if (rawFile.size / 1024 / 1024 > 2) {
-        ElMessage.error('Avatar picture size can not exceed 2MB!')
-        return false
-    }
-    return true
-}
 
 // 初始化
 onMounted(async () => {
@@ -381,110 +451,8 @@ const resetFormFields = () => {
     fileList.value = [];
 };
 
-// 填充表单字段
-// const populateFormFields = (data: any) => {
-//     userDetail.value = data.userDetail;
-//     id.value = data.id;
-//     name.value = data.userDetail.name;
-//     gender.value = data.userDetail.gender;
-//     className.value = data.userDetail.className;
-//     studentId.value = data.userDetail.studentId;
-//     contactNumber.value = data.userDetail.contactNumber;
-//     classTeacher.value = data.userDetail.classTeacher;
-//     graduationTutor.value = data.userDetail.graduationTutor;
-//     futurePlan.value = data.futurePlan;
-//     salary.value = data.salary;
-//     companyNature.value = data.companyNature;
-//     workLocation.value = data.workLocation.split('/');
-//     employmentStatus.value = data.employmentStatus;
-//     if (employmentStatus.value !== '暂无') {
-//         companyName.value = ''
-//     } else {
-//         companyName.value = data.companyName;
-//     }
-
-// };
 const populateFormFields = (data: any) => {
     Object.assign(userDetail.value, data);
-};
-
-// 取消操作
-const handleCancel = () => {
-    ElMessage.success('取消成功');
-    if (userInfoStore().user?.userType === 'teacher') {
-        router.push('/employment-search');
-    }
-};
-
-// 添加信息
-const handleAdd = async () => {
-    loading.value = true;
-    const newData = {
-        name: name.value,
-        gender: gender.value,
-        className: className.value,
-        studentId: userInfoStore().user?.studentId,
-        contactNumber: contactNumber.value,
-        classTeacher: classTeacher.value,
-        graduationTutor: graduationTutor.value,
-        futurePlan: futurePlan.value,
-        salary: salary.value,
-        companyNature: companyNature.value,
-        workLocation: workLocation.value.join('/'),
-        employmentStatus: employmentStatus.value,
-        // 如果employmentStatus.value为暂无则companyName为空
-        companyName: employmentStatus.value === '暂无' ? '' : companyName.value,
-    };
-
-    // try {
-    //     await addEmploymentSearch(newData);
-    //     ElMessage.success('发布成功');
-    //     isEdit.value = true;
-    //     if (userInfoStore().user?.userType === 'teacher') {
-    //         router.push('/employment-search');
-    //     }
-
-    // } catch (error) {
-    //     console.error(error);
-    //     ElMessage.error('发布失败');
-    // } finally {
-    //     loading.value = false;
-    // }
-};
-
-// 编辑信息
-const handleEdit = async () => {
-    loading.value = true;
-    const updatedData = {
-        id: id.value,
-        name: name.value,
-        gender: gender.value,
-        className: className.value,
-        studentId: studentId.value,
-        contactNumber: contactNumber.value,
-        classTeacher: classTeacher.value,
-        graduationTutor: graduationTutor.value,
-        futurePlan: futurePlan.value,
-        salary: salary.value,
-        companyNature: companyNature.value,
-        workLocation: workLocation.value.join('/'),
-        employmentStatus: employmentStatus.value,
-        // 如果employmentStatus.value为暂无则companyName为空
-        companyName: employmentStatus.value === '暂无' ? '' : companyName.value,
-    };
-
-    // try {
-    //     await editEmploymentSearch(updatedData);
-    //     ElMessage.success('更新成功');
-    //     if (userInfoStore().user?.userType === 'teacher') {
-    //         router.push('/employment-search');
-    //     }
-    // } catch (error) {
-    //     console.log(error);
-    //     ElMessage.error('更新失败');
-    // } finally {
-    //     loading.value = false;
-    // }
 };
 </script>
 

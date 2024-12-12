@@ -282,7 +282,7 @@ const downloadAllAttachments = async (attachment: string[]) => {
         attachment: attachment
     };
 
-    const response = await fetch('http://localhost:5173/api/employment-database/download', {
+    const response = await fetch('http://10.248.6.72:81/api/employment-database/download', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

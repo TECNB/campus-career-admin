@@ -87,7 +87,7 @@ const handleFileChange = async (event: Event) => {
         formData.append('userId', userInfo.user?.userId || '')
 
         try {
-            const response = await fetch('http://localhost:5173/api/user-resume-interview-attachment/file', {
+            const response = await fetch('http://10.248.6.72:81/api/user-resume-interview-attachment/file', {
                 method: 'POST',
                 body: formData,
             })

@@ -76,7 +76,7 @@ const onFileChange = async (event: Event) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("http://localhost:5173/api/job-search/importExcel", {
+        const response = await fetch("http://10.248.6.72:81/api/job-search/importExcel", {
             method: "POST",
             body: formData,
         });
@@ -112,8 +112,8 @@ const onFileChange = async (event: Event) => {
 
 const handleExport = async (type: string) => {
     const apiUrl = type === "database"
-        ? "http://localhost:5173/api/job-search/exportExcel"
-        : "http://localhost:5173/api/job-search/downloadStandardTemplate";
+        ? "http://10.248.6.72:81/api/job-search/exportExcel"
+        : "http://10.248.6.72:81/api/job-search/downloadStandardTemplate";
 
     const fileName = type === "database" ? "岗位信息.xlsx" : "岗位信息模板.xlsx";
 

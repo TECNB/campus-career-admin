@@ -69,7 +69,7 @@ const onFileChange = async (event: Event) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("http://localhost:5173/api/user-info/importExcel", {
+        const response = await fetch("http://10.248.6.72:81/api/user-info/importExcel", {
             method: "POST",
             body: formData,
         });
@@ -105,8 +105,8 @@ const onFileChange = async (event: Event) => {
 
 const handleExport = async (type: string) => {
     const apiUrl = type === "database"
-        ? "http://localhost:5173/api/user-info/exportExcel"
-        : "http://localhost:5173/api/user-info/downloadStandardTemplate";
+        ? "http://10.248.6.72:81/api/user-info/exportExcel"
+        : "http://10.248.6.72:81/api/user-info/downloadStandardTemplate";
 
     const fileName = type === "database" ? "学生个人信息.xlsx" : "学生个人信息模板.xlsx";
 

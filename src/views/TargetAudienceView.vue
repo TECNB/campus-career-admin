@@ -53,7 +53,7 @@ const onFileChange = async (event: Event) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("http://localhost:5173/api/activity-target-audience/importExcel", {
+        const response = await fetch("http://10.248.6.72:81/api/activity-target-audience/importExcel", {
             method: "POST",
             body: formData,
         });
@@ -89,8 +89,8 @@ const onFileChange = async (event: Event) => {
 
 const handleExport = async (type: string) => {
     const apiUrl = type === "database"
-        ? "http://localhost:5173/api/activity-target-audience/exportExcel"
-        : "http://localhost:5173/api/activity-target-audience/downloadStandardTemplate";
+        ? "http://10.248.6.72:81/api/activity-target-audience/exportExcel"
+        : "http://10.248.6.72:81/api/activity-target-audience/downloadStandardTemplate";
 
     const fileName = type === "database" ? "活动发送人群.xlsx" : "活动发送人群模板.xlsx";
 

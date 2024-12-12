@@ -66,8 +66,7 @@
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">谈话记录：</p>
                         <!-- 跳转到/conversation-records/+router的id -->
-                        <el-button type="primary"
-                            @click="router.push('/conversation-records/' + studentId)">
+                        <el-button type="primary" @click="router.push('/conversation-records/' + studentId)">
                             查看
                         </el-button>
                     </div>
@@ -84,6 +83,40 @@
                         <el-input v-model="remarks" placeholder="请输入备注" />
                     </div>
                 </div>
+
+                <!-- 第六行 -->
+                <div class="md:flex md:flex-1 justify-between items-center gap-10">
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">上传附件：</p>
+                        <el-upload class="w-1/2" drag action="http://10.248.6.72:81/api/activity/file" multiple
+                            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.xls,.xlsx" :file-list="fileList"
+                            :on-success="handleUploadSuccess">
+                            <el-icon class="el-icon--upload">
+                                <upload-filled />
+                            </el-icon>
+                            <div class="el-upload__text">
+                                将文件拖拽在这里或<em>点击上传</em>
+                            </div>
+                            <template #tip>
+                                <div class="el-upload__tip">
+                                    支持 jpg,png,word,pdf,excel 格式文件
+                                </div>
+                            </template>
+                        </el-upload>
+                    </div>
+                </div>
+
+                <!-- 第七行 -->
+                <div class="flex flex-1 justify-between items-center gap-10" v-if="isFile">
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">下载附件：</p>
+                        <!-- 跳转到/conversation-records/+router的id -->
+                        <el-button type="primary" @click="downloadAllAttachments(attachmentList)">
+                            点击下载
+                        </el-button>
+                    </div>
+                </div>
+
             </div>
         </el-scrollbar>
     </div>
@@ -96,6 +129,7 @@ import router from '../router/index';
 import { useRoute } from 'vue-router';
 import { addSpecialGroup, getSpecialGroupById, editSpecialGroup } from '../api/specialGroup';
 import { userInfoStore } from "../stores/UserInfoStore";
+import type { UploadFile } from 'element-plus';
 
 const userInfo = userInfoStore();
 
@@ -106,6 +140,7 @@ const studentId = route.params.id as string;
 
 const isEdit = ref(false);
 const loading = ref(false);
+const isFile = ref(false);
 
 // 定义表单字段
 const id = ref('');
@@ -117,6 +152,10 @@ const supportContactPhone = ref(''); // 帮扶联系人电话
 const trackingRecord = ref(''); // 跟踪记录
 const remarks = ref(''); // 备注
 
+// 定义上传文件列表
+const fileList = ref<UploadFile[]>([]) // 上传文件列表
+const attachmentList = ref<string[]>([]); // 附件列表
+
 // 初始化
 onMounted(async () => {
     await getSpecialGroupById(route.params.id as string)
@@ -126,9 +165,11 @@ onMounted(async () => {
             // 如果不为空则填充表单字段, 如果为空则重置表单字段
             if (data) {
                 populateFormFields(data);
+                console.log("data:",data);
                 isEdit.value = true;
                 loading.value = true;
             } else {
+                console.log('data is empty');
                 isEdit.value = false;
                 resetFormFields();
             }
@@ -149,6 +190,7 @@ const resetFormFields = () => {
     supportContactPhone.value = '';
     trackingRecord.value = '';
     remarks.value = '';
+    fileList.value = [];
 };
 
 // 填充表单字段
@@ -161,6 +203,21 @@ const populateFormFields = (data: any) => {
     supportContactPhone.value = data.supportContactPhone;
     trackingRecord.value = data.trackingRecord;
     remarks.value = data.remarks;
+
+    // 将attachment数组存入fileList
+    fileList.value = data.attachment.map((data: any) => ({
+        name: data.fileName,
+        url: data.filePath,
+        uid: data.id,
+        status: 'success'
+    }));
+
+    attachmentList.value = data.attachment
+
+    // 如果attachment数组不为空，则显示下载附件按钮
+    if (data.attachment.length > 0) {
+        isFile.value = true;
+    }
 };
 
 // 取消操作
@@ -182,7 +239,11 @@ const handleAdd = async () => {
         supportContactPhone: supportContactPhone.value,
         trackingRecord: trackingRecord.value,
         remarks: remarks.value,
-        studentId: userInfo.user?.studentId
+        studentId: route.params.id,
+        attachment: fileList.value.map((file) => ({
+            fileName: file.name,       // 使用文件的名称作为 fileName
+            filePath: file.url         // 使用文件的 URL 作为 filePath
+        })),
     };
 
     try {
@@ -212,7 +273,11 @@ const handleEdit = async () => {
         supportContactPhone: supportContactPhone.value,
         trackingRecord: trackingRecord.value,
         remarks: remarks.value,
-        studentId: userInfo.user?.studentId
+        studentId: route.params.id,
+        attachment: fileList.value.map((file) => ({
+            fileName: file.name,       // 使用文件的名称作为 fileName
+            filePath: file.url         // 使用文件的 URL 作为 filePath
+        })),
     };
 
     try {
@@ -226,6 +291,52 @@ const handleEdit = async () => {
         ElMessage.error('更新失败');
     } finally {
         loading.value = false;
+    }
+};
+
+// 成功上传后的处理方法
+const handleUploadSuccess = (response: any, file: UploadFile) => {
+    if (!fileList.value.find(f => f.uid === file.uid)) {
+        fileList.value.push({
+            name: file.name,
+            url: response.data,
+            uid: file.uid,
+            status: 'success' // 添加status属性
+        })
+    }
+    console.log('handleUploadSuccess fileList:', fileList.value.map((file) => file.url))
+};
+
+const downloadAllAttachments = async (attachment: string[]) => {
+    const data = {
+        attachment: attachment
+    };
+
+    const response = await fetch('http://10.248.6.72:81/api/special-group/download', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        // 转换响应为 Blob 对象
+        const blob = await response.blob();
+
+        // 创建临时下载链接
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'attachments.zip'; // 下载文件名
+        document.body.appendChild(a);
+        a.click(); // 自动触发下载
+        a.remove(); // 移除临时元素
+
+        // 释放 URL 对象
+        window.URL.revokeObjectURL(url);
+    } else {
+        console.error('下载失败');
     }
 };
 </script>

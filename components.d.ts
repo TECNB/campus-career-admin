@@ -34,7 +34,6 @@ declare module 'vue' {
     ElUpload: typeof import('element-plus/es')['ElUpload']
     EmploymentDatabaseTable: typeof import('./src/components/EmploymentDatabaseTable.vue')['default']
     EmploymentSearchTable: typeof import('./src/components/EmploymentSearchTable.vue')['default']
-    FilterBox: typeof import('./src/components/FilterBox.vue')['default']
     FilterSection: typeof import('./src/components/FilterSection.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     JobRecommendTable: typeof import('./src/components/JobRecommendTable.vue')['default']
@@ -47,7 +46,6 @@ declare module 'vue' {
     SmartEmploymentTable: typeof import('./src/components/SmartEmploymentTable.vue')['default']
     StudentIntentionTable: typeof import('./src/components/StudentIntentionTable.vue')['default']
     TargetAudienceTable: typeof import('./src/components/TargetAudienceTable.vue')['default']
-    UserDetailTable: typeof import('./src/components/UserDetailTable.vue')['default']
     UserInfoTable: typeof import('./src/components/UserInfoTable.vue')['default']
   }
   export interface ComponentCustomProperties {

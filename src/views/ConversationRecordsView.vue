@@ -53,7 +53,7 @@ const onFileChange = async (event: Event) => {
     formData.append("file", file);
 
     try {
-        const response = await fetch("http://localhost:5173/api/conversation-records/importExcel", {
+        const response = await fetch("http://10.248.6.72:81/api/conversation-records/importExcel", {
             method: "POST",
             body: formData,
         });
@@ -89,8 +89,8 @@ const onFileChange = async (event: Event) => {
 
 const handleExport = async (type: string) => {
     const apiUrl = type === "database"
-        ? "http://localhost:5173/api/conversation-records/exportExcel"
-        : "http://localhost:5173/api/conversation-records/downloadStandardTemplate";
+        ? "http://10.248.6.72:81/api/conversation-records/exportExcel"
+        : "http://10.248.6.72:81/api/conversation-records/downloadStandardTemplate";
 
     const fileName = type === "database" ? "谈话记录.xlsx" : "谈话记录模板.xlsx";
 
