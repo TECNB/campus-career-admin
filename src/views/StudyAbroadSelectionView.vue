@@ -74,25 +74,25 @@ const studyOptions = [
     {
         title: "2025QS世界大学排名发布之后，英国前100高校留学申请有何新变化？",
         date: "2024-11-21",
-        image: "http://10.248.6.72:8080/pic1.png",
+        image: "http://10.248.6.72:8181/pic1.png",
         link: "https://mp.weixin.qq.com/s/JmSGyim7Zy7BvMXN9nNnUQ", // 跳转链接
     },
     {
         title: "25fall藤校新开项目！Cornell DSDA无G可冲",
         date: "2024-11-22",
-        image: "http://10.248.6.72:8080/pic2.jpeg",
+        image: "http://10.248.6.72:8181/pic2.jpeg",
         link: "https://www.example.com/article2",
     },
     {
         title: "2025 U.S.News 美国大学排名全新发布！",
         date: "2024-11-23",
-        image: "http://10.248.6.72:8080/pic3.jpeg",
+        image: "http://10.248.6.72:8181/pic3.jpeg",
         link: "https://www.example.com/article3",
     },
     {
         title: "2025fall英国QS排名前100院校新增硕士项目",
         date: "2024-11-24",
-        image: "http://10.248.6.72:8080/pic4.jpeg",
+        image: "http://10.248.6.72:8181/pic4.jpeg",
         link: "https://www.example.com/article4",
     },
     

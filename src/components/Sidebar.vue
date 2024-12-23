@@ -3,36 +3,34 @@
         'Sidebar rounded-none md:rounded-3xl z-[10000]',
         props.device === 'phone' ? 'fixed top-0 left-0' : ''
     ]">
-        <div class="sidebar-logo-container" v-if="props.device == 'pc'">
-            <img class="h-8" src="../assets/images/logo.png">
-            <p>数智就业</p>
+        <div class="sidebar-logo-container" v-if="props.device === 'pc'">
+            <img class="h-8" src="../assets/images/logo.png" />
+            <p>数智学工</p>
         </div>
         <el-scrollbar height="90%">
             <ul>
-                <!-- 遍历菜单项 -->
                 <li v-for="(menu, index) in menus" :key="index">
-                    <div class="menu-item" @click="selectMenu(index, menu.children, menu.path!)"
-                        :class="{ 'active-menu': selectedMenu === index }">
-                        <el-icon color="#3E8CFF" v-if="selectedMenu === index">
-                            <component :is="menu.icon"></component>
-                        </el-icon>
-                        <el-icon v-else>
-                            <component :is="menu.icon"></component>
-                        </el-icon>
-                        <p>{{ menu.label }}</p>
-                        <!-- 如果有子菜单，显示箭头 -->
+                    <div class="menu-item" @click="selectMenu(index, menu)"
+                        :class="{ 'active-menu': selectedMenu === index && !menu.children }">
+                        <div class="flex justify-start items-center gap-2">
+                            <el-icon color="#3E8CFF" v-if="selectedMenu === index">
+                                <component :is="menu.icon" />
+                            </el-icon>
+                            <el-icon v-else>
+                                <component :is="menu.icon" />
+                            </el-icon>
+                            <p>{{ menu.label }}</p>
+                        </div>
+
                         <el-icon v-if="menu.children" class="ml-7">
-                            <ArrowDownBold v-if="!ifShowSubMenu" />
+                            <ArrowDownBold v-if="!menu.isOpen" />
                             <ArrowUpBold v-else />
                         </el-icon>
-
                     </div>
-                    <!-- 如果有子菜单，渲染子菜单 -->
-                    <ul v-if="menu.children && ifShowSubMenu">
+                    <ul v-if="menu.children && menu.isOpen">
                         <li v-for="(child, childIndex) in menu.children" :key="childIndex">
-                            <div class="menu-item child-menu"
-                                @click="selectSubMenu(index, childIndex, menu.children[childIndex].path!)"
-                                :class="{ 'active-menu': selectedSubMenu === childIndex }">
+                            <div class="menu-item child-menu" @click="selectSubMenu(index, childIndex, child.path!)"
+                                :class="{ 'active-menu': menu.selectedSubMenu === childIndex }">
                                 <p class="ml-6">{{ child.label }}</p>
                             </div>
                         </li>
@@ -44,33 +42,40 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getEmploymentSearchByUserId } from '../api/employmentSearch';
-
-// 引入userInfoStore
 import { userInfoStore } from '../stores/UserInfoStore';
+import { ArrowDownBold, ArrowUpBold } from '@element-plus/icons-vue';
 
-// 使用userInfoStore
-const userInfo = userInfoStore();
-
-// 实例化router
-const router = useRouter();
-const route = useRoute();
-
-// props device
 const props = defineProps({
     device: String,
 });
 
+// 获取用户信息
+const userInfo = userInfoStore();
+const router = useRouter();
+const route = useRoute();
+
+// 选中的菜单索引
 const selectedMenu = ref<number | null>(0);
 const selectedSubMenu = ref<number | null>(null);
-// ifShowSubMenu
-const ifShowSubMenu = ref<boolean>(false);
 
-let menus: any = [];
+// 菜单数据
+const menus = ref<any[]>([]);
 
-const menusStudent = [
+// 为菜单添加 `isOpen` 属性
+const addOpenProperty = (menus: any[]): any[] => {
+    return menus.map(menu => {
+        const updatedMenu = { ...menu, isOpen: false, selectedSubMenu: null }; // 新增 selectedSubMenu
+        if (menu.children) {
+            updatedMenu.children = addOpenProperty(menu.children); // 递归处理子菜单
+        }
+        return updatedMenu;
+    });
+};
+
+// 学生菜单
+const menusStudent = addOpenProperty([
     {
         label: '职场引航',
         icon: 'School',
@@ -82,14 +87,12 @@ const menusStudent = [
             { label: '岗位智匹', path: '/job-recommend' },
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
-
         ],
     },
     {
         label: '研途领航',
         icon: 'List',
         path: '/graduate-navigation',
-
     },
     {
         label: '留学智选',
@@ -99,18 +102,25 @@ const menusStudent = [
     {
         label: '就业资料库',
         icon: 'Collection',
-        path: '/employment-database'
+        path: '/employment-database',
     },
     {
         label: '个人信息',
         icon: 'User',
-        path: '/updateUser-info/' + + userInfo.user!.studentId
+        path: '/updateUser-info/' + userInfo.user!.studentId,
     },
-];
+]);
 
-const menusTeacher = [
+// 教师菜单
+
+const menusTeacher = addOpenProperty([
     {
-        label: '职场引航',
+        label: '学生个人信息',
+        icon: 'User',
+        path: '/user-info',
+    },
+    {
+        label: '数智就业',
         icon: 'School',
         path: '/',
         children: [
@@ -120,32 +130,38 @@ const menusTeacher = [
             { label: '岗位搜索', path: '/job-search' },
             { label: '智能就业', path: '/smart-employment' },
             { label: '学生意向', path: '/student-intention' },
+            { label: '研途领航', path: '/graduate-navigation' },
+            { label: '留学智选', path: '/study-abroad-selection' },
+            { label: '就业资料库', path: '/employment-database' },
+        ],
+    },
+
+    {
+        label: '导师项目库',
+        icon: 'Files',
+        path: '/extracurricular-tutors',
+        children: [
+            { label: '导师库', path: '/tutor-database' },
+            { label: '项目库', path: '/project-database' },
+            { label: '项目负责人', path: '/project-leaders' },
         ],
     },
     {
-        label: '研途领航',
-        icon: 'List',
-        path: '/graduate-navigation',
-
-    },
-    {
-        label: '留学智选',
-        icon: 'WindPower',
-        path: '/study-abroad-selection',
-    },
-    {
-        label: '就业资料库',
+        label: '学生工作',
         icon: 'Collection',
-        path: '/employment-database'
+        path: '/student-affairs',
+        children: [
+            { label: '年级事务', path: '/grade-affairs' },
+            { label: '各类证明&模板', path: '/certificates-templates' },
+            { label: '专项事务', path: '/special-affairs' },
+            { label: '工作计划与总结', path: '/work-plans-summaries' },
+            { label: '急先锋', path: '/pioneers' },
+        ],
     },
-    {
-        label: '个人信息登记',
-        icon: 'User',
-        path: '/user-info'
-    },
-];
+]);
 
-const menusAdmin = [
+// 管理员菜单
+const menusAdmin = addOpenProperty([
     {
         label: '职场引航',
         icon: 'School',
@@ -155,65 +171,50 @@ const menusAdmin = [
             { label: '活动地点', path: '/activity-place' },
             { label: '发送人群', path: '/activity-target-audience' },
             { label: '智能就业', path: '/smart-employment' },
-
         ],
     },
-];
-console.log(userInfo.user?.username)
+]);
+
+// 设置用户的菜单
 if (userInfo.user?.userType === 'student') {
-    menus = menusStudent;
+    menus.value = menusStudent;
 } else if (userInfo.user?.userType === 'teacher') {
-    menus = menusTeacher;
+    menus.value = menusTeacher;
 } else {
-    menus = menusAdmin;
+    menus.value = menusAdmin;
 }
 
-
-onMounted(async () => {
-    // 初始化选中的菜单
-    const index = menus.findIndex((menu: any) => menu.path === route.path);
+// 初始化选中的菜单
+onMounted(() => {
+    const index = menus.value.findIndex(menu => menu.path === route.path);
     if (index !== -1) {
         selectedMenu.value = index;
     }
-    console.log("selectedMenu:" + selectedMenu.value)
 });
 
-
-const toggleSubMenu = () => {
-    // 翻转子菜单的显示状态
-    ifShowSubMenu.value = !ifShowSubMenu.value;
-    if (ifShowSubMenu.value) {
-        selectedSubMenu.value = 0; // 清除子菜单的选中状态
-    }
-};
-
-
-const selectMenu = (index: number, ifChildren: any, path: string) => {
-    if (!ifChildren) {
-        selectedMenu.value = index;
-        selectedSubMenu.value = null; // 清除子菜单的选中状态
-        router.push(path)
-
+// 切换主菜单
+const selectMenu = (index: number, menu: any) => {
+    if (menu.children) {
+        menus.value[index].isOpen = !menus.value[index].isOpen;
     } else {
-        selectedMenu.value = null;
-        selectedSubMenu.value = 0; // 清除子菜单的选中状态
-        router.push(menus[index].children![0].path!);
-        toggleSubMenu();
-
+        selectedMenu.value = index;
+        selectedSubMenu.value = null;
+        router.push(menu.path);
     }
-
 };
 
+// 切换子菜单
 const selectSubMenu = (parentIndex: number, childIndex: number, path: string) => {
-    console.log("parentIndex:" + parentIndex)
-    router.push(path)
-
-    selectedMenu.value = null;
-    selectedSubMenu.value = childIndex;
+    menus.value.forEach((menu, index) => {
+        if (index === parentIndex) {
+            menu.selectedSubMenu = childIndex; // 设置当前父菜单的子菜单选中状态
+        } else {
+            menu.selectedSubMenu = null; // 重置其他父菜单的子菜单选中状态
+        }
+    });
+    selectedMenu.value = parentIndex;
+    router.push(path);
 };
-
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -240,6 +241,7 @@ const selectSubMenu = (parentIndex: number, childIndex: number, path: string) =>
     .menu-item {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 12px;
 
 
@@ -261,7 +263,7 @@ const selectSubMenu = (parentIndex: number, childIndex: number, path: string) =>
         }
 
         &.active-menu {
-            border-radius: 20px;
+            border-radius: 16px;
             background: var(--primary-100);
 
 
@@ -272,13 +274,8 @@ const selectSubMenu = (parentIndex: number, childIndex: number, path: string) =>
             // 定义子菜单的样式
             &.active-menu {
                 background: var(--primary-100);
-
             }
         }
-
-
     }
-
-
 }
 </style>

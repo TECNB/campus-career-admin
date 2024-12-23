@@ -4,13 +4,11 @@
             <div class="flex justify-between content-center px-7 pt-7">
                 <p class="md:text-4xl font-extrabold text-3xl">个人信息查看</p>
                 <FilterSection :typeOrder="typeOrder" :dateOrder="dateOrder" :typeOptions="[]"
-                    :dateOptions="['日期倒序', '日期正序']" :showAddButton="userInfo.user?.userType === 'teacher'"
-                    addLabel="发布学生资料" :showImportButton="userInfo.user?.userType === 'teacher'" importLabel="表格导入"
-                    :showExportButton="userInfo.user?.userType === 'teacher'" exportLabel="导出表格"
+                    :dateOptions="['日期倒序', '日期正序']" :showImportButton="userInfo.user?.userType === 'teacher'"
+                    importLabel="表格导入" :showExportButton="userInfo.user?.userType === 'teacher'" exportLabel="导出表格"
                     :showBatchDeleteButton="userInfo.user?.userType === 'teacher'" batchDeleteLabel="批量删除"
                     @update:typeOrder="typeOrder = $event" @update:dateOrder="dateOrder = $event"
-                    @add="toUpdate('create')" @import="handleFileUpload" @export="handleExport"
-                    @batchDelete="handleBatchDelete" />
+                    @import="handleFileUpload" @export="handleExport" @batchDelete="handleBatchDelete" />
             </div>
             <UserInfoTable :key="tableKey" :dateOrder="dateOrder" :typeOrder="typeOrder"
                 @selectionChange="updateSelectedIds" />
@@ -144,10 +142,6 @@ const handleExport = async (type: string) => {
         console.error("导出过程中出现错误：", error);
         ElMessage.error("导出过程中出现错误！");
     }
-};
-
-const toUpdate = (id: string) => {
-    router.push("/updateUser-info/" + id);
 };
 </script>
 

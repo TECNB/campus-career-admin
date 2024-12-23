@@ -1,10 +1,10 @@
 <template>
     <div class="IndexView flex p-0 md:p-5">
         <!-- 仅在大屏幕上显示 sidebar (大于md) -->
-        <div class="min-w-52 hidden md:block">
+        <div class="hidden md:block md:min-w-[16%]">
             <Sidebar device="pc"/>
         </div>
-        <div class="md:w-[86%] w-full h-full">
+        <div class="md:max-w-[85%] w-full h-full">
             <div class="">
                 <Header />
             </div>

@@ -38,10 +38,16 @@
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
-                <el-table-column type="selection" width="40" v-if="isMediumScreen" />
+                <el-table-column label="操作" width="60" align="start" v-if="userInfo.user?.userType === 'teacher'">
+                    <template #default="{ row }">
+                        <el-button text bg type="success" size="small" @click="toUpdateUserInfo(row.studentId)">
+                            查看
+                        </el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="name" label="姓名" />
                 <el-table-column prop="gender" label="性别" />
-                <el-table-column prop="politicalStatus" label="政治面貌" width="140">
+                <el-table-column prop="politicalStatus" label="政治面貌" width="170">
                     <template #default="{ row }">
                         <span>{{ row.politicalStatus }}</span>
                         <el-button v-if="row.politicalStatus !== '群众'" type="primary" size="small" class="ml-3"
@@ -100,16 +106,7 @@
                 <el-table-column prop="emergencyContactPhone" label="紧急联系人手机号" />
 
 
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType === 'admin'">
-                    <template #default="{ row }">
-                        <el-button text bg type="success" size="small" @click="toUpdateActivity(row.id)">
-                            编辑
-                        </el-button>
-                        <el-button text bg type="danger" size="small" @click="deletion(row.id)">
-                            删除
-                        </el-button>
-                    </template>
-                </el-table-column>
+
             </el-table>
         </el-scrollbar>
 
@@ -343,9 +340,9 @@ const handleSelectionChange = (selection: any[]) => {
     selectedIds.value = selection.map((item) => item.id);
     emits("selectionChange", selectedIds.value);
 };
-const toUpdateActivity = (id: string) => {
-    console.log('toUpdateActivity')
-    router.push('/updateUser-detail/' + id)
+const toUpdateUserInfo = (id: string) => {
+    console.log('toUpdateUserInfo')
+    router.push('/updateUser-info/' + id)
 }
 </script>
 

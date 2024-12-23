@@ -134,16 +134,47 @@ const routes: Array<RouteRecordRaw> = [
                 path: "/updateActivity-target-audience/:id",
                 component: () => import("../views/UpdateTargetAudienceView.vue"),
             },
-            // {
-            //     name:'设置',
-            //     path: "/setting",
-            //     component: () => import("../views/SettingView.vue"),
-            // },
-            // {
-            //     name:'设置',
-            //     path: "/setting",
-            //     component: () => import("../views/SettingView.vue"),
-            // },
+
+            {
+                name: '导师库',
+                path: '/tutor-database',
+                component: () => import("../views/TutorDatabaseView.vue"),
+            },
+            {
+                name: '项目库',
+                path: '/project-database',
+                component: () => import("../views/ProjectDatabaseView.vue"),
+            },
+            {
+                name: '项目负责人',
+                path: '/project-leaders',
+                component: () => import("../views/ProjectLeadersView.vue"),
+            },
+            {
+                name: '年级事务',
+                path: '/grade-affairs',
+                component: () => import("../views/GradeAffairsView.vue"),
+            },
+            {
+                name: '各类证明&模板',
+                path: '/certificates-templates',
+                component: () => import("../views/CertificatesTemplatesView.vue"),
+            },
+            {
+                name: '专项事务',
+                path: '/special-affairs',
+                component: () => import("../views/SpecialAffairsView.vue"),
+            },
+            {
+                name: '工作计划与总结',
+                path: '/work-plans-summaries',
+                component: () => import("../views/WorkPlansSummariesView.vue"),
+            },
+            {
+                name: '急先锋',
+                path: '/pioneers',
+                component: () => import("../views/PioneersView.vue"),
+            },
         ],
     },
     {
