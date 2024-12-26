@@ -7,20 +7,27 @@
                     :dateOptions="['日期倒序', '日期正序']" :showImportButton="userInfo.user?.userType === 'teacher'"
                     importLabel="表格导入" :showExportButton="userInfo.user?.userType === 'teacher'" exportLabel="导出表格"
                     :showBatchDeleteButton="userInfo.user?.userType === 'teacher'" batchDeleteLabel="批量删除"
-                    @update:typeOrder="typeOrder = $event" @update:dateOrder="dateOrder = $event"
-                    @import="handleFileUpload" @export="handleExport" @batchDelete="handleBatchDelete" />
+                    @update:typeOrder="typeOrder = $event" @update:dateOrder="dateOrder = $event" @import="handleImport"
+                    @export="handleExport" @batchDelete="handleBatchDelete" />
             </div>
             <UserInfoTable :key="tableKey" :dateOrder="dateOrder" :typeOrder="typeOrder"
                 @selectionChange="updateSelectedIds" />
             <!-- 隐藏的文件输入框 -->
             <input type="file" ref="fileInput" @change="onFileChange" accept=".xls, .xlsx" style="display: none" />
+
+
         </el-scrollbar>
     </div>
+    <!-- 引入 ImportBox 组件 -->
+    <ImportBox :ifShow="showImportBox" @updateIfShow="updateIfShow" />
+    <MaskLayer :ifShow="showImportBox" @updateIfShow="updateIfShow" />
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import router from "../router";
+import ImportBox from "../components/ImportBox.vue";
+import MaskLayer from "../components/MaskLayer.vue";
 import { userInfoStore } from "../stores/UserInfoStore";
 import UserInfoTable from "../components/UserInfoTable.vue";
 import { batchDeleteUserInfo } from "../api/userInfo";
@@ -33,6 +40,9 @@ const fileInput = ref<HTMLInputElement | null>(null);
 
 const selectedIds = ref<string[]>([]);
 const tableKey = ref(0);
+
+// 控制 PayBox 显示状态的变量
+const showImportBox = ref(false);
 
 const updateSelectedIds = (ids: string[]) => {
     console.log("ids", ids);
@@ -54,8 +64,14 @@ const handleBatchDelete = async () => {
     }
 };
 
-const handleFileUpload = () => {
-    fileInput.value?.click();
+const handleImport = () => {
+    showImportBox.value = true; // 显示 PayBox
+    // fileInput.value?.click();
+};
+
+// 处理显示状态的更新方法
+const updateIfShow = (value: boolean) => {
+    showImportBox.value = value;
 };
 
 const onFileChange = async (event: Event) => {

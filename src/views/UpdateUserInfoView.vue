@@ -1,31 +1,10 @@
 <template>
-    <div class="AccountView">
+    <div class="h-full">
 
-        <div class="header">
-            <div class="title">
-                <p class="md:text-4xl font-extrabold text-2xl">个人信息登记详情</p>
-            </div>
-            <div class="FilterSection">
-                <!-- <div class="FilterBox p-2 md:p-3" @click="handleCancel">
-                    <el-icon>
-                        <Close />
-                    </el-icon>
-                    <p>取消</p>
-                </div>
-
-                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
-                    <el-icon>
-                        <Plus />
-                    </el-icon>
-                    <p>确定</p>
-                </div>
-                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
-                    <el-icon>
-                        <Plus />
-                    </el-icon>
-                    <p>更新</p>
-                </div> -->
-
+        <div class="flex justify-center items-center px-8">
+            <div class="h-full">
+                <p class="md:text-4xl font-extrabold text-2xl" v-if="userInfo.user?.userType == 'student'">个人信息登记详情</p>
+                <p class="md:text-4xl font-extrabold text-2xl text-center" v-if="userInfo.user?.userType == 'teacher'">{{ userDetail.name }}学生信息表</p>
             </div>
         </div>
         <el-scrollbar height="90%">
@@ -331,6 +310,7 @@ import type { UploadProps } from 'element-plus'
 import { addUserInfo, getUserInfoById, editUserInfo } from '../api/userInfo';
 import type { UploadFile } from 'element-plus';
 import { userInfoStore } from "../stores/UserInfoStore";
+const userInfo = userInfoStore();
 
 // 是否为修改模式
 const route = useRoute();
@@ -465,62 +445,6 @@ const populateFormFields = (data: any) => {
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
-}
-
-.AccountView {
-    height: 100%;
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-content: center;
-
-        padding: 30px 30px 0 30px;
-
-        .FilterSection {
-            display: flex;
-            justify-content: center;
-            align-content: center;
-            gap: 10px;
-
-            .FilterBox:nth-child(1) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-
-                color: rgba(63, 140, 255, 1);
-                border: 1px solid rgba(63, 140, 255, 1);
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-                border-radius: 12px;
-                cursor: pointer;
-
-
-                margin-bottom: 20px;
-            }
-
-            .FilterBox:nth-child(2) {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                gap: 10px;
-
-
-
-                color: white;
-                background: rgba(63, 140, 255, 1);
-                box-shadow: 0px 6px 12px rgba(63, 140, 255, 0.26);
-                border-radius: 12px;
-                cursor: pointer;
-
-
-                margin-bottom: 20px;
-            }
-        }
-
-
-
-    }
 }
 
 // 下面为el-select部分

@@ -58,7 +58,6 @@ const route = useRoute();
 
 // 选中的菜单索引
 const selectedMenu = ref<number | null>(0);
-const selectedSubMenu = ref<number | null>(null);
 
 // 菜单数据
 const menus = ref<any[]>([]);
@@ -137,7 +136,7 @@ const menusTeacher = addOpenProperty([
     },
 
     {
-        label: '导师项目库',
+        label: '智汇竞赛',
         icon: 'Files',
         path: '/extracurricular-tutors',
         children: [
@@ -147,7 +146,7 @@ const menusTeacher = addOpenProperty([
         ],
     },
     {
-        label: '学生工作',
+        label: '学工百事通',
         icon: 'Collection',
         path: '/student-affairs',
         children: [
@@ -198,7 +197,9 @@ const selectMenu = (index: number, menu: any) => {
         menus.value[index].isOpen = !menus.value[index].isOpen;
     } else {
         selectedMenu.value = index;
-        selectedSubMenu.value = null;
+        menus.value.forEach((menu) => {
+            menu.selectedSubMenu = null; // 重置其他父菜单的子菜单选中状态
+        });
         router.push(menu.path);
     }
 };
