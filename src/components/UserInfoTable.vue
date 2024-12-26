@@ -38,7 +38,7 @@
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
-                <el-table-column label="操作" width="60" align="start" v-if="userInfo.user?.userType === 'teacher'">
+                <el-table-column label="详情" width="60" align="start" v-if="userInfo.user?.userType === 'teacher'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdateUserInfo(row.studentId)">
                             查看

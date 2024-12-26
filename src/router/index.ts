@@ -136,6 +136,11 @@ const routes: Array<RouteRecordRaw> = [
             },
 
             {
+                name: '竞赛介绍',
+                path: '/competition-introduction',
+                component: () => import("../views/CompetitionIntroductionView.vue"),
+            },
+            {
                 name: '导师库',
                 path: '/tutor-database',
                 component: () => import("../views/TutorDatabaseView.vue"),

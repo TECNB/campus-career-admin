@@ -119,7 +119,7 @@ const menusTeacher = addOpenProperty([
         path: '/user-info',
     },
     {
-        label: '数智就业',
+        label: '智慧就业',
         icon: 'School',
         path: '/',
         children: [
@@ -140,9 +140,11 @@ const menusTeacher = addOpenProperty([
         icon: 'Files',
         path: '/extracurricular-tutors',
         children: [
+            { label: '竞赛介绍', path: '/competition-introduction' },
             { label: '导师库', path: '/tutor-database' },
             { label: '项目库', path: '/project-database' },
             { label: '项目负责人', path: '/project-leaders' },
+
         ],
     },
     {
