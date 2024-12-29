@@ -114,12 +114,12 @@ const menusStudent = addOpenProperty([
 
 const menusTeacher = addOpenProperty([
     {
-        label: '学生个人信息',
+        label: '学生管理',
         icon: 'User',
         path: '/user-info',
     },
     {
-        label: '智慧就业',
+        label: '就业管理',
         icon: 'School',
         path: '/',
         children: [
@@ -136,7 +136,7 @@ const menusTeacher = addOpenProperty([
     },
 
     {
-        label: '智汇竞赛',
+        label: '竞赛管理',
         icon: 'Files',
         path: '/extracurricular-tutors',
         children: [
@@ -148,7 +148,7 @@ const menusTeacher = addOpenProperty([
         ],
     },
     {
-        label: '学工百事通',
+        label: '学工资料',
         icon: 'Collection',
         path: '/student-affairs',
         children: [
@@ -156,8 +156,13 @@ const menusTeacher = addOpenProperty([
             { label: '各类证明&模板', path: '/certificates-templates' },
             { label: '专项事务', path: '/special-affairs' },
             { label: '工作计划与总结', path: '/work-plans-summaries' },
-            { label: '急先锋', path: '/pioneers' },
+            { label: '避雷针', path: '/pioneers' },
         ],
+    },
+    {
+        label: 'AI辅导员',
+        icon: 'Collection',
+        path: '/ai-counselor',
     },
 ]);
 

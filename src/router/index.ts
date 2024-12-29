@@ -176,9 +176,15 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import("../views/WorkPlansSummariesView.vue"),
             },
             {
-                name: '急先锋',
+                name: '避雷针',
                 path: '/pioneers',
                 component: () => import("../views/PioneersView.vue"),
+            },
+
+            {
+                name: 'AI辅导员',
+                path: '/ai-counselor',
+                component: () => import('../views/AICounselorView.vue'), 
             },
         ],
     },

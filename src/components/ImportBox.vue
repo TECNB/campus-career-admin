@@ -1,6 +1,6 @@
 <template>
     <div
-        class="w-[30%] absolute z-[99999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 shadow-lg">
+        class="w-[30%] absolute z-[99999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 shadow-lg" v-if="props.ifShow">
         <div class="flex justify-between items-center text-[#1d1c1c] text-xl font-semibold border-b pb-4">
             <p>导入须知</p>
             <div class="cursor-pointer" @click="toggleVisibility">
