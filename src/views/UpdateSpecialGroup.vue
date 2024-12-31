@@ -10,20 +10,13 @@
                     <el-icon>
                         <Close />
                     </el-icon>
-                    <p>取消</p>
+                    <p>返回</p>
                 </div>
-
-                <div class="FilterBox p-2 md:p-3" v-if="!isEdit" @click="handleAdd">
+                <div class="FilterBox p-2 md:p-3" @click="handleAdd">
                     <el-icon>
                         <Plus />
                     </el-icon>
                     <p>确定</p>
-                </div>
-                <div class="FilterBox p-2 md:p-3" v-else @click="handleEdit">
-                    <el-icon>
-                        <Plus />
-                    </el-icon>
-                    <p>更新</p>
                 </div>
             </div>
         </div>
@@ -33,11 +26,11 @@
                 <div class="flex flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">主要问题：</p>
-                        <el-input v-model="mainProblem" placeholder="请输入主要问题" />
+                        <p class="text-xl font-bold whitespace-nowrap">{{ mainProblem }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">并存问题：</p>
-                        <el-input v-model="coexistingProblem" placeholder="请输入并存问题" />
+                        <p class="text-xl font-bold whitespace-nowrap">{{ coexistingProblem }}</p>
                     </div>
                 </div>
 
@@ -45,7 +38,7 @@
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-start mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">问题简述：</p>
-                        <el-input v-model="problemDescription" placeholder="请输入问题简述" :rows="5" type="textarea" />
+                        <p class="text-xl font-bold whitespace-nowrap">{{ problemDescription }}</p>
                     </div>
                 </div>
 
@@ -53,11 +46,11 @@
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">帮扶联系人：</p>
-                        <el-input v-model="supportContact" placeholder="请输入帮扶联系人姓名" />
+                        <p class="text-xl font-bold whitespace-nowrap">{{ supportContact }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center mt-4 md:mt-0">
                         <p class="text-xl font-bold whitespace-nowrap">帮扶联系人电话：</p>
-                        <el-input v-model="supportContactPhone" placeholder="请输入帮扶联系人电话" />
+                        <p class="text-xl font-bold whitespace-nowrap">{{ supportContactPhone }}</p>
                     </div>
                 </div>
 
@@ -72,7 +65,9 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">跟踪记录：</p>
-                        <el-input v-model="trackingRecord" placeholder="请输入跟踪记录" />
+                        <p class="text-xl font-bold whitespace-nowrap" v-if="trackingRecord !== null">{{ trackingRecord }}
+                        </p>
+                        <p class="text-xl font-bold whitespace-nowrap" v-else>无</p>
                     </div>
                 </div>
 
@@ -80,7 +75,8 @@
                 <div class="md:flex md:flex-1 justify-between items-center gap-10">
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">备注：</p>
-                        <el-input v-model="remarks" placeholder="请输入备注" />
+                        <p class="text-xl font-bold whitespace-nowrap" v-if="remarks !== null">{{ remarks }}</p>
+                        <p class="text-xl font-bold whitespace-nowrap" v-else>无</p>
                     </div>
                 </div>
 
@@ -128,6 +124,7 @@ import { ElMessage } from 'element-plus';
 import router from '../router/index';
 import { useRoute } from 'vue-router';
 import { addSpecialGroup, getSpecialGroupById, editSpecialGroup } from '../api/specialGroup';
+import { getUserInfoById } from '../api/userInfo';
 import { userInfoStore } from "../stores/UserInfoStore";
 import type { UploadFile } from 'element-plus';
 
@@ -138,7 +135,6 @@ const route = useRoute();
 // 获取路由参数
 const studentId = route.params.id as string;
 
-const isEdit = ref(false);
 const loading = ref(false);
 const isFile = ref(false);
 
@@ -158,27 +154,45 @@ const attachmentList = ref<string[]>([]); // 附件列表
 
 // 初始化
 onMounted(async () => {
-    await getSpecialGroupById(route.params.id as string)
+    await getUserInfoById(route.params.id as string)
         .then((res) => {
             const data = res.data;
 
             // 如果不为空则填充表单字段, 如果为空则重置表单字段
             if (data) {
                 populateFormFields(data);
-                console.log("data:",data);
-                isEdit.value = true;
+                console.log("data:", data);
                 loading.value = true;
             } else {
                 console.log('data is empty');
-                isEdit.value = false;
                 resetFormFields();
             }
-
-            loading.value = false;
         })
         .catch((err) => {
             console.log(err);
         });
+    await getSpecialGroupById(route.params.id as string).then((res) => {
+        const data = res.data;
+        if (data) {
+            // 将attachment数组存入fileList
+            fileList.value = data.attachment.map((data: any) => ({
+                name: data.fileName,
+                url: data.filePath,
+                uid: data.id,
+                status: 'success'
+            }));
+
+            attachmentList.value = data.attachment
+
+            // 如果attachment数组不为空，则显示下载附件按钮
+            if (data.attachment.length > 0) {
+                isFile.value = true;
+            }
+        } else {
+            console.log('data is empty');
+        }
+        loading.value = false;
+    })
 });
 
 // 重置表单字段
@@ -203,21 +217,6 @@ const populateFormFields = (data: any) => {
     supportContactPhone.value = data.supportContactPhone;
     trackingRecord.value = data.trackingRecord;
     remarks.value = data.remarks;
-
-    // 将attachment数组存入fileList
-    fileList.value = data.attachment.map((data: any) => ({
-        name: data.fileName,
-        url: data.filePath,
-        uid: data.id,
-        status: 'success'
-    }));
-
-    attachmentList.value = data.attachment
-
-    // 如果attachment数组不为空，则显示下载附件按钮
-    if (data.attachment.length > 0) {
-        isFile.value = true;
-    }
 };
 
 // 取消操作
@@ -232,13 +231,6 @@ const handleCancel = () => {
 const handleAdd = async () => {
     loading.value = true;
     const newData = {
-        mainProblem: mainProblem.value,
-        coexistingProblem: coexistingProblem.value,
-        problemDescription: problemDescription.value,
-        supportContact: supportContact.value,
-        supportContactPhone: supportContactPhone.value,
-        trackingRecord: trackingRecord.value,
-        remarks: remarks.value,
         studentId: route.params.id,
         attachment: fileList.value.map((file) => ({
             fileName: file.name,       // 使用文件的名称作为 fileName
@@ -247,48 +239,14 @@ const handleAdd = async () => {
     };
 
     try {
-        await addSpecialGroup(newData);
+        await editSpecialGroup(newData);
         ElMessage.success('添加成功');
-        isEdit.value = true;
         if (userInfoStore().user?.userType === 'teacher') {
             router.push('/user-info');
         }
     } catch (error) {
         console.error(error);
         ElMessage.error('添加失败');
-    } finally {
-        loading.value = false;
-    }
-};
-
-// 编辑信息
-const handleEdit = async () => {
-    loading.value = true;
-    const updatedData = {
-        id: id.value,
-        mainProblem: mainProblem.value,
-        coexistingProblem: coexistingProblem.value,
-        problemDescription: problemDescription.value,
-        supportContact: supportContact.value,
-        supportContactPhone: supportContactPhone.value,
-        trackingRecord: trackingRecord.value,
-        remarks: remarks.value,
-        studentId: route.params.id,
-        attachment: fileList.value.map((file) => ({
-            fileName: file.name,       // 使用文件的名称作为 fileName
-            filePath: file.url         // 使用文件的 URL 作为 filePath
-        })),
-    };
-
-    try {
-        await editSpecialGroup(updatedData);
-        ElMessage.success('更新成功');
-        if (userInfoStore().user?.userType === 'teacher') {
-            router.push('/user-info');
-        }
-    } catch (error) {
-        console.log(error);
-        ElMessage.error('更新失败');
     } finally {
         loading.value = false;
     }

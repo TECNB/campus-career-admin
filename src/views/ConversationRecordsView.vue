@@ -10,21 +10,24 @@
                     :dateOptions="['日期倒序', '日期正序']"
                     :showAddButton="userInfo.user?.userType === 'admin'"
                     addLabel="发布学生资料"
+                    :showBatchDeleteButton="userInfo.user?.userType === 'teacher'" batchDeleteLabel="批量删除"
                     :showImportButton="userInfo.user?.userType === 'teacher'"
                     importLabel="表格导入"
                     :showExportButton="userInfo.user?.userType === 'teacher'" 
                     exportLabel="导出表格" 
                     @update:typeOrder="typeOrder = $event" @update:dateOrder="dateOrder = $event"
                     @add="toUpdate('create')"
-                    @import="handleFileUpload"
+                    @batchDelete="handleBatchDelete"
+                    @import="handleImport"
                     @export="handleExport"
                 />
             </div>
-            <ConversationRecordsTable :key="tableKey" :dateOrder="dateOrder" :typeOrder="typeOrder" />
-            <!-- 隐藏的文件输入框 -->
-            <input type="file" ref="fileInput" @change="onFileChange" accept=".xls, .xlsx" style="display: none" />
+            <ConversationRecordsTable :key="tableKey" :dateOrder="dateOrder" :typeOrder="typeOrder" @selectionChange="updateSelectedIds"/>
         </el-scrollbar>
     </div>
+    <!-- 引入 ImportBox 组件 -->
+    <ImportBox :importNotice="importNotice" :ifShow="showImportBox" apiTo="conversation-records" fileName="谈话记录" @updateIfShow="updateIfShow" @updateTableKey="updateTableKey" />
+    <MaskLayer :ifShow="showImportBox" @updateIfShow="updateIfShow" />
 </template>
 
 <script setup lang="ts">
@@ -32,59 +35,54 @@ import { ref } from "vue";
 import router from "../router";
 import { userInfoStore } from "../stores/UserInfoStore";
 import ConversationRecordsTable from "../components/ConversationRecordsTable.vue";
+import { batchDeleteConversationRecord } from "../api/conversationRecords";
 
 const userInfo = userInfoStore();
 
 const dateOrder = ref("默认排序");
 const typeOrder = ref("所有活动");
-const tableKey = ref(0);
-const fileInput = ref<HTMLInputElement | null>(null);
 
-const handleFileUpload = () => {
-    fileInput.value?.click();
+const selectedIds = ref<string[]>([]);
+const tableKey = ref('');
+const importNotice = ref("请严格按照模板格式填写数据，确保字段内容符合数据类型、格式（如日期为yyyy/M/d）、长度、枚举值等要求，必填项完整，多值字段按规则分隔，避免错误提交。");
+
+// 控制 PayBox 显示状态的变量
+const showImportBox = ref(false);
+
+const updateSelectedIds = (ids: string[]) => {
+    console.log("ids", ids);
+    selectedIds.value = ids;
 };
 
-const onFileChange = async (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    const file = target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-        const response = await fetch("http://10.248.6.72:81/api/conversation-records/importExcel", {
-            method: "POST",
-            body: formData,
-        });
-
-        // 检查响应类型
-        const contentType = response.headers.get("content-type");
-
-        if (response.ok && contentType?.includes("application/json")) {
-            const json = await response.json();
-            if (json.message === "导入成功") {
-                ElMessage.success("文件上传成功！");
-                tableKey.value += 1;
-            } else {
-                ElMessage.error("上传失败：" + json.error);
-            }
-        } else if (response.ok && contentType?.includes("application/vnd.ms-excel")) {
-            // 下载错误 Excel 文件
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "conversation_records_error_data.xlsx"; // 下载文件名
-            a.click();
-            window.URL.revokeObjectURL(url);
-            ElMessage.error("导入文件包含错误，请查看下载的错误文件！");
-        } else {
-            ElMessage.error("文件上传失败，请重试！");
-        }
-    } catch (error) {
-        ElMessage.error("上传过程中出现错误！");
+const handleBatchDelete = async () => {
+    console.log("selectedIds", selectedIds.value);
+    if (selectedIds.value.length === 0) {
+        return ElMessage.warning("请选择要删除的学生个人信息");
     }
+    try {
+        await batchDeleteConversationRecord(selectedIds.value);
+        ElMessage.success("批量删除成功");
+        selectedIds.value = [];
+        tableKey.value = `key_${Date.now()}`; // 使用时间戳确保唯一性
+    } catch (error) {
+        ElMessage.error("批量删除失败，请重试");
+    }
+};
+
+const handleImport = () => {
+    showImportBox.value = true; // 显示 PayBox
+    // fileInput.value?.click();
+};
+
+// 处理显示状态的更新方法
+const updateIfShow = (value: boolean) => {
+    showImportBox.value = value;
+};
+
+// 更新 tableKey 的方法
+const updateTableKey = (value: string) => {
+    tableKey.value = value;
+    console.log("tableKey", tableKey.value);
 };
 
 const handleExport = async (type: string) => {

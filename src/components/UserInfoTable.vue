@@ -38,6 +38,7 @@
         <el-scrollbar height="100%">
             <el-table :data="tableData" class="tableBox" table-layout="fixed" @selection-change="handleSelectionChange"
                 v-loading="loading" :row-style="{ height: '80px' }">
+                <el-table-column type="selection" width="40" v-if="isMediumScreen"/>
                 <el-table-column label="详情" width="60" align="start" v-if="userInfo.user?.userType === 'teacher'">
                     <template #default="{ row }">
                         <el-button text bg type="success" size="small" @click="toUpdateUserInfo(row.studentId)">
@@ -58,8 +59,8 @@
                 </el-table-column>
                 <el-table-column prop="isSpecialGroup" label="是否特殊群体" width="110">
                     <template #default="{ row }">
-                        <span>{{ row.isSpecialGroup ? '是' : '否' }}</span>
-                        <el-button v-if="row.isSpecialGroup" type="primary" size="small" class="ml-3"
+                        <span>{{ row.isSpecialGroup=='是' ? '是' : '否' }}</span>
+                        <el-button v-if="row.isSpecialGroup=='是'" type="primary" size="small" class="ml-3"
                             @click="goToSpecialGroup(row.studentId)">
                             详情
                         </el-button>
@@ -137,13 +138,14 @@ import { getAllUserInfos, deleteUserInfo, searchUserInfo } from '../api/userInfo
 import { getSpecialGroupById } from '../api/specialGroup';
 
 
-const props = defineProps(['dateOrder', 'typeOrder', 'ifRefresh']);
+const props = defineProps(['dateOrder', 'typeOrder']);
 const emits = defineEmits(["selectionChange"]);
 
 
 const selectedIds = ref<string[]>([]);
 
 const filterOptions = [
+    { label: '姓名', value: 'name' },
     { label: '学号', value: 'studentId' },
     { label: '身份证号', value: 'idCard' },
     { label: '年级', value: 'grade' },
@@ -216,12 +218,7 @@ watch(() => props.dateOrder, (newVal) => {
 });
 
 // 通过watch监听props.dateOrder的变化
-watch(() => props.ifRefresh, async (newVal) => {
-    if (newVal === true) {
-        console.log('refresh', newVal)
-        await fetchTableData()
-    }
-});
+
 
 onMounted(async () => {
     await fetchTableData();
@@ -245,20 +242,8 @@ const fetchTableData = async () => {
     };
     try {
         const res = await getAllUserInfos(data);
-        const records = res.data.records;
 
-        // 遍历记录并根据 getSpecialGroupById 接口添加 isSpecialGroup 字段
-        const recordsWithSpecialGroup = await Promise.all(
-            records.map(async (record: any) => {
-                const specialGroupRes = await getSpecialGroupById(record.studentId);
-                return {
-                    ...record,
-                    isSpecialGroup: specialGroupRes.data ? true : false, // 判断是否为特殊群体
-                };
-            })
-        );
-
-        allData.value = recordsWithSpecialGroup;
+        allData.value = res.data.records;
         counts.value = res.data.total;
         tableData.value = allData.value;
     } catch (error) {

@@ -1,6 +1,6 @@
 <template>
-    <div
-        class="w-[30%] absolute z-[99999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 shadow-lg" v-if="props.ifShow">
+    <div class="w-[30%] absolute z-[99999] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 shadow-lg"
+        v-if="props.ifShow" v-loading="isLoding" element-loading-text="导入中...">
         <div class="flex justify-between items-center text-[#1d1c1c] text-xl font-semibold border-b pb-4">
             <p>导入须知</p>
             <div class="cursor-pointer" @click="toggleVisibility">
@@ -15,17 +15,16 @@
             <div>
                 <h3 class="text-lg font-medium text-gray-800">表格字段规则</h3>
                 <p class="mt-2 text-sm text-gray-600 leading-6">
-                    字段需符合数据类型、格式、长度和特定枚举值等限制，部分字段必填，特殊字段有唯一性或特定格式要求（如身份证号18位、手机号码11位、日期格式yyyy/M/d），多值字段用“/”分隔，枚举字段限制选项范围，描述性字段无特殊限制。
+                    {{ props.importNotice }}
                 </p>
             </div>
 
             <!-- 下载模板 -->
             <div>
                 <h3 class="text-lg font-medium text-gray-800">具体规则下载标准查看</h3>
-                <p
-                    class="mt-2 text-sm text-[#00668c] hover:text-[#71c4ef] cursor-pointer underline"
-                    @click="handleExport(standard)">
-                    学生个人信息模板.xlsx
+                <p class="mt-2 text-sm text-[#00668c] hover:text-[#71c4ef] cursor-pointer underline"
+                    @click="handleExport('standard')">
+                    {{ props.fileName }}模板.xlsx
                 </p>
             </div>
 
@@ -47,11 +46,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const props = defineProps(['ifShow']);
-const emit = defineEmits();
+const props = defineProps(['ifShow', 'tableKey', 'importNotice', 'apiTo','fileName']);
+const emit = defineEmits(['updateIfShow', 'updateTableKey']);
 
-const tableKey = ref(0);
+
+const tableKey = ref('');
 const fileInput = ref<HTMLInputElement | null>(null);
+
+const isLoding = ref(false);
 
 const toggleVisibility = () => {
     emit('updateIfShow', false);
@@ -69,8 +71,10 @@ const onFileChange = async (event: Event) => {
     const formData = new FormData();
     formData.append("file", file);
 
+    isLoding.value = true;
+
     try {
-        const response = await fetch("http://10.248.6.72:81/api/user-info/importExcel", {
+        const response = await fetch(`http://10.248.6.72:81/api/${props.apiTo}/importExcel`, {
             method: "POST",
             body: formData,
         });
@@ -81,9 +85,11 @@ const onFileChange = async (event: Event) => {
         if (response.ok && contentType?.includes("application/json")) {
             const json = await response.json();
             if (json.message === "导入成功") {
+                isLoding.value = false;
                 toggleVisibility();
                 ElMessage.success("文件上传成功！");
-                tableKey.value += 1;
+                tableKey.value = `key_${Date.now()}`; // 使用时间戳确保唯一性
+                emit('updateTableKey', tableKey.value); // 通过事件传递给父组件
             } else {
                 ElMessage.error("上传失败：" + json.error);
             }
@@ -93,7 +99,7 @@ const onFileChange = async (event: Event) => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "conversation_records_error_data.xlsx"; // 下载文件名
+            a.download = "user_info_error_data.xlsx"; // 下载文件名
             a.click();
             window.URL.revokeObjectURL(url);
             ElMessage.error("导入文件包含错误，请查看下载的错误文件！");
@@ -107,10 +113,10 @@ const onFileChange = async (event: Event) => {
 
 const handleExport = async (type: string) => {
     const apiUrl = type === "database"
-        ? "http://10.248.6.72:81/api/user-info/exportExcel"
-        : "http://10.248.6.72:81/api/user-info/downloadStandardTemplate";
+        ? `http://10.248.6.72:81/api/${props.apiTo}/exportExcel`
+        : `http://10.248.6.72:81/api/${props.apiTo}/downloadStandardTemplate`;
 
-    const fileName = type === "database" ? "学生个人信息.xlsx" : "学生个人信息模板.xlsx";
+    const fileName = type === "database" ? `${props.fileName}.xlsx` : `${props.fileName}模版.xlsx`;
 
     try {
         // 发送导出请求
@@ -150,4 +156,19 @@ const handleExport = async (type: string) => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+// 下面为loading的样式
+:deep(.el-loading-mask) {
+    border-radius: 16px;
+}
+
+// 修改图标的颜色
+:deep(.el-loading-spinner .path) {
+    stroke: var(--accent-200);
+}
+
+// 修改文字的颜色
+:deep(.el-loading-spinner .el-loading-text) {
+    color: var(--accent-200);
+}
+</style>

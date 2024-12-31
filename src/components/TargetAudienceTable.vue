@@ -52,17 +52,6 @@
                         <span>{{ new Date(row.createdAt).toLocaleString() }}</span>
                     </template>
                 </el-table-column>
-                
-                <el-table-column label="操作" width="200" align="center" v-if="userInfo.user?.userType === 'admin'">
-                    <template #default="{ row }">
-                        <el-button text bg type="success" size="small" @click="toUpdateActivity(row.id)">
-                            编辑
-                        </el-button>
-                        <el-button text bg type="danger" size="small" @click="deletion(row.id)">
-                            删除
-                        </el-button>
-                    </template>
-                </el-table-column>
             </el-table>
         </el-scrollbar>
         
@@ -99,6 +88,10 @@ import { getAllActivityTargetAudience,deleteActivityTargetAudience,searchActivit
 
 
 const props = defineProps(['dateOrder', 'typeOrder']);
+const emits = defineEmits(["selectionChange"]);
+
+
+const selectedIds = ref<string[]>([]);
 
 
 const filterOptions = [
@@ -120,7 +113,6 @@ const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
 const allData = ref<Activity[]>([]);
-const multipleSelection = ref<[]>([])
 
 // 是否搜索
 const isSearch = ref(false);
@@ -248,8 +240,10 @@ const handleCurrentChange = (val: number) => {
     }
 };
 
-const handleSelectionChange = (val: []) => {
-    multipleSelection.value = val;
+const handleSelectionChange = (selection: any[]) => {
+    // 提取选中的 ID
+    selectedIds.value = selection.map((item) => item.id);
+    emits("selectionChange", selectedIds.value);
 };
 </script>
 

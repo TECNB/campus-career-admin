@@ -13,10 +13,13 @@
     "echarts": "^5.5.0",
     "element-china-area-data": "^6.1.0",
     "element-plus": "^2.5.5",
+    "html2canvas": "^1.4.1",
     "intersection-observer": "^0.12.2",
+    "jspdf": "^2.5.2",
     "pinia": "^2.1.7",
     "pinia-plugin-persist": "^1.0.0",
     "pinia-plugin-persistedstate": "^3.2.1",
+    "print-js": "^1.6.0",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
   },

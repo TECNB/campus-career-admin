@@ -102,8 +102,11 @@ import { Activity } from '../interfaces/Activity';
 import { getAllConversationRecords, deleteConversationRecord, searchConversationRecord,getConversationRecordById } from '../api/conversationRecords';
 
 
-const props = defineProps(['dateOrder', 'typeOrder', 'ifRefresh']);
+const props = defineProps(['dateOrder', 'typeOrder']);
+const emits = defineEmits(["selectionChange"]);
 
+
+const selectedIds = ref<string[]>([]);
 
 const filterOptions = [
     { label: '谈话时间', value: 'conversationTime' },
@@ -139,7 +142,6 @@ const pageSize = ref(10);
 const counts = ref(tableData.value.length);
 const page = ref(1);
 const allData = ref<Activity[]>([]);
-const multipleSelection = ref<[]>([])
 
 // 是否搜索
 const isSearch = ref(false);
@@ -172,12 +174,7 @@ watch(() => props.dateOrder, (newVal) => {
 });
 
 // 通过watch监听props.dateOrder的变化
-watch(() => props.ifRefresh, async (newVal) => {
-    if (newVal === true) {
-        console.log('refresh', newVal)
-        await fetchTableData()
-    }
-});
+
 
 onMounted(async () => {
     await fetchTableData();
@@ -270,8 +267,10 @@ const handleCurrentChange = (val: number) => {
     }
 };
 
-const handleSelectionChange = (val: []) => {
-    multipleSelection.value = val;
+const handleSelectionChange = (selection: any[]) => {
+    // 提取选中的 ID
+    selectedIds.value = selection.map((item) => item.id);
+    emits("selectionChange", selectedIds.value);
 };
 const toUpdateActivity = (id: string) => {
     console.log('toUpdateActivity')

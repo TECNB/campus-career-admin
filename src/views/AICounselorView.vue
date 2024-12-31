@@ -3,8 +3,7 @@
         <!-- 用户信息 -->
         <div class="flex flex-col items-center mb-6">
             <img class="w-20 h-20 rounded-full object-cover shadow-md" src="../assets/images/AI.jpeg" alt="Avatar">
-            <p class="text-lg font-bold mt-2">小芯</p>
-            <p class="text-sm text-gray-500">@186***5250</p>
+            <p class="text-lg font-bold mt-2">导员</p>
         </div>
 
         <!-- 聊天内容 -->
@@ -18,7 +17,7 @@
             <!-- 回复消息 -->
             <div class="self-start max-w-[70%]">
                 <div class="bg-white text-gray-800 text-sm p-3 rounded-lg shadow-md">
-                    同学你好，在学习、生活或者心理上有什么疑问想交流吗？
+                    同学你好，我是你的AI辅导员，在学习、生活或者心理上有什么疑问想交流吗?
                 </div>
             </div>
         </div>
@@ -42,7 +41,7 @@ const name = ref('');
 
 const redirectToLink =()=>{
     // 跳转到指定链接
-    window.location.href = 'https://m.tongyi.aliyun.com/app/tongyi/tongyi-share/agent-share?shareId=87276bc0-b140-4905-9faa-6a5dbc8381cf';
+    window.location.href = 'https://lxblog.com/qianwen/share?shareId=04439037-0a37-450b-89d5-22bacc6d3a19&type=agentCard';
 }
 </script>
 
