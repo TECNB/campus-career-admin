@@ -152,7 +152,7 @@ const menusTeacher = addOpenProperty([
         icon: 'Collection',
         path: '/student-affairs',
         children: [
-            { label: '年级事务', path: '/grade-affairs' },
+            { label: '规章制度', path: '/grade-affairs' },
             { label: '各类证明&模板', path: '/certificates-templates' },
             { label: '专项事务', path: '/special-affairs' },
             { label: '工作计划与总结', path: '/work-plans-summaries' },
@@ -184,7 +184,7 @@ const menusAdmin = addOpenProperty([
 // 设置用户的菜单
 if (userInfo.user?.userType === 'student') {
     menus.value = menusStudent;
-} else if (userInfo.user?.userType === 'teacher') {
+} else if (userInfo.user?.userType === 'teacher' || userInfo.user?.userType === 'visitors') {
     menus.value = menusTeacher;
 } else {
     menus.value = menusAdmin;

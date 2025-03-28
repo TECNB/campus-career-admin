@@ -51,7 +51,7 @@
                 <el-table-column prop="politicalStatus" label="政治面貌" width="170">
                     <template #default="{ row }">
                         <span>{{ row.politicalStatus }}</span>
-                        <el-button v-if="row.politicalStatus !== '群众'" type="primary" size="small" class="ml-3"
+                        <el-button type="primary" size="small" class="ml-3"
                             @click="goToPoliticalStatus(row.studentId)">
                             详情
                         </el-button>
@@ -97,14 +97,17 @@
                 <el-table-column prop="douyinId" label="抖音账号" />
                 <el-table-column prop="parent1Name" label="家长1姓名" />
                 <el-table-column prop="parent1Phone" label="家长1手机号" />
+                <el-table-column prop="parent1IdCard" label="家长1身份证" />
                 <el-table-column prop="parent1Company" label="家长1工作单位" />
                 <el-table-column prop="parent1Job" label="家长1职业" />
                 <el-table-column prop="parent2Name" label="家长2姓名" />
                 <el-table-column prop="parent2Phone" label="家长2手机号" />
+                <el-table-column prop="parent2IdCard" label="家长2身份证" />
                 <el-table-column prop="parent2Company" label="家长2工作单位" />
                 <el-table-column prop="parent2Job" label="家长2职业" />
                 <el-table-column prop="emergencyContactName" label="紧急联系人姓名" />
                 <el-table-column prop="emergencyContactPhone" label="紧急联系人手机号" />
+                <el-table-column prop="emergencyContactIdCard" label="紧急联系人手机号" />
 
 
 

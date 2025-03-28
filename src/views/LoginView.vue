@@ -119,7 +119,9 @@ const handleLogin = async () => {
         userId: "",
         studentId: "",
         username: "",
-        passwordHash: "",
+        // passwordHash: "",
+        // 这里给错误的，防止数据库插入攻击
+        password: "",
         userType: "teacher", // 根据需要设置默认值
         avatarUrl: "",
         age: null,
@@ -194,13 +196,22 @@ const handleSignup = async () => {
     // 清空signupForm
     signupForm = new FormData();
 
-    signupForm.append("avatar", "")
-    signupForm.append("username", username.value)
-    signupForm.append("password", password.value)
-    signupForm.append("phone", phone.value)
-    signupForm.append("userType", "admin")
+    // 创建注册数据为JSON对象
+    let signupData = {
+        avatar: "",
+        username: username.value,
+        passwordHash: password.value,
+        phone: phone.value,
+        userType: "admin"
+    };
+    
+    // 验证手机号格式
+    if (!isValidPhone(phone.value)) {
+        ElMessage.error('请输入有效的手机号码');
+        return;
+    }
 
-    await signup(signupForm).then(response => {
+    await signup(signupData).then(response => {
         console.log("注册返回:" + response);
 
         // 回到登录状态

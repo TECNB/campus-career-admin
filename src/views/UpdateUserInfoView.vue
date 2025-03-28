@@ -142,7 +142,7 @@
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.counselorPhone }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">寝室号：</p>
+                        <p class="text-xl font-bold whitespace-nowrap">寝室号/校外住宿：</p>
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.dormitoryNumber }}</p>
                     </div>
                 </div>
@@ -227,13 +227,15 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">手机号</p>
-
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">身份证号</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">工作单位</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
-                        <p class="text-xl font-bold whitespace-nowrap">职业</p>
+                        <p class="text-xl font-bold whitespace-nowrap">职业&宗教信仰</p>
                     </div>
                 </div>
 
@@ -247,6 +249,9 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent1Phone }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent1IdCard }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent1Company }}</p>
@@ -268,6 +273,9 @@
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent2Phone }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent2IdCard }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.parent2Company }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
@@ -286,6 +294,9 @@
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.emergencyContactPhone }}</p>
+                    </div>
+                    <div class="flex flex-1 justify-start items-center">
+                        <p class="text-xl font-bold whitespace-nowrap">{{ userDetail.emergencyContactIdCard }}</p>
                     </div>
                     <div class="flex flex-1 justify-start items-center">
                         <p class="text-xl font-bold whitespace-nowrap">/</p>
@@ -417,7 +428,7 @@
                 </div>
 
                 <div class="h-full" v-if="userDetail.isSpecialGroup == '是'">
-                    <p class="md:text-2xl font-extrabold text-xl text-center">谈话/跟踪记录</p>
+                    <p class="md:text-2xl font-extrabold text-xl text-center">在校记录</p>
                 </div>
 
                 <div v-for="(row, index) in tableData" :key="index">
@@ -426,7 +437,7 @@
                             <p class="text-xl font-bold whitespace-nowrap">时间</p>
                         </div>
                         <div class="flex w-28 justify-start items-center">
-                            <p class="text-xl font-bold whitespace-nowrap">谈话教师</p>
+                            <p class="text-xl font-bold whitespace-nowrap">地点</p>
                         </div>
                         <div class="flex flex-1 justify-start items-center">
                             <p class="text-xl font-bold whitespace-nowrap">记录{{ index + 1 }}</p>
