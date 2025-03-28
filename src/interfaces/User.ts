@@ -3,7 +3,7 @@ export interface User {
     studentId: string;
     username: string;
     passwordHash: string;
-    userType: 'teacher' | 'student' | 'admin'; // 具体的 userType 可根据实际情况添加
+    userType: 'teacher' | 'student' | 'admin' | 'visitors'; // 具体的 userType 可根据实际情况添加
     avatarUrl: string;
     token: string;
     salt: string;

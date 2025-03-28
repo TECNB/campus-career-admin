@@ -170,7 +170,11 @@ const handleLogin = async () => {
 
 
         toggleVisibility()
-        router.push({ path: '/' })
+        if(userInfo.user?.userType === 'student'){
+            router.push('/job-recommend')
+        }else{
+            router.push({ path: '/' })
+        }
 
     }).catch((error: AxiosError) => {
         // 获取到 AxiosError 中的 error
